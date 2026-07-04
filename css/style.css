@@ -147,3 +147,44 @@ body {
         letter-spacing: -0.02em;
     }
 }
+
+/* Gender & Style Filter Buttons */
+.gender-btn,
+.style-btn {
+    background: transparent;
+    color: #666;
+}
+
+.gender-btn.active,
+.style-btn.active {
+    background: #1E5A7A;
+    color: white;
+    box-shadow: 0 2px 8px rgba(30, 90, 122, 0.3);
+}
+
+.gender-btn:hover:not(.active),
+.style-btn:hover:not(.active) {
+    background: #e6f6ff;
+    color: #1E5A7A;
+}
+
+/* Rain Alert Banner */
+#rain-alert {
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.8; }
+}
+
+/* Outfit Card Link */
+.outfit-card {
+    text-decoration: none;
+    color: inherit;
+}
+
+.outfit-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 24px rgba(30, 90, 122, 0.15);
+}

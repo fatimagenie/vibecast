@@ -175,6 +175,34 @@
 
         <!-- ========== OUTFIT SECTION ========== -->
         <section id="outfit-section" class="max-w-7xl mx-auto px-5 md:px-12 py-16">
+            <!-- Rain Alert Banner -->
+            <div id="rain-alert" class="hidden mb-6 p-4 bg-blue-500/10 border border-blue-500/30 rounded-2xl flex items-center gap-3">
+                <span class="material-symbols-outlined text-blue-600 text-[24px]">rainy</span>
+                <p class="text-sm font-medium text-blue-700" id="rain-alert-text">Rain Alert: 80% chance of rain today!</p>
+            </div>
+
+            <!-- Filter Controls -->
+            <div class="flex flex-wrap items-center gap-4 mb-8">
+                <!-- Gender Filter -->
+                <div class="flex items-center gap-2">
+                    <span class="text-xs font-bold text-outline uppercase tracking-wider">Gender:</span>
+                    <div class="flex bg-surface-low rounded-xl p-1">
+                        <button class="gender-btn active px-4 py-2 rounded-lg text-xs font-semibold transition-all" data-gender="men">Men</button>
+                        <button class="gender-btn px-4 py-2 rounded-lg text-xs font-semibold transition-all" data-gender="women">Women</button>
+                        <button class="gender-btn px-4 py-2 rounded-lg text-xs font-semibold transition-all" data-gender="unisex">Unisex</button>
+                    </div>
+                </div>
+
+                <!-- Style Toggle -->
+                <div class="flex items-center gap-2">
+                    <span class="text-xs font-bold text-outline uppercase tracking-wider">Style:</span>
+                    <div class="flex bg-surface-low rounded-xl p-1">
+                        <button class="style-btn active px-4 py-2 rounded-lg text-xs font-semibold transition-all" data-style="western">Western</button>
+                        <button class="style-btn px-4 py-2 rounded-lg text-xs font-semibold transition-all" data-style="desi">Desi</button>
+                    </div>
+                </div>
+            </div>
+
             <!-- Section Header -->
             <div class="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-10">
                 <div>
