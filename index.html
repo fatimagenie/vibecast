@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>VibeCast - Your Daily Lifestyle Weather Companion</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700&family=Inter:wght@400;500;600&family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#1E5A7A",
+                        "primary-light": "#a0d2eb",
+                        "primary-container": "#a0d2eb",
+                        "on-primary": "#ffffff",
+                        "on-primary-container": "#1E5A7A",
+                        "secondary": "#785a00",
+                        "secondary-container": "#ffd167",
+                        "on-secondary": "#ffffff",
+                        "on-secondary-container": "#765900",
+                        "surface": "#f4faff",
+                        "surface-low": "#e6f6ff",
+                        "surface-card": "#ffffff",
+                        "on-surface": "#0A1628",
+                        "on-surface-variant": "#374151",
+                        "outline": "#94A3B8",
+                        "outline-variant": "#CBD5E1",
+                    },
+                    fontFamily: {
+                        "display": ["Lexend", "sans-serif"],
+                        "body": ["Inter", "sans-serif"],
+                    },
+                },
+            },
+        }
+    </script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f4faff;
+            color: #0A1628;
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+        }
+
+        .soft-shadow {
+            box-shadow: 0 4px 24px -4px rgba(30, 90, 122, 0.08);
+        }
+
+        .soft-shadow-lg {
+            box-shadow: 0 8px 32px -4px rgba(30, 90, 122, 0.12);
+        }
+
+        .section-divider {
+            height: 1px;
+            background: linear-gradient(90deg, transparent, #CBD5E1, transparent);
+        }
+
+        #location-modal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            z-index: 100;
+            background: rgba(0,0,0,0.4);
+            backdrop-filter: blur(4px);
+        }
+        #location-modal.active {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ========== HEADER / NAVBAR ========== -->
+    <header class="fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-md border-b border-outline-variant/30">
+        <div class="max-w-7xl mx-auto px-5 md:px-12 h-16 flex items-center justify-between">
+            <!-- Logo -->
+            <div class="flex items-center gap-2">
+                <div class="w-9 h-9 rounded-xl bg-primary flex items-center justify-center">
+                    <span class="material-symbols-outlined text-white text-[18px]">cloud</span>
+                </div>
+                <span class="font-display font-bold text-lg text-primary">VibeCast</span>
+            </div>
+            <!-- Nav Links -->
+            <nav class="hidden md:flex items-center gap-8">
+                <a class="text-primary font-semibold text-sm border-b-2 border-primary pb-0.5" href="#">Home</a>
+                <a class="text-on-surface-variant hover:text-primary transition-colors text-sm font-medium" href="#outfit-section">Outfit</a>
+                <a class="text-on-surface-variant hover:text-primary transition-colors text-sm font-medium" href="#food-section">Food</a>
+                <a class="text-on-surface-variant hover:text-primary transition-colors text-sm font-medium" href="#weekend-section">Travel</a>
+            </nav>
+            <!-- Actions -->
+            <div class="flex items-center gap-2">
+                <button id="location-btn" class="w-9 h-9 rounded-xl flex items-center justify-center hover:bg-surface-low transition-colors" title="My Location">
+                    <span class="material-symbols-outlined text-primary text-[20px]">my_location</span>
+                </button>
+                <button id="search-btn" class="w-9 h-9 rounded-xl flex items-center justify-center hover:bg-surface-low transition-colors" title="Search">
+                    <span class="material-symbols-outlined text-primary text-[20px]">search</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- ========== SEARCH MODAL ========== -->
+    <div id="location-modal">
+        <div class="bg-white rounded-2xl p-6 max-w-md w-[90%] shadow-2xl">
+            <div class="flex items-center justify-between mb-5">
+                <h3 class="font-display font-semibold text-lg text-on-surface">Search City</h3>
+                <button id="modal-close" class="w-8 h-8 rounded-lg flex items-center justify-center hover:bg-surface-low">
+                    <span class="material-symbols-outlined text-outline text-[20px]">close</span>
+                </button>
+            </div>
+            <input id="search-input" type="text" placeholder="Type city name..." class="w-full px-4 py-3 bg-surface border border-outline-variant/50 rounded-xl text-sm focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-all mb-4"/>
+            <div id="search-results" class="space-y-1 max-h-48 overflow-y-auto"></div>
+        </div>
+    </div>
+
+    <main>
+
+        <!-- ========== HERO SECTION ========== -->
+        <section class="relative min-h-[85vh] flex flex-col items-center justify-center text-center px-5 overflow-hidden">
+            <!-- Background Gradient -->
+            <div class="absolute inset-0 z-0" style="background: linear-gradient(180deg, #bee9ff 0%, #f4faff 60%);"></div>
+
+            <div class="relative z-10 space-y-5 max-w-2xl">
+                <!-- Weather Badge -->
+                <div id="weather-badge" class="inline-flex items-center gap-2 px-5 py-2 bg-white/70 backdrop-blur-sm rounded-full border border-white/60">
+                    <span class="material-symbols-outlined text-primary text-[16px]" style="font-variation-settings: 'FILL' 1;" id="weather-badge-icon">wb_sunny</span>
+                    <span class="text-xs font-semibold text-primary uppercase tracking-wider" id="weather-badge-text">Loading...</span>
+                </div>
+
+                <!-- Temperature -->
+                <h1 class="font-display font-bold text-[80px] md:text-[100px] leading-none text-primary tracking-tight" id="temperature">--°F</h1>
+
+                <!-- Vibe Title -->
+                <div>
+                    <h2 class="font-display font-semibold text-2xl md:text-3xl text-on-surface mb-2" id="vibe-title">Today's Vibe</h2>
+                    <p class="text-base text-on-surface-variant max-w-md mx-auto" id="vibe-description">Fetching weather data...</p>
+                </div>
+
+                <!-- Weather Stats -->
+                <div class="flex flex-wrap justify-center gap-4 pt-4">
+                    <div class="glass-card soft-shadow px-5 py-3 rounded-2xl flex items-center gap-3">
+                        <span class="material-symbols-outlined text-primary text-[20px]">air</span>
+                        <div class="text-left">
+                            <p class="text-[11px] font-semibold text-outline uppercase tracking-wider">Wind</p>
+                            <p class="font-display font-semibold text-base text-on-surface" id="wind-speed">-- mph</p>
+                        </div>
+                    </div>
+                    <div class="glass-card soft-shadow px-5 py-3 rounded-2xl flex items-center gap-3">
+                        <span class="material-symbols-outlined text-primary text-[20px]">water_drop</span>
+                        <div class="text-left">
+                            <p class="text-[11px] font-semibold text-outline uppercase tracking-wider">Humidity</p>
+                            <p class="font-display font-semibold text-base text-on-surface" id="humidity">--%</p>
+                        </div>
+                    </div>
+                    <div class="glass-card soft-shadow px-5 py-3 rounded-2xl flex items-center gap-3">
+                        <span class="material-symbols-outlined text-primary text-[20px]">wb_sunny</span>
+                        <div class="text-left">
+                            <p class="text-[11px] font-semibold text-outline uppercase tracking-wider">UV Index</p>
+                            <p class="font-display font-semibold text-base text-on-surface" id="uv-index">--</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ========== OUTFIT SECTION ========== -->
+        <section id="outfit-section" class="max-w-7xl mx-auto px-5 md:px-12 py-16">
+            <!-- Section Header -->
+            <div class="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-10">
+                <div>
+                    <h2 class="font-display font-bold text-3xl text-primary mb-2">Style Your Day</h2>
+                    <p class="text-on-surface-variant" id="outfit-subtitle">Curated essentials for your day.</p>
+                </div>
+                <div class="flex items-center gap-3 bg-primary-container/20 border border-primary-container/40 px-5 py-3 rounded-2xl">
+                    <span class="material-symbols-outlined text-primary text-[24px]">health_and_safety</span>
+                    <p class="text-sm font-medium text-on-primary-container" id="spf-tip">SPF 50 is your best friend today!</p>
+                </div>
+            </div>
+            <!-- Outfit Cards Grid -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6" id="outfit-grid">
+                <!-- Injected by JS -->
+            </div>
+        </section>
+
+        <!-- Divider -->
+        <div class="max-w-7xl mx-auto px-5 md:px-12"><div class="section-divider"></div></div>
+
+        <!-- ========== FOOD SECTION ========== -->
+        <section id="food-section" class="max-w-7xl mx-auto px-5 md:px-12 py-16">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                <!-- Text Content -->
+                <div class="space-y-5">
+                    <h2 class="font-display font-bold text-3xl text-primary">Taste the Weather</h2>
+                    <span class="inline-block bg-secondary text-on-secondary px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider" id="food-badge">Sunny Day Pick</span>
+                    <h3 class="font-display font-semibold text-2xl text-on-surface" id="food-title">Mango Gelato & Iced Matcha</h3>
+                    <p class="text-on-surface-variant leading-relaxed" id="food-description">The perfect pairing for a warm day. Light, refreshing, and photogenic.</p>
+                    <div class="flex flex-wrap gap-3 pt-2">
+                        <button class="px-6 py-3 bg-primary text-white rounded-full font-semibold text-sm hover:shadow-lg hover:shadow-primary/20 transition-all flex items-center gap-2">
+                            <span class="material-symbols-outlined text-[18px]">near_me</span>
+                            Find Nearby Cafes
+                        </button>
+                        <button class="px-6 py-3 border-2 border-primary text-primary rounded-full font-semibold text-sm hover:bg-primary/5 transition-colors">See Full Menu</button>
+                    </div>
+                </div>
+                <!-- Image -->
+                <div class="relative">
+                    <div class="w-full h-[400px] lg:h-[480px] rounded-3xl overflow-hidden soft-shadow-lg">
+                        <img id="food-image" class="w-full h-full object-cover" src="https://images.unsplash.com/photo-1551024601-bec78aea704b?w=600&h=480&fit=crop" alt="Food recommendation"/>
+                    </div>
+                    <div class="absolute -bottom-6 -left-6 w-32 h-32 bg-primary-container/30 rounded-full blur-2xl"></div>
+                    <div class="absolute -top-6 -right-6 w-40 h-40 bg-secondary-container/20 rounded-full blur-2xl"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Divider -->
+        <div class="max-w-7xl mx-auto px-5 md:px-12"><div class="section-divider"></div></div>
+
+        <!-- ========== WEEKEND SECTION ========== -->
+        <section id="weekend-section" class="max-w-7xl mx-auto px-5 md:px-12 py-16">
+            <!-- Section Header -->
+            <div class="text-center mb-10">
+                <h2 class="font-display font-bold text-3xl text-primary mb-2">Your Weekend Escape</h2>
+                <p class="text-on-surface-variant max-w-lg mx-auto">Don't let the forecast surprise you. We've curated your perfect itinerary.</p>
+            </div>
+            <!-- Weekend Cards -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10" id="weekend-grid">
+                <!-- Injected by JS -->
+            </div>
+            <!-- CTA Button -->
+            <div class="text-center">
+                <button class="group inline-flex items-center gap-3 px-8 py-4 bg-primary text-white rounded-full font-semibold hover:shadow-lg hover:shadow-primary/20 hover:scale-[1.02] transition-all">
+                    Plan My Trip
+                    <span class="material-symbols-outlined text-[20px] group-hover:translate-x-1 transition-transform">arrow_forward</span>
+                </button>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- ========== FOOTER ========== -->
+    <footer class="bg-white border-t border-outline-variant/30">
+        <div class="max-w-7xl mx-auto px-5 md:px-12 py-14">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-10">
+                <!-- Brand -->
+                <div class="space-y-4">
+                    <div class="flex items-center gap-2">
+                        <div class="w-8 h-8 rounded-lg bg-primary flex items-center justify-center">
+                            <span class="material-symbols-outlined text-white text-[16px]">cloud</span>
+                        </div>
+                        <span class="font-display font-bold text-primary">VibeCast</span>
+                    </div>
+                    <p class="text-sm text-on-surface-variant leading-relaxed">Your daily companion for a lifestyle-first weather experience. We focus on how it feels, not just what it shows.</p>
+                    <p class="text-xs text-outline">&copy; 2024 VibeCast. All rights reserved.</p>
+                </div>
+                <!-- Links -->
+                <div class="grid grid-cols-2 gap-6">
+                    <div class="space-y-3">
+                        <h4 class="text-xs font-bold text-primary uppercase tracking-wider">Explore</h4>
+                        <ul class="space-y-2">
+                            <li><a class="text-sm text-on-surface-variant hover:text-primary transition-colors" href="#">About the Vibe</a></li>
+                            <li><a class="text-sm text-on-surface-variant hover:text-primary transition-colors" href="#">Daily Guide</a></li>
+                            <li><a class="text-sm text-on-surface-variant hover:text-primary transition-colors" href="#">Destinations</a></li>
+                        </ul>
+                    </div>
+                    <div class="space-y-3">
+                        <h4 class="text-xs font-bold text-primary uppercase tracking-wider">Connect</h4>
+                        <ul class="space-y-2">
+                            <li><a class="text-sm text-on-surface-variant hover:text-primary transition-colors" href="#">Instagram</a></li>
+                            <li><a class="text-sm text-on-surface-variant hover:text-primary transition-colors" href="#">TikTok</a></li>
+                            <li><a class="text-sm text-on-surface-variant hover:text-primary transition-colors" href="#">Contact</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <!-- Newsletter -->
+                <div class="space-y-3">
+                    <h4 class="text-xs font-bold text-primary uppercase tracking-wider">Stay Tuned</h4>
+                    <p class="text-sm text-on-surface-variant">Get a weekly vibe digest in your inbox.</p>
+                    <form class="flex gap-2" onsubmit="event.preventDefault();">
+                        <input class="flex-1 bg-surface border border-outline-variant/40 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-all" placeholder="Email address" type="email"/>
+                        <button class="bg-primary text-white px-5 py-2.5 rounded-xl font-semibold text-sm hover:bg-primary/90 transition-colors">Join</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/app.js"></script>
+    <script>
+        // Scroll header hide/show
+        let lastScroll = 0;
+        const header = document.querySelector('header');
+        window.addEventListener('scroll', () => {
+            const currentScroll = window.pageYOffset;
+            if (currentScroll > lastScroll && currentScroll > 80) {
+                header.style.transform = 'translateY(-100%)';
+            } else {
+                header.style.transform = 'translateY(0)';
+            }
+            lastScroll = currentScroll;
+        });
+    </script>
+</body>
+</html>
