@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html class="light" lang="en">
+<html lang="en">
 <head>
     <meta charset="utf-8"/>
     <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
@@ -8,26 +8,15 @@
     <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700&family=Inter:wght@400;500;600&family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
     <script>
         tailwind.config = {
-            darkMode: 'class',
             theme: {
                 extend: {
                     colors: {
-                        "primary": "#1E5A7A",
-                        "primary-light": "#a0d2eb",
-                        "primary-container": "#a0d2eb",
-                        "on-primary": "#ffffff",
-                        "on-primary-container": "#1E5A7A",
-                        "secondary": "#785a00",
-                        "secondary-container": "#ffd167",
-                        "on-secondary": "#ffffff",
-                        "on-secondary-container": "#765900",
-                        "surface": "#f4faff",
-                        "surface-low": "#e6f6ff",
-                        "surface-card": "#ffffff",
-                        "on-surface": "#0A1628",
-                        "on-surface-variant": "#374151",
-                        "outline": "#94A3B8",
-                        "outline-variant": "#CBD5E1",
+                        "primary": "#c084fc",
+                        "primary-dark": "#a855f7",
+                        "accent": "#f472b6",
+                        "surface": "#1a1028",
+                        "surface-card": "rgba(255,255,255,0.05)",
+                        "surface-elevated": "rgba(255,255,255,0.08)",
                     },
                     fontFamily: {
                         "display": ["Lexend", "sans-serif"],
@@ -42,126 +31,45 @@
 
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #f4faff;
-            color: #0A1628;
-            transition: background-color 0.3s, color 0.3s;
-        }
-
-        html.dark body {
-            background-color: #0f0a1a;
+            background: linear-gradient(180deg, #1a0f2e 0%, #0f0a1a 50%, #0d0816 100%);
             color: #ffffff;
+            min-height: 100vh;
         }
 
         .glass-card {
-            background: rgba(255, 255, 255, 0.85);
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.6);
-        }
-
-        html.dark .glass-card {
             background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .glass-card-light {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        /* Hero Gradient */
+        .hero-bg {
+            background: radial-gradient(ellipse at 50% 0%, rgba(168, 85, 247, 0.15) 0%, transparent 60%),
+                        radial-gradient(ellipse at 80% 20%, rgba(244, 114, 182, 0.1) 0%, transparent 50%),
+                        linear-gradient(180deg, #1a0f2e 0%, #0f0a1a 100%);
+        }
+
+        /* Weather Card */
+        .weather-card {
+            background: linear-gradient(135deg, rgba(168, 85, 247, 0.2), rgba(244, 114, 182, 0.15));
             border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 24px;
+            padding: 24px;
+            backdrop-filter: blur(20px);
         }
 
-        .soft-shadow {
-            box-shadow: 0 4px 24px -4px rgba(30, 90, 122, 0.08);
-        }
-
-        html.dark .soft-shadow {
-            box-shadow: 0 4px 24px -4px rgba(0, 0, 0, 0.3);
-        }
-
-        .soft-shadow-lg {
-            box-shadow: 0 8px 32px -4px rgba(30, 90, 122, 0.12);
-        }
-
-        html.dark .soft-shadow-lg {
-            box-shadow: 0 8px 32px -4px rgba(0, 0, 0, 0.4);
-        }
-
-        .section-divider {
-            height: 1px;
-            background: linear-gradient(90deg, transparent, #CBD5E1, transparent);
-        }
-
-        html.dark .section-divider {
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
-        }
-
-        #location-modal {
-            display: none;
-            position: fixed;
-            inset: 0;
-            z-index: 100;
-            background: rgba(0,0,0,0.4);
-            backdrop-filter: blur(4px);
-        }
-        #location-modal.active {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        /* Theme Toggle */
-        .theme-toggle {
-            width: 40px;
-            height: 40px;
-            border-radius: 12px;
-            border: none;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.3s;
-            background: transparent;
-        }
-        .theme-toggle:hover {
-            background: rgba(255,255,255,0.1);
-        }
-        html:not(.dark) .theme-toggle:hover {
-            background: rgba(0,0,0,0.05);
-        }
-        .theme-toggle .icon-sun { display: none; }
-        .theme-toggle .icon-moon { display: block; }
-        html.dark .theme-toggle .icon-sun { display: block; }
-        html.dark .theme-toggle .icon-moon { display: none; }
-
-        /* Weather Details Cards */
-        .weather-detail-card {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 16px 20px;
-            border-radius: 16px;
-        }
-        .weather-detail-card .detail-icon {
-            width: 44px;
-            height: 44px;
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-shrink: 0;
-        }
-        .weather-detail-card .detail-label {
-            font-size: 11px;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            opacity: 0.6;
-        }
-        .weather-detail-card .detail-value {
-            font-family: 'Lexend', sans-serif;
-            font-weight: 600;
-            font-size: 16px;
-        }
-
-        /* Hourly Forecast */
+        /* Hourly Cards */
         .hourly-scroll {
             display: flex;
             gap: 12px;
             overflow-x: auto;
-            padding-bottom: 12px;
+            padding-bottom: 8px;
             scroll-behavior: smooth;
             -ms-overflow-style: none;
             scrollbar-width: none;
@@ -170,55 +78,75 @@
 
         .hourly-card {
             flex: 0 0 auto;
-            width: 72px;
-            padding: 16px 8px;
+            width: 64px;
+            padding: 14px 8px;
             border-radius: 16px;
             text-align: center;
             display: flex;
             flex-direction: column;
             align-items: center;
             gap: 8px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.05);
             transition: all 0.3s;
         }
-        html:not(.dark) .hourly-card {
-            background: rgba(255,255,255,0.6);
-            border: 1px solid rgba(255,255,255,0.8);
-        }
-        html.dark .hourly-card {
-            background: rgba(255,255,255,0.03);
-            border: 1px solid rgba(255,255,255,0.05);
-        }
         .hourly-card.active {
-            background: linear-gradient(135deg, #c084fc, #f472b6) !important;
-            color: white;
+            background: linear-gradient(135deg, #c084fc, #f472b6);
             border: none;
         }
         .hourly-card .hour-time {
-            font-size: 12px;
+            font-size: 11px;
             font-weight: 500;
-            opacity: 0.7;
+            opacity: 0.6;
         }
         .hourly-card .hour-temp {
             font-family: 'Lexend', sans-serif;
             font-weight: 700;
-            font-size: 16px;
+            font-size: 14px;
         }
 
-        /* Today Tips */
+        /* Weather Detail Cards */
+        .detail-card {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 16px;
+            border-radius: 16px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        .detail-card .detail-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+        .detail-card .detail-label {
+            font-size: 10px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            opacity: 0.5;
+        }
+        .detail-card .detail-value {
+            font-family: 'Lexend', sans-serif;
+            font-weight: 600;
+            font-size: 15px;
+        }
+
+        /* Tip Items */
         .tip-item {
             display: flex;
             align-items: center;
             gap: 10px;
-            padding: 10px 16px;
+            padding: 10px 14px;
             border-radius: 12px;
-            font-size: 13px;
+            font-size: 12px;
             font-weight: 500;
-        }
-        html:not(.dark) .tip-item {
-            background: rgba(0,0,0,0.03);
-        }
-        html.dark .tip-item {
-            background: rgba(255,255,255,0.03);
+            background: rgba(255, 255, 255, 0.03);
         }
 
         /* Gradient Cards */
@@ -228,113 +156,129 @@
             color: white;
             position: relative;
             overflow: hidden;
+            min-height: 160px;
         }
         .gradient-card::before {
             content: '';
             position: absolute;
-            top: -50%;
-            right: -50%;
-            width: 100%;
-            height: 100%;
-            background: radial-gradient(circle, rgba(255,255,255,0.2) 0%, transparent 70%);
+            top: -30%;
+            right: -30%;
+            width: 80%;
+            height: 80%;
+            background: radial-gradient(circle, rgba(255,255,255,0.15) 0%, transparent 70%);
             border-radius: 50%;
         }
+        .gradient-pink { background: linear-gradient(135deg, #f472b6, #fb923c); }
+        .gradient-orange { background: linear-gradient(135deg, #fb923c, #fbbf24); }
+        .gradient-purple { background: linear-gradient(135deg, #a78bfa, #c084fc); }
+        .gradient-blue { background: linear-gradient(135deg, #60a5fa, #34d399); }
 
-        /* Hero Dark */
-        html.dark .hero-gradient {
-            background: linear-gradient(180deg, #1a0f2e 0%, #0f0a1a 60%) !important;
+        /* Search Bar */
+        .search-bar {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 10px 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
-        html:not(.dark) .hero-gradient {
-            background: linear-gradient(180deg, #bee9ff 0%, #f4faff 60%) !important;
+        .search-bar input {
+            background: transparent;
+            border: none;
+            outline: none;
+            color: white;
+            font-size: 13px;
+            width: 100%;
         }
-
-        /* Header Dark */
-        html.dark header {
-            background: rgba(15, 10, 26, 0.85) !important;
-            border-color: rgba(255,255,255,0.1) !important;
-        }
-        html:not(.dark) header {
-            background: rgba(255, 255, 255, 0.8) !important;
-            border-color: rgba(203, 213, 225, 0.3) !important;
-        }
-
-        /* Footer Dark */
-        html.dark footer {
-            background: #0a0714 !important;
-            border-color: rgba(255,255,255,0.1) !important;
-        }
-        html:not(.dark) footer {
-            background: white !important;
-            border-color: rgba(203, 213, 225, 0.3) !important;
+        .search-bar input::placeholder {
+            color: rgba(255, 255, 255, 0.4);
         }
 
-        /* Modal Dark */
-        html.dark #location-modal > div {
+        /* Category Buttons */
+        .cat-btn {
+            padding: 8px 16px;
+            border-radius: 10px;
+            font-size: 12px;
+            font-weight: 600;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            color: rgba(255, 255, 255, 0.7);
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .cat-btn:hover, .cat-btn.active {
+            background: rgba(192, 132, 252, 0.2);
+            border-color: rgba(192, 132, 252, 0.3);
+            color: #c084fc;
+        }
+
+        /* Section Title */
+        .section-title {
+            font-family: 'Lexend', sans-serif;
+            font-weight: 700;
+            font-size: 22px;
+            color: white;
+            margin-bottom: 16px;
+        }
+
+        /* Footer */
+        footer {
+            background: rgba(0, 0, 0, 0.3);
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        /* Modal */
+        #location-modal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            z-index: 100;
+            background: rgba(0,0,0,0.6);
+            backdrop-filter: blur(8px);
+        }
+        #location-modal.active {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        #location-modal > div {
             background: #1a1028;
-            color: white;
+            border: 1px solid rgba(255,255,255,0.1);
         }
-        html.dark #location-modal input {
+        #location-modal input {
             background: rgba(255,255,255,0.05);
-            border-color: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.1);
             color: white;
         }
-
-        /* Nav links dark */
-        html.dark nav a.text-on-surface-variant {
-            color: rgba(255,255,255,0.6);
-        }
-        html.dark nav a.text-on-surface-variant:hover {
-            color: #c084fc;
-        }
-        html.dark nav a.text-primary {
-            color: #c084fc;
-            border-color: #c084fc;
-        }
-
-        /* Text colors dark */
-        html.dark .text-on-surface {
-            color: #ffffff;
-        }
-        html.dark .text-on-surface-variant {
-            color: rgba(255,255,255,0.6);
-        }
-
-        /* Outfit card gradient */
-        .outfit-gradient-1 { background: linear-gradient(135deg, #f472b6, #fb923c); }
-        .outfit-gradient-2 { background: linear-gradient(135deg, #a78bfa, #c084fc); }
-        .outfit-gradient-3 { background: linear-gradient(135deg, #60a5fa, #34d399); }
     </style>
 </head>
 <body>
 
     <!-- ========== HEADER / NAVBAR ========== -->
-    <header class="fixed top-0 left-0 right-0 z-50 backdrop-blur-md border-b transition-colors">
-        <div class="max-w-7xl mx-auto px-5 md:px-12 h-16 flex items-center justify-between">
+    <header class="fixed top-0 left-0 right-0 z-50" style="background: rgba(15, 10, 26, 0.85); backdrop-filter: blur(12px); border-bottom: 1px solid rgba(255,255,255,0.05);">
+        <div class="max-w-7xl mx-auto px-5 md:px-12 h-14 flex items-center justify-between">
             <!-- Logo -->
             <div class="flex items-center gap-2">
-                <div class="w-9 h-9 rounded-xl bg-primary flex items-center justify-center">
-                    <span class="material-symbols-outlined text-white text-[18px]">cloud</span>
+                <div class="w-8 h-8 rounded-lg bg-primary flex items-center justify-center">
+                    <span class="material-symbols-outlined text-white text-[16px]">cloud</span>
                 </div>
-                <span class="font-display font-bold text-lg text-primary">VibeCast</span>
+                <span class="font-display font-bold text-sm text-white">VibeCast</span>
             </div>
             <!-- Nav Links -->
-            <nav class="hidden md:flex items-center gap-8">
-                <a class="text-primary font-semibold text-sm border-b-2 border-primary pb-0.5" href="#">Home</a>
-                <a class="text-on-surface-variant hover:text-primary transition-colors text-sm font-medium" href="#outfit-section">Outfit</a>
-                <a class="text-on-surface-variant hover:text-primary transition-colors text-sm font-medium" href="#food-section">Food</a>
-                <a class="text-on-surface-variant hover:text-primary transition-colors text-sm font-medium" href="#weekend-section">Travel</a>
+            <nav class="hidden md:flex items-center gap-6">
+                <a class="text-white font-semibold text-xs border-b-2 border-primary pb-0.5" href="#">Home</a>
+                <a class="text-white/50 hover:text-primary transition-colors text-xs font-medium" href="#outfit-section">Outfit</a>
+                <a class="text-white/50 hover:text-primary transition-colors text-xs font-medium" href="#food-section">Food</a>
+                <a class="text-white/50 hover:text-primary transition-colors text-xs font-medium" href="#weekend-section">Travel</a>
             </nav>
             <!-- Actions -->
             <div class="flex items-center gap-2">
-                <button id="theme-toggle" class="theme-toggle" title="Toggle Theme">
-                    <span class="material-symbols-outlined text-[20px] icon-sun">light_mode</span>
-                    <span class="material-symbols-outlined text-[20px] icon-moon">dark_mode</span>
+                <button id="location-btn" class="w-8 h-8 rounded-lg flex items-center justify-center hover:bg-white/10 transition-colors" title="My Location">
+                    <span class="material-symbols-outlined text-white/70 text-[18px]">my_location</span>
                 </button>
-                <button id="location-btn" class="w-9 h-9 rounded-xl flex items-center justify-center hover:bg-surface-low transition-colors" title="My Location">
-                    <span class="material-symbols-outlined text-primary text-[20px]">my_location</span>
-                </button>
-                <button id="search-btn" class="w-9 h-9 rounded-xl flex items-center justify-center hover:bg-surface-low transition-colors" title="Search">
-                    <span class="material-symbols-outlined text-primary text-[20px]">search</span>
+                <button id="search-btn" class="w-8 h-8 rounded-lg flex items-center justify-center hover:bg-white/10 transition-colors" title="Search">
+                    <span class="material-symbols-outlined text-white/70 text-[18px]">search</span>
                 </button>
             </div>
         </div>
@@ -342,14 +286,14 @@
 
     <!-- ========== SEARCH MODAL ========== -->
     <div id="location-modal">
-        <div class="bg-white rounded-2xl p-6 max-w-md w-[90%] shadow-2xl">
+        <div class="rounded-2xl p-6 max-w-md w-[90%] shadow-2xl">
             <div class="flex items-center justify-between mb-5">
-                <h3 class="font-display font-semibold text-lg text-on-surface">Search City</h3>
-                <button id="modal-close" class="w-8 h-8 rounded-lg flex items-center justify-center hover:bg-surface-low">
-                    <span class="material-symbols-outlined text-outline text-[20px]">close</span>
+                <h3 class="font-display font-semibold text-lg text-white">Search City</h3>
+                <button id="modal-close" class="w-8 h-8 rounded-lg flex items-center justify-center hover:bg-white/10">
+                    <span class="material-symbols-outlined text-white/50 text-[20px]">close</span>
                 </button>
             </div>
-            <input id="search-input" type="text" placeholder="Type city name..." class="w-full px-4 py-3 bg-surface border border-outline-variant/50 rounded-xl text-sm focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-all mb-4"/>
+            <input id="search-input" type="text" placeholder="Type city name..." class="w-full px-4 py-3 rounded-xl text-sm outline-none mb-4"/>
             <div id="search-results" class="space-y-1 max-h-48 overflow-y-auto"></div>
         </div>
     </div>
@@ -357,81 +301,109 @@
     <main>
 
         <!-- ========== HERO SECTION ========== -->
-        <section class="relative min-h-[85vh] flex flex-col items-center justify-center text-center px-5 overflow-hidden">
-            <!-- Background Gradient -->
-            <div class="absolute inset-0 z-0 hero-gradient" style="background: linear-gradient(180deg, #bee9ff 0%, #f4faff 60%);"></div>
+        <section class="hero-bg min-h-[80vh] flex items-center px-5 md:px-12 pt-20">
+            <div class="max-w-7xl mx-auto w-full grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                <!-- Left: Text Content -->
+                <div class="space-y-6">
+                    <h1 class="font-display font-bold text-4xl md:text-5xl text-white leading-tight">
+                        Today's<br/>weather.
+                    </h1>
+                    <p class="text-white/50 text-sm max-w-md leading-relaxed" id="vibe-description">
+                        The clear skies in Peshawar make for a perfect <span class="text-primary">Golden Hour</span> afternoon. A perfect day to explore outdoor markets or enjoy a rooftop chai.
+                    </p>
+                    <p class="text-white/40 text-xs" id="city-name">Peshawar, Pakistan</p>
 
-            <div class="relative z-10 space-y-5 max-w-2xl">
-                <!-- Weather Badge -->
-                <div id="weather-badge" class="inline-flex items-center gap-2 px-5 py-2 bg-white/70 backdrop-blur-sm rounded-full border border-white/60 dark:bg-white/10 dark:border-white/10">
-                    <span class="material-symbols-outlined text-primary text-[16px]" style="font-variation-settings: 'FILL' 1;" id="weather-badge-icon">wb_sunny</span>
-                    <span class="text-xs font-semibold text-primary uppercase tracking-wider" id="weather-badge-text">Loading...</span>
+                    <!-- Search Bar -->
+                    <div class="search-bar max-w-sm">
+                        <span class="material-symbols-outlined text-white/40 text-[18px]">search</span>
+                        <input type="text" placeholder="Search for a city..." id="hero-search-input"/>
+                    </div>
+
+                    <!-- Category Buttons -->
+                    <div class="flex flex-wrap gap-2">
+                        <button class="cat-btn active">Outfit</button>
+                        <button class="cat-btn">Food</button>
+                        <button class="cat-btn">Travel</button>
+                    </div>
                 </div>
 
-                <!-- Large Weather Icon + Temperature -->
-                <div class="flex flex-col items-center gap-2">
-                    <span class="material-symbols-outlined text-primary" style="font-size: 80px; font-variation-settings: 'FILL' 1;" id="hero-weather-icon">wb_sunny</span>
-                    <h1 class="font-display font-bold text-[80px] md:text-[100px] leading-none text-primary tracking-tight" id="temperature">--°</h1>
-                </div>
-
-                <!-- Vibe Title -->
-                <div>
-                    <h2 class="font-display font-semibold text-2xl md:text-3xl text-on-surface mb-2" id="vibe-title">Today's Vibe</h2>
-                    <p class="text-base text-on-surface-variant max-w-md mx-auto" id="vibe-description">Fetching weather data...</p>
+                <!-- Right: Weather Card -->
+                <div class="flex justify-center lg:justify-end">
+                    <div class="weather-card w-full max-w-[280px]">
+                        <div class="flex items-center gap-2 mb-4">
+                            <span class="text-xs text-white/50 font-medium">IN YOUR REGION</span>
+                        </div>
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <span class="material-symbols-outlined text-yellow-400" style="font-size: 56px; font-variation-settings: 'FILL' 1;" id="hero-weather-icon">wb_sunny</span>
+                            </div>
+                            <div class="text-right">
+                                <h2 class="font-display font-bold text-5xl text-white" id="temperature">--°</h2>
+                            </div>
+                        </div>
+                        <p class="text-white/60 text-sm mt-2" id="weather-condition">Clear Sky</p>
+                        <div class="flex items-center gap-4 mt-4 pt-4 border-t border-white/10">
+                            <div class="flex items-center gap-2">
+                                <span class="material-symbols-outlined text-primary text-[16px]">thermostat</span>
+                                <span class="text-xs text-white/50">Feels like</span>
+                                <span class="text-xs text-white font-medium" id="feels-like">--°</span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </section>
 
-        <!-- ========== WEATHER DETAILS CARDS ========== -->
-        <section class="max-w-7xl mx-auto px-5 md:px-12 -mt-8 relative z-20">
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-4" id="weather-details-grid">
+        <!-- ========== WEATHER DETAILS ========== -->
+        <section class="max-w-7xl mx-auto px-5 md:px-12 py-8">
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
                 <!-- Sunrise -->
-                <div class="glass-card soft-shadow weather-detail-card">
+                <div class="detail-card">
                     <div class="detail-icon" style="background: rgba(251, 146, 60, 0.15);">
-                        <span class="material-symbols-outlined text-orange-500 text-[22px]">wb_twilight</span>
+                        <span class="material-symbols-outlined text-orange-400 text-[20px]">wb_twilight</span>
                     </div>
                     <div>
-                        <p class="detail-label text-on-surface-variant">Sunrise</p>
-                        <p class="detail-value text-on-surface" id="sunrise-time">--:--</p>
+                        <p class="detail-label text-white/50">Sunrise</p>
+                        <p class="detail-value text-white" id="sunrise-time">05:05 AM</p>
                     </div>
                 </div>
                 <!-- Sunset -->
-                <div class="glass-card soft-shadow weather-detail-card">
+                <div class="detail-card">
                     <div class="detail-icon" style="background: rgba(168, 85, 247, 0.15);">
-                        <span class="material-symbols-outlined text-purple-500 text-[22px]">nights_stay</span>
+                        <span class="material-symbols-outlined text-purple-400 text-[20px]">nights_stay</span>
                     </div>
                     <div>
-                        <p class="detail-label text-on-surface-variant">Sunset</p>
-                        <p class="detail-value text-on-surface" id="sunset-time">--:--</p>
+                        <p class="detail-label text-white/50">Sunset</p>
+                        <p class="detail-value text-white" id="sunset-time">07:28 PM</p>
                     </div>
                 </div>
                 <!-- Wind -->
-                <div class="glass-card soft-shadow weather-detail-card">
+                <div class="detail-card">
                     <div class="detail-icon" style="background: rgba(59, 130, 246, 0.15);">
-                        <span class="material-symbols-outlined text-blue-500 text-[22px]">air</span>
+                        <span class="material-symbols-outlined text-blue-400 text-[20px]">air</span>
                     </div>
                     <div>
-                        <p class="detail-label text-on-surface-variant">Wind</p>
-                        <p class="detail-value text-on-surface" id="wind-speed">-- km/h</p>
+                        <p class="detail-label text-white/50">Wind</p>
+                        <p class="detail-value text-white" id="wind-speed">0 m/s</p>
                     </div>
                 </div>
                 <!-- Humidity -->
-                <div class="glass-card soft-shadow weather-detail-card">
+                <div class="detail-card">
                     <div class="detail-icon" style="background: rgba(34, 197, 94, 0.15);">
-                        <span class="material-symbols-outlined text-green-500 text-[22px]">water_drop</span>
+                        <span class="material-symbols-outlined text-green-400 text-[20px]">water_drop</span>
                     </div>
                     <div>
-                        <p class="detail-label text-on-surface-variant">Humidity</p>
-                        <p class="detail-value text-on-surface" id="humidity">--%</p>
+                        <p class="detail-label text-white/50">Humidity</p>
+                        <p class="detail-value text-white" id="humidity">54%</p>
                     </div>
                 </div>
             </div>
         </section>
 
         <!-- ========== HOURLY FORECAST ========== -->
-        <section class="max-w-7xl mx-auto px-5 md:px-12 py-12">
-            <h2 class="font-display font-bold text-2xl text-on-surface mb-6">Hourly Forecast</h2>
-            <div class="glass-card soft-shadow rounded-2xl p-5">
+        <section class="max-w-7xl mx-auto px-5 md:px-12 py-6">
+            <h2 class="section-title">Hourly forecast</h2>
+            <div class="glass-card rounded-2xl p-4">
                 <div class="hourly-scroll" id="hourly-scroll">
                     <!-- Injected by JS -->
                 </div>
@@ -439,93 +411,76 @@
         </section>
 
         <!-- ========== TODAY'S TIPS ========== -->
-        <section class="max-w-7xl mx-auto px-5 md:px-12 pb-8">
-            <h2 class="font-display font-bold text-2xl text-on-surface mb-4">Today's Tips</h2>
-            <div class="glass-card soft-shadow rounded-2xl p-5">
+        <section class="max-w-7xl mx-auto px-5 md:px-12 py-6">
+            <h2 class="section-title">Today's tips</h2>
+            <div class="glass-card rounded-2xl p-4">
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-3" id="tips-container">
                     <!-- Injected by JS -->
                 </div>
             </div>
         </section>
 
-        <!-- Divider -->
-        <div class="max-w-7xl mx-auto px-5 md:px-12"><div class="section-divider"></div></div>
-
-        <!-- ========== OUTFIT SECTION ========== -->
-        <section id="outfit-section" class="max-w-7xl mx-auto px-5 md:px-12 py-16">
-            <!-- Rain Alert Banner -->
-            <div id="rain-alert" class="hidden mb-6 p-4 bg-blue-500/10 border border-blue-500/30 rounded-2xl flex items-center gap-3">
-                <span class="material-symbols-outlined text-blue-600 text-[24px]">rainy</span>
-                <p class="text-sm font-medium text-blue-700" id="rain-alert-text">Rain Alert: 80% chance of rain today!</p>
-            </div>
-
-            <!-- Section Header -->
-            <div class="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-10">
-                <div>
-                    <h2 class="font-display font-bold text-3xl text-primary mb-2">What to Wear</h2>
-                    <p class="text-on-surface-variant" id="outfit-subtitle">Curated essentials for your day.</p>
-                </div>
-                <div class="flex items-center gap-3 bg-primary-container/20 border border-primary-container/40 px-5 py-3 rounded-2xl">
-                    <span class="material-symbols-outlined text-primary text-[24px]">health_and_safety</span>
-                    <p class="text-sm font-medium text-on-primary-container" id="spf-tip">SPF 50 is your best friend today!</p>
-                </div>
-            </div>
-            <!-- Outfit Cards Grid -->
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6" id="outfit-grid">
-                <!-- Injected by JS -->
-            </div>
-        </section>
-
-        <!-- Divider -->
-        <div class="max-w-7xl mx-auto px-5 md:px-12"><div class="section-divider"></div></div>
-
-        <!-- ========== FOOD SECTION ========== -->
-        <section id="food-section" class="max-w-7xl mx-auto px-5 md:px-12 py-16">
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-                <!-- Text Content -->
-                <div class="space-y-5">
-                    <h2 class="font-display font-bold text-3xl text-primary">What to Eat</h2>
-                    <span class="inline-block bg-secondary text-on-secondary px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider" id="food-badge">Sunny Day Pick</span>
-                    <h3 class="font-display font-semibold text-2xl text-on-surface" id="food-title">Mango Gelato & Iced Matcha</h3>
-                    <p class="text-on-surface-variant leading-relaxed" id="food-description">The perfect pairing for a warm day. Light, refreshing, and photogenic.</p>
-                    <div class="flex flex-wrap gap-3 pt-2">
-                        <button class="px-6 py-3 bg-primary text-white rounded-full font-semibold text-sm hover:shadow-lg hover:shadow-primary/20 transition-all flex items-center gap-2">
-                            <span class="material-symbols-outlined text-[18px]">near_me</span>
-                            Find Nearby Cafes
-                        </button>
-                        <button class="px-6 py-3 border-2 border-primary text-primary rounded-full font-semibold text-sm hover:bg-primary/5 transition-colors">See Full Menu</button>
+        <!-- ========== LIFESTYLE SECTION ========== -->
+        <section class="max-w-7xl mx-auto px-5 md:px-12 py-8">
+            <h2 class="section-title">What to do, what to eat</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Outfit Card -->
+                <div class="gradient-card gradient-pink" id="outfit-card">
+                    <div class="relative z-10">
+                        <span class="inline-block px-3 py-1 bg-white/20 rounded-full text-[10px] font-bold uppercase mb-3" id="outfit-badge">Sunny Day</span>
+                        <h3 class="font-display font-bold text-xl mb-2" id="outfit-title">Very Hot - Light Clothes</h3>
+                        <ul class="space-y-2 text-sm text-white/80" id="outfit-list">
+                            <li class="flex items-center gap-2">
+                                <span class="material-symbols-outlined text-[14px]">check</span>
+                                Cotton breathable fabric
+                            </li>
+                            <li class="flex items-center gap-2">
+                                <span class="material-symbols-outlined text-[14px]">check</span>
+                                Light colors preferred
+                            </li>
+                            <li class="flex items-center gap-2">
+                                <span class="material-symbols-outlined text-[14px]">check</span>
+                                Sunglasses & hat
+                            </li>
+                        </ul>
                     </div>
                 </div>
-                <!-- Image -->
-                <div class="relative">
-                    <div class="w-full h-[400px] lg:h-[480px] rounded-3xl overflow-hidden soft-shadow-lg">
-                        <img id="food-image" class="w-full h-full object-cover" src="https://images.unsplash.com/photo-1551024601-bec78aea704b?w=600&h=480&fit=crop" alt="Food recommendation"/>
+
+                <!-- Food Card -->
+                <div class="gradient-card gradient-orange" id="food-card">
+                    <div class="relative z-10">
+                        <span class="inline-block px-3 py-1 bg-white/20 rounded-full text-[10px] font-bold uppercase mb-3" id="food-badge">Stay Healthy</span>
+                        <h3 class="font-display font-bold text-xl mb-2" id="food-title">Fresh & Hydrating</h3>
+                        <ul class="space-y-2 text-sm text-white/80" id="food-list">
+                            <li class="flex items-center gap-2">
+                                <span class="material-symbols-outlined text-[14px]">check</span>
+                                Fresh fruit juice
+                            </li>
+                            <li class="flex items-center gap-2">
+                                <span class="material-symbols-outlined text-[14px]">check</span>
+                                Light salad meals
+                            </li>
+                            <li class="flex items-center gap-2">
+                                <span class="material-symbols-outlined text-[14px]">check</span>
+                                Stay hydrated
+                            </li>
+                        </ul>
                     </div>
-                    <div class="absolute -bottom-6 -left-6 w-32 h-32 bg-primary-container/30 rounded-full blur-2xl"></div>
-                    <div class="absolute -top-6 -right-6 w-40 h-40 bg-secondary-container/20 rounded-full blur-2xl"></div>
                 </div>
             </div>
         </section>
-
-        <!-- Divider -->
-        <div class="max-w-7xl mx-auto px-5 md:px-12"><div class="section-divider"></div></div>
 
         <!-- ========== WEEKEND SECTION ========== -->
-        <section id="weekend-section" class="max-w-7xl mx-auto px-5 md:px-12 py-16">
-            <!-- Section Header -->
-            <div class="text-center mb-10">
-                <h2 class="font-display font-bold text-3xl text-primary mb-2">Your Weekend Escape</h2>
-                <p class="text-on-surface-variant max-w-lg mx-auto">Don't let the forecast surprise you. We've curated your perfect itinerary.</p>
-            </div>
-            <!-- Weekend Cards -->
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10" id="weekend-grid">
+        <section id="weekend-section" class="max-w-7xl mx-auto px-5 md:px-12 py-12">
+            <h2 class="section-title text-center">Your Weekend Escape</h2>
+            <p class="text-white/40 text-sm text-center max-w-lg mx-auto mb-8">Don't let the forecast surprise you. We've curated your perfect itinerary.</p>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8" id="weekend-grid">
                 <!-- Injected by JS -->
             </div>
-            <!-- CTA Button -->
             <div class="text-center">
-                <button class="group inline-flex items-center gap-3 px-8 py-4 bg-primary text-white rounded-full font-semibold hover:shadow-lg hover:shadow-primary/20 hover:scale-[1.02] transition-all">
+                <button class="group inline-flex items-center gap-3 px-8 py-3 bg-primary text-white rounded-full font-semibold text-sm hover:shadow-lg hover:shadow-primary/20 hover:scale-[1.02] transition-all">
                     Plan My Trip
-                    <span class="material-symbols-outlined text-[20px] group-hover:translate-x-1 transition-transform">arrow_forward</span>
+                    <span class="material-symbols-outlined text-[18px] group-hover:translate-x-1 transition-transform">arrow_forward</span>
                 </button>
             </div>
         </section>
@@ -533,45 +488,42 @@
     </main>
 
     <!-- ========== FOOTER ========== -->
-    <footer class="border-t transition-colors">
-        <div class="max-w-7xl mx-auto px-5 md:px-12 py-14">
+    <footer>
+        <div class="max-w-7xl mx-auto px-5 md:px-12 py-12">
             <div class="grid grid-cols-1 md:grid-cols-3 gap-10">
-                <!-- Brand -->
                 <div class="space-y-4">
                     <div class="flex items-center gap-2">
                         <div class="w-8 h-8 rounded-lg bg-primary flex items-center justify-center">
                             <span class="material-symbols-outlined text-white text-[16px]">cloud</span>
                         </div>
-                        <span class="font-display font-bold text-primary">VibeCast</span>
+                        <span class="font-display font-bold text-white">VibeCast</span>
                     </div>
-                    <p class="text-sm text-on-surface-variant leading-relaxed">Your daily companion for a lifestyle-first weather experience. We focus on how it feels, not just what it shows.</p>
-                    <p class="text-xs text-outline">&copy; 2024 VibeCast. All rights reserved.</p>
+                    <p class="text-sm text-white/40 leading-relaxed">Your daily companion for a lifestyle-first weather experience.</p>
+                    <p class="text-xs text-white/30">&copy; 2024 VibeCast. All rights reserved.</p>
                 </div>
-                <!-- Links -->
                 <div class="grid grid-cols-2 gap-6">
                     <div class="space-y-3">
                         <h4 class="text-xs font-bold text-primary uppercase tracking-wider">Explore</h4>
                         <ul class="space-y-2">
-                            <li><a class="text-sm text-on-surface-variant hover:text-primary transition-colors" href="#">About the Vibe</a></li>
-                            <li><a class="text-sm text-on-surface-variant hover:text-primary transition-colors" href="#">Daily Guide</a></li>
-                            <li><a class="text-sm text-on-surface-variant hover:text-primary transition-colors" href="#">Destinations</a></li>
+                            <li><a class="text-sm text-white/40 hover:text-primary transition-colors" href="#">About</a></li>
+                            <li><a class="text-sm text-white/40 hover:text-primary transition-colors" href="#">Daily Guide</a></li>
+                            <li><a class="text-sm text-white/40 hover:text-primary transition-colors" href="#">Destinations</a></li>
                         </ul>
                     </div>
                     <div class="space-y-3">
                         <h4 class="text-xs font-bold text-primary uppercase tracking-wider">Connect</h4>
                         <ul class="space-y-2">
-                            <li><a class="text-sm text-on-surface-variant hover:text-primary transition-colors" href="#">Instagram</a></li>
-                            <li><a class="text-sm text-on-surface-variant hover:text-primary transition-colors" href="#">TikTok</a></li>
-                            <li><a class="text-sm text-on-surface-variant hover:text-primary transition-colors" href="#">Contact</a></li>
+                            <li><a class="text-sm text-white/40 hover:text-primary transition-colors" href="#">Instagram</a></li>
+                            <li><a class="text-sm text-white/40 hover:text-primary transition-colors" href="#">TikTok</a></li>
+                            <li><a class="text-sm text-white/40 hover:text-primary transition-colors" href="#">Contact</a></li>
                         </ul>
                     </div>
                 </div>
-                <!-- Newsletter -->
                 <div class="space-y-3">
                     <h4 class="text-xs font-bold text-primary uppercase tracking-wider">Stay Tuned</h4>
-                    <p class="text-sm text-on-surface-variant">Get a weekly vibe digest in your inbox.</p>
+                    <p class="text-sm text-white/40">Get a weekly vibe digest in your inbox.</p>
                     <form class="flex gap-2" onsubmit="event.preventDefault();">
-                        <input class="flex-1 bg-surface border border-outline-variant/40 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-all" placeholder="Email address" type="email"/>
+                        <input class="flex-1 bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-sm text-white placeholder-white/30 outline-none focus:ring-2 focus:ring-primary" placeholder="Email address" type="email"/>
                         <button class="bg-primary text-white px-5 py-2.5 rounded-xl font-semibold text-sm hover:bg-primary/90 transition-colors">Join</button>
                     </form>
                 </div>
