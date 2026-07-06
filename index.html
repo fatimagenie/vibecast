@@ -42,20 +42,12 @@
             border: 1px solid rgba(255, 255, 255, 0.08);
         }
 
-        .glass-card-light {
-            background: rgba(255, 255, 255, 0.03);
-            backdrop-filter: blur(8px);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-        }
-
-        /* Hero Gradient */
         .hero-bg {
             background: radial-gradient(ellipse at 50% 0%, rgba(168, 85, 247, 0.15) 0%, transparent 60%),
                         radial-gradient(ellipse at 80% 20%, rgba(244, 114, 182, 0.1) 0%, transparent 50%),
                         linear-gradient(180deg, #1a0f2e 0%, #0f0a1a 100%);
         }
 
-        /* Weather Card */
         .weather-card {
             background: linear-gradient(135deg, rgba(168, 85, 247, 0.2), rgba(244, 114, 182, 0.15));
             border: 1px solid rgba(255, 255, 255, 0.1);
@@ -64,12 +56,15 @@
             backdrop-filter: blur(20px);
         }
 
-        /* Hourly Cards */
+        /* Hourly Forecast - Exact Match */
+        .hourly-container {
+            position: relative;
+        }
         .hourly-scroll {
             display: flex;
-            gap: 12px;
+            gap: 10px;
             overflow-x: auto;
-            padding-bottom: 8px;
+            padding: 8px 0;
             scroll-behavior: smooth;
             -ms-overflow-style: none;
             scrollbar-width: none;
@@ -78,34 +73,258 @@
 
         .hourly-card {
             flex: 0 0 auto;
-            width: 64px;
-            padding: 14px 8px;
-            border-radius: 16px;
+            width: 68px;
+            padding: 12px 6px;
+            border-radius: 14px;
             text-align: center;
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 8px;
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 255, 255, 0.05);
+            gap: 6px;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.06);
             transition: all 0.3s;
         }
         .hourly-card.active {
             background: linear-gradient(135deg, #c084fc, #f472b6);
             border: none;
+            box-shadow: 0 4px 20px rgba(192, 132, 252, 0.3);
         }
         .hourly-card .hour-time {
-            font-size: 11px;
+            font-size: 10px;
             font-weight: 500;
             opacity: 0.6;
+        }
+        .hourly-card .hour-icon {
+            font-size: 24px;
         }
         .hourly-card .hour-temp {
             font-family: 'Lexend', sans-serif;
             font-weight: 700;
-            font-size: 14px;
+            font-size: 13px;
         }
 
-        /* Weather Detail Cards */
+        .scroll-arrow {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 10;
+            transition: all 0.3s;
+        }
+        .scroll-arrow:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+        .scroll-arrow.left { left: -16px; }
+        .scroll-arrow.right { right: -16px; }
+
+        /* Progress Bar */
+        .scroll-progress {
+            width: 100%;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 2px;
+            margin-top: 12px;
+            overflow: hidden;
+        }
+        .scroll-progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, #c084fc, #f472b6);
+            border-radius: 2px;
+            width: 30%;
+            transition: width 0.3s;
+        }
+
+        /* Tips Section - Exact Match */
+        .tips-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            background: rgba(168, 85, 247, 0.2);
+            border: 1px solid rgba(168, 85, 247, 0.3);
+            border-radius: 6px;
+            font-size: 10px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: #c084fc;
+            margin-bottom: 12px;
+        }
+
+        .tip-card {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            padding: 16px;
+            border-radius: 14px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        .tip-number {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: rgba(168, 85, 247, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 11px;
+            font-weight: 700;
+            color: #c084fc;
+            flex-shrink: 0;
+        }
+        .tip-text {
+            font-size: 13px;
+            color: rgba(255, 255, 255, 0.7);
+            line-height: 1.5;
+        }
+
+        /* Lifestyle Section - Exact Match */
+        .lifestyle-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            background: rgba(244, 114, 182, 0.2);
+            border: 1px solid rgba(244, 114, 182, 0.3);
+            border-radius: 6px;
+            font-size: 10px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: #f472b6;
+            margin-bottom: 8px;
+        }
+
+        .gradient-card {
+            border-radius: 20px;
+            padding: 24px;
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+        .gradient-card::before {
+            content: '';
+            position: absolute;
+            top: -30%;
+            right: -30%;
+            width: 80%;
+            height: 80%;
+            background: radial-gradient(circle, rgba(255,255,255,0.15) 0%, transparent 70%);
+            border-radius: 50%;
+        }
+        .gradient-pink { background: linear-gradient(135deg, #f472b6, #fb923c); }
+        .gradient-orange { background: linear-gradient(135deg, #fb923c, #fbbf24); }
+        .gradient-purple { background: linear-gradient(135deg, #a78bfa, #c084fc); }
+        .gradient-dark {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .outfit-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            margin-top: 16px;
+        }
+        .outfit-item {
+            padding: 10px 12px;
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 10px;
+            font-size: 11px;
+            font-weight: 500;
+        }
+
+        .see-all-btn {
+            display: inline-block;
+            margin-top: 16px;
+            padding: 8px 16px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .see-all-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .small-card-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        .small-card-list li {
+            padding: 6px 0;
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.8);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .small-card-list li::before {
+            content: '';
+            width: 4px;
+            height: 4px;
+            border-radius: 50%;
+            background: currentColor;
+            flex-shrink: 0;
+        }
+
+        .search-bar {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 10px 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .search-bar input {
+            background: transparent;
+            border: none;
+            outline: none;
+            color: white;
+            font-size: 13px;
+            width: 100%;
+        }
+        .search-bar input::placeholder {
+            color: rgba(255, 255, 255, 0.4);
+        }
+
+        .cat-btn {
+            padding: 8px 16px;
+            border-radius: 10px;
+            font-size: 12px;
+            font-weight: 600;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            color: rgba(255, 255, 255, 0.7);
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .cat-btn:hover, .cat-btn.active {
+            background: rgba(192, 132, 252, 0.2);
+            border-color: rgba(192, 132, 252, 0.3);
+            color: #c084fc;
+        }
+
+        .section-title {
+            font-family: 'Lexend', sans-serif;
+            font-weight: 700;
+            font-size: 22px;
+            color: white;
+            margin-bottom: 16px;
+        }
+
         .detail-card {
             display: flex;
             align-items: center;
@@ -137,98 +356,11 @@
             font-size: 15px;
         }
 
-        /* Tip Items */
-        .tip-item {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            padding: 10px 14px;
-            border-radius: 12px;
-            font-size: 12px;
-            font-weight: 500;
-            background: rgba(255, 255, 255, 0.03);
-        }
-
-        /* Gradient Cards */
-        .gradient-card {
-            border-radius: 20px;
-            padding: 20px;
-            color: white;
-            position: relative;
-            overflow: hidden;
-            min-height: 160px;
-        }
-        .gradient-card::before {
-            content: '';
-            position: absolute;
-            top: -30%;
-            right: -30%;
-            width: 80%;
-            height: 80%;
-            background: radial-gradient(circle, rgba(255,255,255,0.15) 0%, transparent 70%);
-            border-radius: 50%;
-        }
-        .gradient-pink { background: linear-gradient(135deg, #f472b6, #fb923c); }
-        .gradient-orange { background: linear-gradient(135deg, #fb923c, #fbbf24); }
-        .gradient-purple { background: linear-gradient(135deg, #a78bfa, #c084fc); }
-        .gradient-blue { background: linear-gradient(135deg, #60a5fa, #34d399); }
-
-        /* Search Bar */
-        .search-bar {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 12px;
-            padding: 10px 16px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        .search-bar input {
-            background: transparent;
-            border: none;
-            outline: none;
-            color: white;
-            font-size: 13px;
-            width: 100%;
-        }
-        .search-bar input::placeholder {
-            color: rgba(255, 255, 255, 0.4);
-        }
-
-        /* Category Buttons */
-        .cat-btn {
-            padding: 8px 16px;
-            border-radius: 10px;
-            font-size: 12px;
-            font-weight: 600;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            color: rgba(255, 255, 255, 0.7);
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-        .cat-btn:hover, .cat-btn.active {
-            background: rgba(192, 132, 252, 0.2);
-            border-color: rgba(192, 132, 252, 0.3);
-            color: #c084fc;
-        }
-
-        /* Section Title */
-        .section-title {
-            font-family: 'Lexend', sans-serif;
-            font-weight: 700;
-            font-size: 22px;
-            color: white;
-            margin-bottom: 16px;
-        }
-
-        /* Footer */
         footer {
             background: rgba(0, 0, 0, 0.3);
             border-top: 1px solid rgba(255, 255, 255, 0.05);
         }
 
-        /* Modal */
         #location-modal {
             display: none;
             position: fixed;
@@ -255,24 +387,21 @@
 </head>
 <body>
 
-    <!-- ========== HEADER / NAVBAR ========== -->
+    <!-- ========== HEADER ========== -->
     <header class="fixed top-0 left-0 right-0 z-50" style="background: rgba(15, 10, 26, 0.85); backdrop-filter: blur(12px); border-bottom: 1px solid rgba(255,255,255,0.05);">
         <div class="max-w-7xl mx-auto px-5 md:px-12 h-14 flex items-center justify-between">
-            <!-- Logo -->
             <div class="flex items-center gap-2">
                 <div class="w-8 h-8 rounded-lg bg-primary flex items-center justify-center">
                     <span class="material-symbols-outlined text-white text-[16px]">cloud</span>
                 </div>
                 <span class="font-display font-bold text-sm text-white">VibeCast</span>
             </div>
-            <!-- Nav Links -->
             <nav class="hidden md:flex items-center gap-6">
                 <a class="text-white font-semibold text-xs border-b-2 border-primary pb-0.5" href="#">Home</a>
                 <a class="text-white/50 hover:text-primary transition-colors text-xs font-medium" href="#outfit-section">Outfit</a>
                 <a class="text-white/50 hover:text-primary transition-colors text-xs font-medium" href="#food-section">Food</a>
                 <a class="text-white/50 hover:text-primary transition-colors text-xs font-medium" href="#weekend-section">Travel</a>
             </nav>
-            <!-- Actions -->
             <div class="flex items-center gap-2">
                 <button id="location-btn" class="w-8 h-8 rounded-lg flex items-center justify-center hover:bg-white/10 transition-colors" title="My Location">
                     <span class="material-symbols-outlined text-white/70 text-[18px]">my_location</span>
@@ -303,7 +432,6 @@
         <!-- ========== HERO SECTION ========== -->
         <section class="hero-bg min-h-[80vh] flex items-center px-5 md:px-12 pt-20">
             <div class="max-w-7xl mx-auto w-full grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-                <!-- Left: Text Content -->
                 <div class="space-y-6">
                     <h1 class="font-display font-bold text-4xl md:text-5xl text-white leading-tight">
                         Today's<br/>weather.
@@ -312,22 +440,16 @@
                         The clear skies in Peshawar make for a perfect <span class="text-primary">Golden Hour</span> afternoon. A perfect day to explore outdoor markets or enjoy a rooftop chai.
                     </p>
                     <p class="text-white/40 text-xs" id="city-name">Peshawar, Pakistan</p>
-
-                    <!-- Search Bar -->
                     <div class="search-bar max-w-sm">
                         <span class="material-symbols-outlined text-white/40 text-[18px]">search</span>
                         <input type="text" placeholder="Search for a city..." id="hero-search-input"/>
                     </div>
-
-                    <!-- Category Buttons -->
                     <div class="flex flex-wrap gap-2">
                         <button class="cat-btn active">Outfit</button>
                         <button class="cat-btn">Food</button>
                         <button class="cat-btn">Travel</button>
                     </div>
                 </div>
-
-                <!-- Right: Weather Card -->
                 <div class="flex justify-center lg:justify-end">
                     <div class="weather-card w-full max-w-[280px]">
                         <div class="flex items-center gap-2 mb-4">
@@ -357,7 +479,6 @@
         <!-- ========== WEATHER DETAILS ========== -->
         <section class="max-w-7xl mx-auto px-5 md:px-12 py-8">
             <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-                <!-- Sunrise -->
                 <div class="detail-card">
                     <div class="detail-icon" style="background: rgba(251, 146, 60, 0.15);">
                         <span class="material-symbols-outlined text-orange-400 text-[20px]">wb_twilight</span>
@@ -367,7 +488,6 @@
                         <p class="detail-value text-white" id="sunrise-time">05:05 AM</p>
                     </div>
                 </div>
-                <!-- Sunset -->
                 <div class="detail-card">
                     <div class="detail-icon" style="background: rgba(168, 85, 247, 0.15);">
                         <span class="material-symbols-outlined text-purple-400 text-[20px]">nights_stay</span>
@@ -377,7 +497,6 @@
                         <p class="detail-value text-white" id="sunset-time">07:28 PM</p>
                     </div>
                 </div>
-                <!-- Wind -->
                 <div class="detail-card">
                     <div class="detail-icon" style="background: rgba(59, 130, 246, 0.15);">
                         <span class="material-symbols-outlined text-blue-400 text-[20px]">air</span>
@@ -387,7 +506,6 @@
                         <p class="detail-value text-white" id="wind-speed">0 m/s</p>
                     </div>
                 </div>
-                <!-- Humidity -->
                 <div class="detail-card">
                     <div class="detail-icon" style="background: rgba(34, 197, 94, 0.15);">
                         <span class="material-symbols-outlined text-green-400 text-[20px]">water_drop</span>
@@ -402,19 +520,34 @@
 
         <!-- ========== HOURLY FORECAST ========== -->
         <section class="max-w-7xl mx-auto px-5 md:px-12 py-6">
-            <h2 class="section-title">Hourly forecast</h2>
-            <div class="glass-card rounded-2xl p-4">
-                <div class="hourly-scroll" id="hourly-scroll">
-                    <!-- Injected by JS -->
+            <p class="text-white/40 text-xs font-semibold uppercase tracking-wider mb-3">HOURLY FORECAST</p>
+            <div class="hourly-container">
+                <div class="scroll-arrow left" onclick="scrollHourly(-1)">
+                    <span class="material-symbols-outlined text-white text-[18px]">chevron_left</span>
+                </div>
+                <div class="glass-card rounded-2xl p-4 mx-8">
+                    <div class="hourly-scroll" id="hourly-scroll">
+                        <!-- Injected by JS -->
+                    </div>
+                    <div class="scroll-progress">
+                        <div class="scroll-progress-bar" id="scroll-progress-bar"></div>
+                    </div>
+                </div>
+                <div class="scroll-arrow right" onclick="scrollHourly(1)">
+                    <span class="material-symbols-outlined text-white text-[18px]">chevron_right</span>
                 </div>
             </div>
         </section>
 
         <!-- ========== TODAY'S TIPS ========== -->
         <section class="max-w-7xl mx-auto px-5 md:px-12 py-6">
-            <h2 class="section-title">Today's tips</h2>
-            <div class="glass-card rounded-2xl p-4">
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-3" id="tips-container">
+            <div class="glass-card rounded-2xl p-5">
+                <span class="tips-badge">IMPORTANT</span>
+                <h2 class="section-title flex items-center gap-2">
+                    <span class="material-symbols-outlined text-yellow-400 text-[24px]" style="font-variation-settings: 'FILL' 1;">lightbulb</span>
+                    Today's tips
+                </h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4" id="tips-container">
                     <!-- Injected by JS -->
                 </div>
             </div>
@@ -422,49 +555,66 @@
 
         <!-- ========== LIFESTYLE SECTION ========== -->
         <section class="max-w-7xl mx-auto px-5 md:px-12 py-8">
+            <p class="text-white/40 text-xs font-semibold uppercase tracking-wider mb-2">DAILY ROUTINE</p>
             <h2 class="section-title">What to do, what to eat</h2>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <!-- Outfit Card -->
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <!-- Left: Outfit Card (Large) -->
                 <div class="gradient-card gradient-pink" id="outfit-card">
                     <div class="relative z-10">
-                        <span class="inline-block px-3 py-1 bg-white/20 rounded-full text-[10px] font-bold uppercase mb-3" id="outfit-badge">Sunny Day</span>
-                        <h3 class="font-display font-bold text-xl mb-2" id="outfit-title">Very Hot - Light Clothes</h3>
-                        <ul class="space-y-2 text-sm text-white/80" id="outfit-list">
-                            <li class="flex items-center gap-2">
-                                <span class="material-symbols-outlined text-[14px]">check</span>
-                                Cotton breathable fabric
-                            </li>
-                            <li class="flex items-center gap-2">
-                                <span class="material-symbols-outlined text-[14px]">check</span>
-                                Light colors preferred
-                            </li>
-                            <li class="flex items-center gap-2">
-                                <span class="material-symbols-outlined text-[14px]">check</span>
-                                Sunglasses & hat
-                            </li>
-                        </ul>
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="material-symbols-outlined text-white/80 text-[28px]">shopping_bag</span>
+                            <span class="see-all-btn" id="outfit-badge">SEE EVERYTHING</span>
+                        </div>
+                        <h3 class="font-display font-bold text-xl mb-1" id="outfit-title">Very Hot — Light Clothes</h3>
+                        <div class="outfit-grid" id="outfit-grid">
+                            <!-- Injected by JS -->
+                        </div>
                     </div>
                 </div>
 
-                <!-- Food Card -->
-                <div class="gradient-card gradient-orange" id="food-card">
-                    <div class="relative z-10">
-                        <span class="inline-block px-3 py-1 bg-white/20 rounded-full text-[10px] font-bold uppercase mb-3" id="food-badge">Stay Healthy</span>
-                        <h3 class="font-display font-bold text-xl mb-2" id="food-title">Fresh & Hydrating</h3>
-                        <ul class="space-y-2 text-sm text-white/80" id="food-list">
-                            <li class="flex items-center gap-2">
-                                <span class="material-symbols-outlined text-[14px]">check</span>
-                                Fresh fruit juice
-                            </li>
-                            <li class="flex items-center gap-2">
-                                <span class="material-symbols-outlined text-[14px]">check</span>
-                                Light salad meals
-                            </li>
-                            <li class="flex items-center gap-2">
-                                <span class="material-symbols-outlined text-[14px]">check</span>
-                                Stay hydrated
-                            </li>
-                        </ul>
+                <!-- Right: 3 Small Cards -->
+                <div class="flex flex-col gap-4">
+                    <!-- Food Card -->
+                    <div class="gradient-card gradient-orange flex-1" id="food-card">
+                        <div class="relative z-10">
+                            <div class="flex items-center gap-2 mb-2">
+                                <span class="material-symbols-outlined text-white/80 text-[20px]">restaurant</span>
+                                <span class="text-[10px] font-bold uppercase tracking-wider text-white/60">HEALTHY</span>
+                            </div>
+                            <h3 class="font-display font-bold text-lg mb-2" id="food-title">Cooling Food</h3>
+                            <ul class="small-card-list" id="food-list">
+                                <!-- Injected by JS -->
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- Hydration Card -->
+                    <div class="gradient-card gradient-purple flex-1" id="hydration-card">
+                        <div class="relative z-10">
+                            <div class="flex items-center gap-2 mb-2">
+                                <span class="material-symbols-outlined text-white/80 text-[20px]">water_drop</span>
+                                <span class="text-[10px] font-bold uppercase tracking-wider text-white/60">STAY FRESH</span>
+                            </div>
+                            <h3 class="font-display font-bold text-lg mb-2">Hydration</h3>
+                            <ul class="small-card-list" id="hydration-list">
+                                <!-- Injected by JS -->
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- Today's Plan Card -->
+                    <div class="gradient-card gradient-dark flex-1" id="today-card">
+                        <div class="relative z-10">
+                            <div class="flex items-center gap-2 mb-2">
+                                <span class="material-symbols-outlined text-white/80 text-[20px]">calendar_today</span>
+                                <span class="text-[10px] font-bold uppercase tracking-wider text-white/60">TODAY</span>
+                            </div>
+                            <h3 class="font-display font-bold text-lg mb-2">Today's Plan</h3>
+                            <ul class="small-card-list" id="today-list">
+                                <!-- Injected by JS -->
+                            </ul>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -474,9 +624,7 @@
         <section id="weekend-section" class="max-w-7xl mx-auto px-5 md:px-12 py-12">
             <h2 class="section-title text-center">Your Weekend Escape</h2>
             <p class="text-white/40 text-sm text-center max-w-lg mx-auto mb-8">Don't let the forecast surprise you. We've curated your perfect itinerary.</p>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8" id="weekend-grid">
-                <!-- Injected by JS -->
-            </div>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8" id="weekend-grid"></div>
             <div class="text-center">
                 <button class="group inline-flex items-center gap-3 px-8 py-3 bg-primary text-white rounded-full font-semibold text-sm hover:shadow-lg hover:shadow-primary/20 hover:scale-[1.02] transition-all">
                     Plan My Trip
@@ -533,7 +681,7 @@
 
     <script src="js/app.js"></script>
     <script>
-        // Scroll header hide/show
+        // Scroll header
         let lastScroll = 0;
         const header = document.querySelector('header');
         window.addEventListener('scroll', () => {
@@ -545,6 +693,25 @@
             }
             lastScroll = currentScroll;
         });
+
+        // Hourly scroll arrows
+        function scrollHourly(direction) {
+            const container = document.getElementById('hourly-scroll');
+            const scrollAmount = 150;
+            container.scrollBy({ left: direction * scrollAmount, behavior: 'smooth' });
+        }
+
+        // Update progress bar on scroll
+        const hourlyScroll = document.getElementById('hourly-scroll');
+        const progressBar = document.getElementById('scroll-progress-bar');
+        if (hourlyScroll && progressBar) {
+            hourlyScroll.addEventListener('scroll', () => {
+                const scrollLeft = hourlyScroll.scrollLeft;
+                const maxScroll = hourlyScroll.scrollWidth - hourlyScroll.clientWidth;
+                const percentage = maxScroll > 0 ? (scrollLeft / maxScroll) * 100 : 0;
+                progressBar.style.width = Math.max(30, percentage) + '%';
+            });
+        }
     </script>
 </body>
 </html>
