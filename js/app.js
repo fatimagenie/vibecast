@@ -9,21 +9,21 @@
 const CONFIG = {
     GEO_API: 'https://geocoding-api.open-meteo.com/v1/search',
     WEATHER_API: 'https://api.open-meteo.com/v1/forecast',
-    DEFAULT_CITY: 'Karachi',
+    DEFAULT_CITY: 'Peshawar',
 };
 
 // ============================================
 // STATE
 // ============================================
-let currentGender = 'men';
-let currentStyle = 'western';
 let currentWeatherData = null;
+let isDarkMode = false;
 
 // ============================================
 // DOM ELEMENTS
 // ============================================
 const DOM = {
     temperature: document.getElementById('temperature'),
+    heroWeatherIcon: document.getElementById('hero-weather-icon'),
     weatherBadge: document.getElementById('weather-badge'),
     weatherBadgeIcon: document.getElementById('weather-badge-icon'),
     weatherBadgeText: document.getElementById('weather-badge-text'),
@@ -31,283 +31,124 @@ const DOM = {
     vibeDescription: document.getElementById('vibe-description'),
     windSpeed: document.getElementById('wind-speed'),
     humidity: document.getElementById('humidity'),
-    uvIndex: document.getElementById('uv-index'),
+    sunriseTime: document.getElementById('sunrise-time'),
+    sunsetTime: document.getElementById('sunset-time'),
+    hourlyScroll: document.getElementById('hourly-scroll'),
+    tipsContainer: document.getElementById('tips-container'),
     outfitSubtitle: document.getElementById('outfit-subtitle'),
     outfitGrid: document.getElementById('outfit-grid'),
     spfTip: document.getElementById('spf-tip'),
     rainAlert: document.getElementById('rain-alert'),
     rainAlertText: document.getElementById('rain-alert-text'),
-    genderBtns: document.querySelectorAll('.gender-btn'),
-    styleBtns: document.querySelectorAll('.style-btn'),
     foodBadge: document.getElementById('food-badge'),
     foodTitle: document.getElementById('food-title'),
     foodDescription: document.getElementById('food-description'),
     foodImage: document.getElementById('food-image'),
-    weekendGrid: document.getElementById('weekend-grid'),
     searchBtn: document.getElementById('search-btn'),
     locationBtn: document.getElementById('location-btn'),
     locationModal: document.getElementById('location-modal'),
     modalClose: document.getElementById('modal-close'),
     searchInput: document.getElementById('search-input'),
     searchResults: document.getElementById('search-results'),
+    themeToggle: document.getElementById('theme-toggle'),
 };
 
 // ============================================
 // WEATHER CODES
 // ============================================
 const WEATHER_CODES = {
-    0: { condition: 'Clear Sky', icon: 'wb_sunny', mood: 'Sunshine Day', badge: 'CLEAR SKY', bg: 'weather-gradient' },
-    1: { condition: 'Mainly Clear', icon: 'wb_sunny', mood: 'Perfect Day', badge: 'MAINLY CLEAR', bg: 'weather-gradient' },
-    2: { condition: 'Partly Cloudy', icon: 'partly_cloudy_day', mood: 'Picnic Perfect', badge: 'PARTLY SUNNY', bg: 'weather-gradient' },
-    3: { condition: 'Overcast', icon: 'cloud', mood: 'Cozy Vibes', badge: 'OVERCAST', bg: 'weather-gradient' },
-    45: { condition: 'Foggy', icon: 'foggy', mood: 'Mysterious Morning', badge: 'FOGGY', bg: 'weather-gradient' },
-    48: { condition: 'Rime Fog', icon: 'foggy', mood: 'Mysterious Vibes', badge: 'FOGGY', bg: 'weather-gradient' },
-    51: { condition: 'Light Drizzle', icon: 'rainy_light', mood: 'Gentle Rain', badge: 'LIGHT DRIZZLE', bg: 'weather-gradient-rain' },
-    53: { condition: 'Moderate Drizzle', icon: 'rainy', mood: 'Drizzle Day', badge: 'DRIZZLE', bg: 'weather-gradient-rain' },
-    55: { condition: 'Dense Drizzle', icon: 'rainy_heavy', mood: 'Stay Cozy', badge: 'HEAVY DRIZZLE', bg: 'weather-gradient-rain' },
-    61: { condition: 'Slight Rain', icon: 'rainy_light', mood: 'Rainy Day', badge: 'LIGHT RAIN', bg: 'weather-gradient-rain' },
-    63: { condition: 'Moderate Rain', icon: 'rainy', mood: 'Pakora Weather', badge: 'RAIN', bg: 'weather-gradient-rain' },
-    65: { condition: 'Heavy Rain', icon: 'rainy_heavy', mood: 'Stay Inside', badge: 'HEAVY RAIN', bg: 'weather-gradient-rain' },
-    71: { condition: 'Slight Snow', icon: 'weather_snowy', mood: 'Winter Wonderland', badge: 'LIGHT SNOW', bg: 'weather-gradient-snow' },
-    73: { condition: 'Moderate Snow', icon: 'weather_snowy', mood: 'Snow Day!', badge: 'SNOW', bg: 'weather-gradient-snow' },
-    75: { condition: 'Heavy Snow', icon: 'weather_snowy', mood: 'Bundle Up!', badge: 'HEAVY SNOW', bg: 'weather-gradient-snow' },
-    80: { condition: 'Light Showers', icon: 'rainy_light', mood: 'Shower Time', badge: 'SHOWERS', bg: 'weather-gradient-rain' },
-    81: { condition: 'Moderate Showers', icon: 'rainy', mood: 'Carry Umbrella', badge: 'SHOWERS', bg: 'weather-gradient-rain' },
-    82: { condition: 'Violent Showers', icon: 'rainy_heavy', mood: 'Stay Dry!', badge: 'STORM', bg: 'weather-gradient-rain' },
-    95: { condition: 'Thunderstorm', icon: 'thunderstorm', mood: 'Thunder & Lightning', badge: 'THUNDERSTORM', bg: 'weather-gradient-rain' },
-    96: { condition: 'Thunderstorm with Hail', icon: 'thunderstorm', mood: 'Stay Safe!', badge: 'SEVERE STORM', bg: 'weather-gradient-rain' },
+    0: { condition: 'Clear Sky', icon: 'wb_sunny', mood: 'Sunshine Day', badge: 'CLEAR SKY' },
+    1: { condition: 'Mainly Clear', icon: 'wb_sunny', mood: 'Perfect Day', badge: 'MAINLY CLEAR' },
+    2: { condition: 'Partly Cloudy', icon: 'partly_cloudy_day', mood: 'Picnic Perfect', badge: 'PARTLY SUNNY' },
+    3: { condition: 'Overcast', icon: 'cloud', mood: 'Cozy Vibes', badge: 'OVERCAST' },
+    45: { condition: 'Foggy', icon: 'foggy', mood: 'Mysterious Morning', badge: 'FOGGY' },
+    48: { condition: 'Rime Fog', icon: 'foggy', mood: 'Mysterious Vibes', badge: 'FOGGY' },
+    51: { condition: 'Light Drizzle', icon: 'rainy_light', mood: 'Gentle Rain', badge: 'LIGHT DRIZZLE' },
+    53: { condition: 'Moderate Drizzle', icon: 'rainy', mood: 'Drizzle Day', badge: 'DRIZZLE' },
+    55: { condition: 'Dense Drizzle', icon: 'rainy_heavy', mood: 'Stay Cozy', badge: 'HEAVY DRIZZLE' },
+    61: { condition: 'Slight Rain', icon: 'rainy_light', mood: 'Rainy Day', badge: 'LIGHT RAIN' },
+    63: { condition: 'Moderate Rain', icon: 'rainy', mood: 'Pakora Weather', badge: 'RAIN' },
+    65: { condition: 'Heavy Rain', icon: 'rainy_heavy', mood: 'Stay Inside', badge: 'HEAVY RAIN' },
+    71: { condition: 'Slight Snow', icon: 'weather_snowy', mood: 'Winter Wonderland', badge: 'LIGHT SNOW' },
+    73: { condition: 'Moderate Snow', icon: 'weather_snowy', mood: 'Snow Day!', badge: 'SNOW' },
+    75: { condition: 'Heavy Snow', icon: 'weather_snowy', mood: 'Bundle Up!', badge: 'HEAVY SNOW' },
+    80: { condition: 'Light Showers', icon: 'rainy_light', mood: 'Shower Time', badge: 'SHOWERS' },
+    81: { condition: 'Moderate Showers', icon: 'rainy', mood: 'Carry Umbrella', badge: 'SHOWERS' },
+    82: { condition: 'Violent Showers', icon: 'rainy_heavy', mood: 'Stay Dry!', badge: 'STORM' },
+    95: { condition: 'Thunderstorm', icon: 'thunderstorm', mood: 'Thunder & Lightning', badge: 'THUNDERSTORM' },
+    96: { condition: 'Thunderstorm with Hail', icon: 'thunderstorm', mood: 'Stay Safe!', badge: 'SEVERE STORM' },
 };
 
 // ============================================
-// OUTFIT DATA - WESTERN (Men/Women/Unisex)
+// LIFESTYLE DATABASE (Weather-Based Content)
 // ============================================
-const OUTFIT_WESTERN = {
-    men: {
-        hot: [
-            { name: 'Linen Shirt', desc: 'Keep it light and breezy in the midday sun.', tag: 'Breathable', img: 'https://images.unsplash.com/photo-1596755094514-f87e34085b2c?w=400&h=300&fit=crop', link: 'https://amazon.in/s?k=men+linen+shirt' },
-            { name: 'Oversized Sunglasses', desc: 'Protect your eyes with a touch of elegance.', tag: 'Essential', img: 'https://images.unsplash.com/photo-1572635196237-14b3f281503f?w=400&h=300&fit=crop', link: 'https://amazon.in/s?k=men+sunglasses' },
-            { name: 'Breathable Chinos', desc: 'Versatile comfort for city strolls or park sits.', tag: 'Comfort', img: 'https://images.unsplash.com/photo-1473966968600-fa801b869a1a?w=400&h=300&fit=crop', link: 'https://amazon.in/s?k=men+chinos' },
-        ],
-        warm: [
-            { name: 'Cotton Polo', desc: 'Classic style for a warm afternoon.', tag: 'Classic', img: 'https://images.unsplash.com/photo-1625910513413-5fc428e4d14d?w=400&h=300&fit=crop', link: 'https://amazon.in/s?k=men+polo+tshirt' },
-            { name: 'Canvas Sneakers', desc: 'Walk comfortable all day long.', tag: 'Comfort', img: 'https://images.unsplash.com/photo-1525966222134-fcfa99b8ae77?w=400&h=300&fit=crop', link: 'https://amazon.in/s?k=men+sneakers' },
-            { name: 'Baseball Cap', desc: 'Stay shaded and stylish.', tag: 'Essential', img: 'https://images.unsplash.com/photo-1588850561407-ed78c334e67a?w=400&h=300&fit=crop', link: 'https://amazon.in/s?k=men+cap' },
-        ],
-        cool: [
-            { name: 'Light Jacket', desc: 'Perfect layer for cooler evenings.', tag: 'Essential', img: 'https://images.unsplash.com/photo-1551028719-00167b16eac5?w=400&h=300&fit=crop', link: 'https://amazon.in/s?k=men+jacket' },
-            { name: 'Denim Jeans', desc: 'Classic comfort for any occasion.', tag: 'Classic', img: 'https://images.unsplash.com/photo-1542272604-787c3835535d?w=400&h=300&fit=crop', link: 'https://amazon.in/s?k=men+jeans' },
-            { name: 'Ankle Boots', desc: 'Step out in style.', tag: 'Style', img: 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=400&h=300&fit=crop', link: 'https://amazon.in/s?k=men+boots' },
-        ],
-        cold: [
-            { name: 'Wool Sweater', desc: 'Stay warm without sacrificing style.', tag: 'Warm', img: 'https://images.unsplash.com/photo-1434389677669-e08b4cda3a00?w=400&h=300&fit=crop', link: 'https://amazon.in/s?k=men+sweater' },
-            { name: 'Puffer Jacket', desc: 'Maximum warmth for cold days.', tag: 'Essential', img: 'https://images.unsplash.com/photo-1544923246-77307dd270c8?w=400&h=300&fit=crop', link: 'https://amazon.in/s?k=men+puffer+jacket' },
-            { name: 'Knit Scarf', desc: 'Keep your neck warm and cozy.', tag: 'Comfort', img: 'https://images.unsplash.com/photo-1520903920243-00d872a2d1c9?w=400&h=300&fit=crop', link: 'https://amazon.in/s?k=men+scarf' },
-        ],
-        rainy: [
-            { name: 'Rain Jacket', desc: 'Stay dry in style.', tag: 'Essential', img: 'https://images.unsplash.com/photo-1544022613-e87ca75a784a?w=400&h=300&fit=crop', link: 'https://amazon.in/s?k=men+rain+jacket' },
-            { name: 'Waterproof Boots', desc: 'Walk through puddles worry-free.', tag: 'Practical', img: 'https://images.unsplash.com/photo-1608256246200-53e635b5b65f?w=400&h=300&fit=crop', link: 'https://amazon.in/s?k=men+waterproof+boots' },
-            { name: 'Compact Umbrella', desc: 'Never leave home without it.', tag: 'Must Have', img: 'https://images.unsplash.com/photo-1534430480872-3498386e7856?w=400&h=300&fit=crop', link: 'https://amazon.in/s?k=umbrella' },
-        ],
-    },
-    women: {
-        hot: [
-            { name: 'Flowy Sundress', desc: 'Effortless elegance for hot summer days.', tag: 'Breezy', img: 'https://images.unsplash.com/photo-1572804013309-59a88b7e92f1?w=400&h=300&fit=crop', link: 'https://amazon.in/s?k=women+sundress' },
-            { name: 'Straw Hat', desc: 'Shield yourself from the sun in style.', tag: 'Essential', img: 'https://images.unsplash.com/photo-1521369909029-2afed882baee?w=400&h=300&fit=crop', link: 'https://amazon.in/s?k=women+straw+hat' },
-            { name: 'Espadrille Sandals', desc: 'Chic and comfortable for warm days.', tag: 'Style', img: 'https://images.unsplash.com/photo-1603487742131-4160ec999306?w=400&h=300&fit=crop', link: 'https://amazon.in/s?k=women+espadrilles' },
-        ],
-        warm: [
-            { name: 'Cotton Blouse', desc: 'Light and airy for a perfect afternoon.', tag: 'Classic', img: 'https://images.unsplash.com/photo-1598554747436-c9293d6a588f?w=400&h=300&fit=crop', link: 'https://amazon.in/s?k=women+blouse' },
-            { name: 'White Sneakers', desc: 'Go anywhere, do anything.', tag: 'Versatile', img: 'https://images.unsplash.com/photo-1560769629-975ec94e6a86?w=400&h=300&fit=crop', link: 'https://amazon.in/s?k=women+sneakers' },
-            { name: 'Crossbody Bag', desc: 'Keep your essentials close.', tag: 'Practical', img: 'https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=400&h=300&fit=crop', link: 'https://amazon.in/s?k=women+crossbody+bag' },
-        ],
-        cool: [
-            { name: 'Cardigan', desc: 'Layer up with cozy comfort.', tag: 'Cozy', img: 'https://images.unsplash.com/photo-1434389677669-e08b4cda3a00?w=400&h=300&fit=crop', link: 'https://amazon.in/s?k=women+cardigan' },
-            { name: 'High-Waist Jeans', desc: 'Flattering fit for any occasion.', tag: 'Classic', img: 'https://images.unsplash.com/photo-1541099649105-f69ad21f3246?w=400&h=300&fit=crop', link: 'https://amazon.in/s?k=women+jeans' },
-            { name: 'Ankle Boots', desc: 'Step out in style.', tag: 'Style', img: 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=400&h=300&fit=crop', link: 'https://amazon.in/s?k=women+boots' },
-        ],
-        cold: [
-            { name: 'Cozy Knit Sweater', desc: 'Stay warm and stylish.', tag: 'Warm', img: 'https://images.unsplash.com/photo-1576566588028-4147f3842f27?w=400&h=300&fit=crop', link: 'https://amazon.in/s?k=women+sweater' },
-            { name: 'Wool Coat', desc: 'Elegance meets warmth.', tag: 'Essential', img: 'https://images.unsplash.com/photo-1539533113208-f6df8cc8b543?w=400&h=300&fit=crop', link: 'https://amazon.in/s?k=women+wool+coat' },
-            { name: 'Knit Beanie', desc: 'Keep your head warm.', tag: 'Comfort', img: 'https://images.unsplash.com/photo-1576871337632-b9aef4c17ab9?w=400&h=300&fit=crop', link: 'https://amazon.in/s?k=women+beanie' },
-        ],
-        rainy: [
-            { name: 'Trench Coat', desc: 'Classic rain protection.', tag: 'Elegant', img: 'https://images.unsplash.com/photo-1591047139829-d91aecb6caea?w=400&h=300&fit=crop', link: 'https://amazon.in/s?k=women+trench+coat' },
-            { name: 'Rain Boots', desc: 'Walk through puddles worry-free.', tag: 'Practical', img: 'https://images.unsplash.com/photo-1608256246200-53e635b5b65f?w=400&h=300&fit=crop', link: 'https://amazon.in/s?k=women+rain+boots' },
-            { name: 'Compact Umbrella', desc: 'Never leave home without it.', tag: 'Must Have', img: 'https://images.unsplash.com/photo-1534430480872-3498386e7856?w=400&h=300&fit=crop', link: 'https://amazon.in/s?k=umbrella' },
-        ],
-    },
-    unisex: {
-        hot: [
-            { name: 'Linen Shirt', desc: 'Keep it light and breezy in the midday sun.', tag: 'Breathable', img: 'https://images.unsplash.com/photo-1596755094514-f87e34085b2c?w=400&h=300&fit=crop', link: 'https://amazon.in/s?k=linen+shirt' },
-            { name: 'Sunglasses', desc: 'Protect your eyes with a touch of elegance.', tag: 'Essential', img: 'https://images.unsplash.com/photo-1572635196237-14b3f281503f?w=400&h=300&fit=crop', link: 'https://amazon.in/s?k=sunglasses' },
-            { name: 'Breathable Shorts', desc: 'Versatile comfort for city strolls.', tag: 'Comfort', img: 'https://images.unsplash.com/photo-1591195853828-11db59a44f6b?w=400&h=300&fit=crop', link: 'https://amazon.in/s?k=shorts' },
-        ],
-        warm: [
-            { name: 'Cotton T-Shirt', desc: 'Classic style for a warm afternoon.', tag: 'Classic', img: 'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=400&h=300&fit=crop', link: 'https://amazon.in/s?k=tshirt' },
-            { name: 'Canvas Sneakers', desc: 'Walk comfortable all day long.', tag: 'Comfort', img: 'https://images.unsplash.com/photo-1525966222134-fcfa99b8ae77?w=400&h=300&fit=crop', link: 'https://amazon.in/s?k=sneakers' },
-            { name: 'Baseball Cap', desc: 'Stay shaded and stylish.', tag: 'Essential', img: 'https://images.unsplash.com/photo-1588850561407-ed78c334e67a?w=400&h=300&fit=crop', link: 'https://amazon.in/s?k=cap' },
-        ],
-        cool: [
-            { name: 'Light Jacket', desc: 'Perfect layer for cooler evenings.', tag: 'Essential', img: 'https://images.unsplash.com/photo-1551028719-00167b16eac5?w=400&h=300&fit=crop', link: 'https://amazon.in/s?k=jacket' },
-            { name: 'Denim Jeans', desc: 'Classic comfort for any occasion.', tag: 'Classic', img: 'https://images.unsplash.com/photo-1542272604-787c3835535d?w=400&h=300&fit=crop', link: 'https://amazon.in/s?k=jeans' },
-            { name: 'Sneakers', desc: 'Step out in style.', tag: 'Style', img: 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=400&h=300&fit=crop', link: 'https://amazon.in/s?k=sneakers' },
-        ],
-        cold: [
-            { name: 'Wool Sweater', desc: 'Stay warm without sacrificing style.', tag: 'Warm', img: 'https://images.unsplash.com/photo-1434389677669-e08b4cda3a00?w=400&h=300&fit=crop', link: 'https://amazon.in/s?k=sweater' },
-            { name: 'Puffer Jacket', desc: 'Maximum warmth for cold days.', tag: 'Essential', img: 'https://images.unsplash.com/photo-1544923246-77307dd270c8?w=400&h=300&fit=crop', link: 'https://amazon.in/s?k=puffer+jacket' },
-            { name: 'Knit Scarf', desc: 'Keep your neck warm and cozy.', tag: 'Comfort', img: 'https://images.unsplash.com/photo-1520903920243-00d872a2d1c9?w=400&h=300&fit=crop', link: 'https://amazon.in/s?k=scarf' },
-        ],
-        rainy: [
-            { name: 'Rain Jacket', desc: 'Stay dry in style.', tag: 'Essential', img: 'https://images.unsplash.com/photo-1544022613-e87ca75a784a?w=400&h=300&fit=crop', link: 'https://amazon.in/s?k=rain+jacket' },
-            { name: 'Waterproof Boots', desc: 'Walk through puddles worry-free.', tag: 'Practical', img: 'https://images.unsplash.com/photo-1608256246200-53e635b5b65f?w=400&h=300&fit=crop', link: 'https://amazon.in/s?k=waterproof+boots' },
-            { name: 'Compact Umbrella', desc: 'Never leave home without it.', tag: 'Must Have', img: 'https://images.unsplash.com/photo-1534430480872-3498386e7856?w=400&h=300&fit=crop', link: 'https://amazon.in/s?k=umbrella' },
-        ],
-    },
-};
-
-// ============================================
-// OUTFIT DATA - DESI (Men/Women/Unisex)
-// ============================================
-const OUTFIT_DESI = {
-    men: {
-        hot: [
-            { name: 'Lawn Kurta', desc: 'Beat the heat with traditional comfort.', tag: 'Traditional', img: 'https://images.unsplash.com/photo-1594938298603-c8148c4dae35?w=400&h=300&fit=crop', link: 'https://amazon.in/s?k=men+lawn+kurta' },
-            { name: 'Peshawari Chappal', desc: 'Walk in tradition and comfort.', tag: 'Classic', img: 'https://images.unsplash.com/photo-1603252109303-2751441dd157?w=400&h=300&fit=crop', link: 'https://amazon.in/s?k=peshawari+chappal' },
-            { name: 'Cotton Waistcoat', desc: 'Layer up with elegance.', tag: 'Elegant', img: 'https://images.unsplash.com/photo-1594938298603-c8148c4dae35?w=400&h=300&fit=crop', link: 'https://amazon.in/s?k=men+waistcoat' },
-        ],
-        warm: [
-            { name: 'Kurta Pajama', desc: 'Classic comfort for any occasion.', tag: 'Traditional', img: 'https://images.unsplash.com/photo-1594938298603-c8148c4dae35?w=400&h=300&fit=crop', link: 'https://amazon.in/s?k=kurta+pajama' },
-            { name: 'Leather Khussa', desc: 'Step out in style.', tag: 'Heritage', img: 'https://images.unsplash.com/photo-1603252109303-2751441dd157?w=400&h=300&fit=crop', link: 'https://amazon.in/s?k=khussa' },
-            { name: 'Embroidered Cap', desc: 'Complete the traditional look.', tag: 'Essential', img: 'https://images.unsplash.com/photo-1588850561407-ed78c334e67a?w=400&h=300&fit=crop', link: 'https://amazon.in/s?k=turban+cap' },
-        ],
-        cool: [
-            { name: 'Wool Kurta', desc: 'Stay warm with traditional style.', tag: 'Warm', img: 'https://images.unsplash.com/photo-1594938298603-c8148c4dae35?w=400&h=300&fit=crop', link: 'https://amazon.in/s?k=wool+kurta' },
-            { name: 'Peshawari Cap', desc: 'Keep your head warm.', tag: 'Classic', img: 'https://images.unsplash.com/photo-1588850561407-ed78c334e67a?w=400&h=300&fit=crop', link: 'https://amazon.in/s?k=peshawari+cap' },
-            { name: 'Leather Boots', desc: 'Step out in style.', tag: 'Style', img: 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=400&h=300&fit=crop', link: 'https://amazon.in/s?k=leather+boots' },
-        ],
-        cold: [
-            { name: 'Peshawari Waistcoat', desc: 'Warmth meets tradition.', tag: 'Heritage', img: 'https://images.unsplash.com/photo-1594938298603-c8148c4dae35?w=400&h=300&fit=crop', link: 'https://amazon.in/s?k=peshawari+waistcoat' },
-            { name: 'Wool Shawl', desc: 'Wrap up in elegance.', tag: 'Elegant', img: 'https://images.unsplash.com/photo-1520903920243-00d872a2d1c9?w=400&h=300&fit=crop', link: 'https://amazon.in/s?k=wool+shawl' },
-            { name: 'Karakul Cap', desc: 'Traditional warmth.', tag: 'Classic', img: 'https://images.unsplash.com/photo-1588850561407-ed78c334e67a?w=400&h=300&fit=crop', link: 'https://amazon.in/s?k=karakul+cap' },
-        ],
-        rainy: [
-            { name: 'Raincoat', desc: 'Stay dry in style.', tag: 'Essential', img: 'https://images.unsplash.com/photo-1544022613-e87ca75a784a?w=400&h=300&fit=crop', link: 'https://amazon.in/s?k=raincoat' },
-            { name: 'Waterproof Chappal', desc: 'Walk through puddles worry-free.', tag: 'Practical', img: 'https://images.unsplash.com/photo-1603252109303-2751441dd157?w=400&h=300&fit=crop', link: 'https://amazon.in/s?k=waterproof+chappal' },
-            { name: 'Compact Umbrella', desc: 'Never leave home without it.', tag: 'Must Have', img: 'https://images.unsplash.com/photo-1534430480872-3498386e7856?w=400&h=300&fit=crop', link: 'https://amazon.in/s?k=umbrella' },
-        ],
-    },
-    women: {
-        hot: [
-            { name: 'Lawn Dupatta Set', desc: 'Beat the heat with traditional grace.', tag: 'Traditional', img: 'https://images.unsplash.com/photo-1610030469983-98e550d6193c?w=400&h=300&fit=crop', link: 'https://amazon.in/s?k=lawn+dupatta' },
-            { name: 'Kolhapuri Sandals', desc: 'Walk in tradition and comfort.', tag: 'Classic', img: 'https://images.unsplash.com/photo-1603487742131-4160ec999306?w=400&h=300&fit=crop', link: 'https://amazon.in/s?k=kolhapuri+sandals' },
-            { name: 'Embroidered Clutch', desc: 'Add elegance to your look.', tag: 'Elegant', img: 'https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=400&h=300&fit=crop', link: 'https://amazon.in/s?k=embroidered+clutch' },
-        ],
-        warm: [
-            { name: 'Kurti Set', desc: 'Classic comfort for any occasion.', tag: 'Traditional', img: 'https://images.unsplash.com/photo-1610030469983-98e550d6193c?w=400&h=300&fit=crop', link: 'https://amazon.in/s?k=kurti+set' },
-            { name: 'Juttis', desc: 'Step out in style.', tag: 'Heritage', img: 'https://images.unsplash.com/photo-1603487742131-4160ec999306?w=400&h=300&fit=crop', link: 'https://amazon.in/s?k=juttis' },
-            { name: 'Potli Bag', desc: 'Complete the traditional look.', tag: 'Essential', img: 'https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=400&h=300&fit=crop', link: 'https://amazon.in/s?k=potli+bag' },
-        ],
-        cool: [
-            { name: 'Wool Kurti', desc: 'Stay warm with traditional style.', tag: 'Warm', img: 'https://images.unsplash.com/photo-1610030469983-98e550d6193c?w=400&h=300&fit=crop', link: 'https://amazon.in/s?k=wool+kurti' },
-            { name: 'Silk Scarf', desc: 'Wrap up in elegance.', tag: 'Elegant', img: 'https://images.unsplash.com/photo-1520903920243-00d872a2d1c9?w=400&h=300&fit=crop', link: 'https://amazon.in/s?k=silk+scarf' },
-            { name: 'Knee-High Boots', desc: 'Step out in style.', tag: 'Style', img: 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=400&h=300&fit=crop', link: 'https://amazon.in/s?k=knee+high+boots' },
-        ],
-        cold: [
-            { name: 'Velvet Shawl', desc: 'Wrap up in luxury.', tag: 'Luxury', img: 'https://images.unsplash.com/photo-1520903920243-00d872a2d1c9?w=400&h=300&fit=crop', link: 'https://amazon.in/s?k=velvet+shawl' },
-            { name: 'Pashmina Stole', desc: 'Warmth meets elegance.', tag: 'Elegant', img: 'https://images.unsplash.com/photo-1520903920243-00d872a2d1c9?w=400&h=300&fit=crop', link: 'https://amazon.in/s?k=pashmina+stole' },
-            { name: 'Wool Potli', desc: 'Complete the look.', tag: 'Essential', img: 'https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=400&h=300&fit=crop', link: 'https://amazon.in/s?k=wool+potli' },
-        ],
-        rainy: [
-            { name: 'Waterproof Kurti', desc: 'Stay dry in style.', tag: 'Essential', img: 'https://images.unsplash.com/photo-1610030469983-98e550d6193c?w=400&h=300&fit=crop', link: 'https://amazon.in/s?k=waterproof+kurti' },
-            { name: 'Rain Juttis', desc: 'Walk through puddles worry-free.', tag: 'Practical', img: 'https://images.unsplash.com/photo-1603487742131-4160ec999306?w=400&h=300&fit=crop', link: 'https://amazon.in/s?k=rain+juttis' },
-            { name: 'Compact Umbrella', desc: 'Never leave home without it.', tag: 'Must Have', img: 'https://images.unsplash.com/photo-1534430480872-3498386e7856?w=400&h=300&fit=crop', link: 'https://amazon.in/s?k=umbrella' },
-        ],
-    },
-    unisex: {
-        hot: [
-            { name: 'Lawn Kurta', desc: 'Beat the heat with traditional comfort.', tag: 'Traditional', img: 'https://images.unsplash.com/photo-1594938298603-c8148c4dae35?w=400&h=300&fit=crop', link: 'https://amazon.in/s?k=lawn+kurta' },
-            { name: 'Kolhapuri Chappal', desc: 'Walk in tradition and comfort.', tag: 'Classic', img: 'https://images.unsplash.com/photo-1603252109303-2751441dd157?w=400&h=300&fit=crop', link: 'https://amazon.in/s?k=kolhapuri' },
-            { name: 'Cotton Dupatta', desc: 'Add elegance to your look.', tag: 'Elegant', img: 'https://images.unsplash.com/photo-1520903920243-00d872a2d1c9?w=400&h=300&fit=crop', link: 'https://amazon.in/s?k=dupatta' },
-        ],
-        warm: [
-            { name: 'Kurta Set', desc: 'Classic comfort for any occasion.', tag: 'Traditional', img: 'https://images.unsplash.com/photo-1594938298603-c8148c4dae35?w=400&h=300&fit=crop', link: 'https://amazon.in/s?k=kurta+set' },
-            { name: 'Khussa', desc: 'Step out in style.', tag: 'Heritage', img: 'https://images.unsplash.com/photo-1603252109303-2751441dd157?w=400&h=300&fit=crop', link: 'https://amazon.in/s?k=khussa' },
-            { name: 'Embroidered Cap', desc: 'Complete the traditional look.', tag: 'Essential', img: 'https://images.unsplash.com/photo-1588850561407-ed78c334e67a?w=400&h=300&fit=crop', link: 'https://amazon.in/s?k=cap' },
-        ],
-        cool: [
-            { name: 'Wool Kurta', desc: 'Stay warm with traditional style.', tag: 'Warm', img: 'https://images.unsplash.com/photo-1594938298603-c8148c4dae35?w=400&h=300&fit=crop', link: 'https://amazon.in/s?k=wool+kurta' },
-            { name: 'Peshawari Cap', desc: 'Keep your head warm.', tag: 'Classic', img: 'https://images.unsplash.com/photo-1588850561407-ed78c334e67a?w=400&h=300&fit=crop', link: 'https://amazon.in/s?k=peshawari+cap' },
-            { name: 'Leather Boots', desc: 'Step out in style.', tag: 'Style', img: 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=400&h=300&fit=crop', link: 'https://amazon.in/s?k=boots' },
-        ],
-        cold: [
-            { name: 'Peshawari Waistcoat', desc: 'Warmth meets tradition.', tag: 'Heritage', img: 'https://images.unsplash.com/photo-1594938298603-c8148c4dae35?w=400&h=300&fit=crop', link: 'https://amazon.in/s?k=waistcoat' },
-            { name: 'Wool Shawl', desc: 'Wrap up in elegance.', tag: 'Elegant', img: 'https://images.unsplash.com/photo-1520903920243-00d872a2d1c9?w=400&h=300&fit=crop', link: 'https://amazon.in/s?k=wool+shawl' },
-            { name: 'Karakul Cap', desc: 'Traditional warmth.', tag: 'Classic', img: 'https://images.unsplash.com/photo-1588850561407-ed78c334e67a?w=400&h=300&fit=crop', link: 'https://amazon.in/s?k=karakul+cap' },
-        ],
-        rainy: [
-            { name: 'Raincoat', desc: 'Stay dry in style.', tag: 'Essential', img: 'https://images.unsplash.com/photo-1544022613-e87ca75a784a?w=400&h=300&fit=crop', link: 'https://amazon.in/s?k=raincoat' },
-            { name: 'Waterproof Chappal', desc: 'Walk through puddles worry-free.', tag: 'Practical', img: 'https://images.unsplash.com/photo-1603252109303-2751441dd157?w=400&h=300&fit=crop', link: 'https://amazon.in/s?k=waterproof+chappal' },
-            { name: 'Compact Umbrella', desc: 'Never leave home without it.', tag: 'Must Have', img: 'https://images.unsplash.com/photo-1534430480872-3498386e7856?w=400&h=300&fit=crop', link: 'https://amazon.in/s?k=umbrella' },
-        ],
-    },
-};
-
-// ============================================
-// RAIN ALERT DATA
-// ============================================
-const RAIN_ALERT_ITEMS = [
-    { name: 'Waterproof Jacket', desc: 'Stay completely dry during heavy rain.', tag: 'Rain Essential', img: 'https://images.unsplash.com/photo-1544022613-e87ca75a784a?w=400&h=300&fit=crop', link: 'https://amazon.in/s?k=waterproof+jacket' },
-    { name: 'Rain Boots', desc: 'Keep your feet dry and stylish.', tag: 'Must Have', img: 'https://images.unsplash.com/photo-1608256246200-53e635b5b65f?w=400&h=300&fit=crop', link: 'https://amazon.in/s?k=rain+boots' },
-    { name: 'Compact Umbrella', desc: 'Never leave home without it.', tag: 'Essential', img: 'https://images.unsplash.com/photo-1534430480872-3498386e7856?w=400&h=300&fit=crop', link: 'https://amazon.in/s?k=umbrella' },
-    { name: 'Dark Jeans', desc: 'Hide those rain stains.', tag: 'Practical', img: 'https://images.unsplash.com/photo-1542272604-787c3835535d?w=400&h=300&fit=crop', link: 'https://amazon.in/s?k=dark+jeans' },
-    { name: 'Waterproof Backpack', desc: 'Protect your belongings.', tag: 'Smart', img: 'https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=400&h=300&fit=crop', link: 'https://amazon.in/s?k=waterproof+backpack' },
-    { name: 'Dark Sweater', desc: 'Stay warm and hide water spots.', tag: 'Practical', img: 'https://images.unsplash.com/photo-1434389677669-e08b4cda3a00?w=400&h=300&fit=crop', link: 'https://amazon.in/s?k=dark+sweater' },
-];
-
-// ============================================
-// FOOD DATA (Weather-Based)
-// ============================================
-const FOOD_DATA = {
+const lifestyleDatabase = {
     hot: {
-        badge: 'HOT DAY PICK',
-        title: 'Mango Lassi & Chaat',
-        desc: 'There is no better pairing for a hot day than the tropical sweetness of mango lassi balanced by the tangy, refreshing taste of chaat. Light, refreshing, and perfect for summer.',
-        img: 'https://images.unsplash.com/photo-1551024601-bec78aea704b?w=600&h=450&fit=crop',
-    },
-    warm: {
-        badge: 'WARM DAY PICK',
-        title: 'Chai & Samosa',
-        desc: 'Start your day right with a refreshing cup of chai paired with crispy samosas. The perfect comfort combo for a pleasant afternoon.',
-        img: 'https://images.unsplash.com/photo-1590301157890-4810ed352733?w=600&h=450&fit=crop',
-    },
-    cool: {
-        badge: 'COOL DAY PICK',
-        title: 'Hot Chai & Pakora',
-        desc: 'Warm up with a perfectly spiced chai paired with crispy pakoras. The ideal comfort combo for a breezy afternoon.',
-        img: 'https://images.unsplash.com/photo-1611564494260-6f21b80af7ea?w=600&h=450&fit=crop',
-    },
-    cold: {
-        badge: 'COLD DAY PICK',
-        title: 'Karachi Sajji & Naan',
-        desc: 'Warm your soul with slow-roasted sajji served with fresh naan. A hearty meal perfect for cold evenings.',
-        img: 'https://images.unsplash.com/photo-1601050690597-df0568f70950?w=600&h=450&fit=crop',
+        vibeTitle: "Today's Vibe: Golden Hour Magic",
+        vibeDesc: "Warm breezes and sunshine create the perfect atmosphere for a memorable day out.",
+        status: "SUNNY",
+        statusIcon: "wb_sunny",
+        outfits: [
+            { title: "Cotton Polo", desc: "Classic style for a warm afternoon.", link: "https://s.click.aliexpress.com/e/_xxx1", gradient: "outfit-gradient-1" },
+            { title: "Canvas Sneakers", desc: "Walk comfortable all day long.", link: "https://s.click.aliexpress.com/e/_xxx2", gradient: "outfit-gradient-2" },
+            { title: "Baseball Cap", desc: "Stay shaded and stylish.", link: "https://s.click.aliexpress.com/e/_xxx3", gradient: "outfit-gradient-3" }
+        ],
+        food: {
+            title: "Fresh Mint Juice & Acai Bowl",
+            desc: "Start your day right with a refreshing acai bowl topped with fresh fruits. Pair it with a cold juice for the ultimate wellness combo.",
+            badge: "WARM DAY PICK"
+        },
+        tips: [
+            { icon: "thermostat", text: "Stay hydrated - drink at least 8 glasses of water today", color: "text-orange-500" },
+            { icon: "wb_sunny", text: "Apply SPF 50+ sunscreen before going outside", color: "text-yellow-500" },
+            { icon: "access_time", text: "Avoid outdoor activities between 12PM - 3PM", color: "text-red-500" },
+            { icon: "checkroom", text: "Wear light-colored, loose-fitting clothing", color: "text-pink-500" }
+        ]
     },
     rainy: {
-        badge: 'RAINY DAY PICK',
-        title: 'Pakoras & Hot Chai',
-        desc: 'The ultimate rainy day combo! Crispy pakoras with a steaming cup of chai while watching the rain from your window.',
-        img: 'https://images.unsplash.com/photo-1611564494260-6f21b80af7ea?w=600&h=450&fit=crop',
+        vibeTitle: "Today's Vibe: Cozy Monsoon Melodies",
+        vibeDesc: "Rain drops and cool winds call for a perfect indoor evening with warm Pakistani comfort food.",
+        status: "RAINY",
+        statusIcon: "rainy",
+        outfits: [
+            { title: "Waterproof Jacket", desc: "Stay dry and stylish in the heavy rain.", link: "https://s.click.aliexpress.com/e/_rain1", gradient: "outfit-gradient-1" },
+            { title: "Dark Cargo Pants", desc: "Easy to clean and perfect to avoid mud stains.", link: "https://s.click.aliexpress.com/e/_rain2", gradient: "outfit-gradient-2" },
+            { title: "Compact Umbrella", desc: "Your best friend for today. Don't leave home without it.", link: "https://s.click.aliexpress.com/e/_rain3", gradient: "outfit-gradient-3" }
+        ],
+        food: {
+            title: "Karak Chai & Crispy Samosa",
+            desc: "The ultimate Pakistani comfort combo. Steaming hot tea with traditional crispy samosas while enjoying the rain.",
+            badge: "RAINY DAY COMFORT"
+        },
+        tips: [
+            { icon: "umbrella", text: "Carry an umbrella - rain expected throughout the day", color: "text-blue-500" },
+            { icon: "water_drop", text: "Keep electronics in waterproof bags", color: "text-cyan-500" },
+            { icon: "checkroom", text: "Wear waterproof shoes and layers", color: "text-indigo-500" },
+            { icon: "route", text: "Plan alternate routes to avoid flooded areas", color: "text-purple-500" }
+        ]
     },
-};
-
-// ============================================
-// WEEKEND ACTIVITIES
-// ============================================
-const WEEKEND_ACTIVITIES = {
-    clear: ['Morning Jog', 'Park Picnic', 'Beach Day'],
-    cloudy: ['Indoor Games', 'Museum Visit', 'Shopping'],
-    rainy: ['Movie Marathon', 'Board Games', 'Cooking'],
-    cold: ['Hot Springs', 'Mall Walk', 'Cafe Hopping'],
+    cold: {
+        vibeTitle: "Today's Vibe: Cozy Winter Chill",
+        vibeDesc: "Chilly winds and crisp air. Perfect time to layer up and enjoy a hot cup of coffee.",
+        status: "COLD",
+        statusIcon: "ac_unit",
+        outfits: [
+            { title: "Oversized Hoodie", desc: "Cozy layers to keep you warm and trendy.", link: "https://s.click.aliexpress.com/e/_cold1", gradient: "outfit-gradient-1" },
+            { title: "Warm Fleece Jeans", desc: "Perfect protection against cold winter winds.", link: "https://s.click.aliexpress.com/e/_cold2", gradient: "outfit-gradient-2" },
+            { title: "Stylish Beanie Cap", desc: "Keep your ears warm and your look aesthetic.", link: "https://s.click.aliexpress.com/e/_cold3", gradient: "outfit-gradient-3" }
+        ],
+        food: {
+            title: "Hot Coffee & Chicken Soup",
+            desc: "Warm up your soul with a freshly brewed hot latte and a steaming bowl of local chicken corn soup.",
+            badge: "COLD DAY PICK"
+        },
+        tips: [
+            { icon: "thermostat", text: "Bundle up in layers - temperature feels colder with wind", color: "text-blue-500" },
+            { icon: "local_cafe", text: "Start your day with a hot beverage to warm up", color: "text-amber-500" },
+            { icon: "checkroom", text: "Wear a warm jacket, scarf, and gloves", color: "text-purple-500" },
+            { icon: "home", text: "Keep室内 heated - check heating system", color: "text-red-500" }
+        ]
+    }
 };
 
 // ============================================
@@ -336,19 +177,57 @@ function getUVLabel(uv) {
     return 'Extreme';
 }
 
-function getWeatherIcon(code) {
-    const info = WEATHER_CODES[code];
-    return info ? info.icon : 'cloud';
+function formatTime(isoString) {
+    const date = new Date(isoString);
+    return date.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true });
 }
 
-function getWeatherCondition(code) {
-    const info = WEATHER_CODES[code];
-    return info ? info.condition : 'Cloudy';
+function formatHour(isoString) {
+    const date = new Date(isoString);
+    return date.toLocaleTimeString('en-US', { hour: 'numeric', hour12: true });
 }
 
-function formatDay(dateStr) {
-    const date = new Date(dateStr + 'T00:00:00');
-    return date.toLocaleDateString('en-US', { weekday: 'long' });
+// ============================================
+// THEME TOGGLE
+// ============================================
+function initTheme() {
+    const saved = localStorage.getItem('vibecast-theme');
+    if (saved === 'dark') {
+        isDarkMode = true;
+        document.documentElement.classList.add('dark');
+        document.documentElement.classList.remove('light');
+    } else {
+        isDarkMode = false;
+        document.documentElement.classList.remove('dark');
+        document.documentElement.classList.add('light');
+    }
+}
+
+function toggleTheme() {
+    isDarkMode = !isDarkMode;
+    if (isDarkMode) {
+        document.documentElement.classList.add('dark');
+        document.documentElement.classList.remove('light');
+        localStorage.setItem('vibecast-theme', 'dark');
+    } else {
+        document.documentElement.classList.remove('dark');
+        document.documentElement.classList.add('light');
+        localStorage.setItem('vibecast-theme', 'light');
+    }
+}
+
+// ============================================
+// MAP WEATHER TO LIFESTYLE STATE
+// ============================================
+function getLifestyleState(tempC, weatherCode) {
+    const weatherCat = getWeatherCategory(weatherCode);
+    const tempCat = getTemperatureCategory(tempC);
+
+    if (weatherCat === 'rainy') return 'rainy';
+    if (tempCat === 'hot' || tempCat === 'warm') return 'hot';
+    if (tempCat === 'cool' || tempCat === 'cold') return 'cold';
+
+    return 'hot';
 }
 
 // ============================================
@@ -374,9 +253,10 @@ async function fetchWeather(lat, lon) {
         latitude: lat,
         longitude: lon,
         current: 'temperature_2m,relative_humidity_2m,apparent_temperature,weather_code,wind_speed_10m,is_day',
-        daily: 'weather_code,temperature_2m_max,temperature_2m_min,uv_index_max,precipitation_probability_max',
+        hourly: 'temperature_2m,weather_code',
+        daily: 'weather_code,temperature_2m_max,temperature_2m_min,uv_index_max,precipitation_probability_max,sunrise,sunset',
         timezone: 'auto',
-        forecast_days: 7,
+        forecast_days: 1,
     });
     const url = `${CONFIG.WEATHER_API}?${params.toString()}`;
     try {
@@ -390,47 +270,103 @@ async function fetchWeather(lat, lon) {
 }
 
 // ============================================
-// UI UPDATE FUNCTIONS
+// RENDER HOURLY FORECAST
 // ============================================
-function updateHero(data, cityName) {
-    const current = data.current;
-    const weatherInfo = WEATHER_CODES[current.weather_code] || WEATHER_CODES[0];
-    const tempC = current.temperature_2m;
-    const tempF = Math.round((tempC * 9/5) + 32);
-    const tempCategory = getTemperatureCategory(tempC);
-    const isNight = current.is_day === 0;
-
-    DOM.temperature.textContent = `${tempF}°F`;
-
-    DOM.weatherBadgeIcon.textContent = isNight ? 'night_clear' : weatherInfo.icon;
-    DOM.weatherBadgeText.textContent = isNight ? 'CLEAR NIGHT' : weatherInfo.badge;
-
-    const vibes = {
-        hot: { title: "Today's Vibe: Beach Day Paradise", desc: "The sun is blazing and the vibes are immaculate. Perfect for outdoor adventures and staying cool." },
-        warm: { title: "Today's Vibe: Golden Hour Magic", desc: "Warm breezes and sunshine create the perfect atmosphere for a memorable day out." },
-        cool: { title: "Today's Vibe: Cozy Afternoon", desc: "The crisp air invites you to layer up and enjoy a comfortable, refreshing day." },
-        cold: { title: "Today's Vibe: Winter Wonderland", desc: "Bundle up and embrace the cold. Hot drinks and warm moments await." },
-    };
-
-    const weatherVibes = {
-        rainy: { title: "Today's Vibe: Rainy Day Retreat", desc: "The pitter-patter of rain creates the perfect excuse to slow down and relax." },
-        stormy: { title: "Today's Vibe: Storm Watch", desc: "Nature's power on full display. Stay safe and enjoy the drama from indoors." },
-    };
-
-    let vibe = vibes[tempCategory] || vibes.warm;
-    const weatherCat = getWeatherCategory(current.weather_code);
-    if (weatherVibes[weatherCat]) {
-        vibe = weatherVibes[weatherCat];
+function renderHourlyForecast(hourlyData) {
+    if (!hourlyData || !hourlyData.time || !hourlyData.temperature_2m) {
+        DOM.hourlyScroll.innerHTML = '<p class="text-on-surface-variant text-sm">Hourly data unavailable</p>';
+        return;
     }
 
-    DOM.vibeTitle.textContent = vibe.title;
-    DOM.vibeDescription.textContent = vibe.desc;
+    const now = new Date();
+    const currentHour = now.getHours();
 
-    DOM.windSpeed.textContent = `${Math.round(current.wind_speed_10m)} mph`;
-    DOM.humidity.textContent = `${current.relative_humidity_2m}%`;
-    DOM.uvIndex.textContent = data.daily && data.daily.uv_index_max ? getUVLabel(data.daily.uv_index_max[0]) : '--';
+    // Get next 24 hours of data
+    let startIndex = 0;
+    for (let i = 0; i < hourlyData.time.length; i++) {
+        const hourDate = new Date(hourlyData.time[i]);
+        if (hourDate.getHours() === currentHour) {
+            startIndex = i;
+            break;
+        }
+    }
+
+    const cards = [];
+    for (let i = startIndex; i < Math.min(startIndex + 24, hourlyData.time.length); i++) {
+        const time = hourlyData.time[i];
+        const temp = Math.round(hourlyData.temperature_2m[i]);
+        const weatherCode = hourlyData.weather_code[i];
+        const weatherInfo = WEATHER_CODES[weatherCode] || WEATHER_CODES[0];
+        const hourLabel = formatHour(time);
+        const isActive = i === startIndex;
+
+        cards.push(`
+            <div class="hourly-card ${isActive ? 'active' : ''}">
+                <span class="hour-time">${isActive ? 'Now' : hourLabel}</span>
+                <span class="material-symbols-outlined ${isActive ? 'text-white' : 'text-primary'}" style="font-size: 28px; font-variation-settings: 'FILL' 1;">${weatherInfo.icon}</span>
+                <span class="hour-temp">${temp}°</span>
+            </div>
+        `);
+    }
+
+    DOM.hourlyScroll.innerHTML = cards.join('');
 }
 
+// ============================================
+// RENDER WEATHER TIPS
+// ============================================
+function renderWeatherTips(tips) {
+    if (!tips || tips.length === 0) {
+        DOM.tipsContainer.innerHTML = '<p class="text-on-surface-variant text-sm">No tips available</p>';
+        return;
+    }
+
+    DOM.tipsContainer.innerHTML = tips.map(tip => `
+        <div class="tip-item">
+            <span class="material-symbols-outlined ${tip.color} text-[20px]">${tip.icon}</span>
+            <span class="text-on-surface-variant">${tip.text}</span>
+        </div>
+    `).join('');
+}
+
+// ============================================
+// UPDATE WEBSITE VIBE (Main DOM Manipulation)
+// ============================================
+function updateWebsiteVibe(weatherState) {
+    const data = lifestyleDatabase[weatherState];
+    if (!data) return;
+
+    // Hero Section Updates
+    DOM.weatherBadgeIcon.textContent = data.statusIcon;
+    DOM.weatherBadgeText.textContent = data.status;
+    DOM.vibeTitle.textContent = data.vibeTitle;
+    DOM.vibeDescription.textContent = data.vibeDesc;
+
+    // Outfit Section - Generate Gradient Cards
+    DOM.outfitGrid.innerHTML = data.outfits.map((item, index) => `
+        <a href="${item.link}" target="_blank" rel="noopener noreferrer" 
+           class="gradient-card ${item.gradient} block hover:scale-[1.02] transition-transform">
+            <div class="relative z-10">
+                <span class="material-symbols-outlined text-white/80 text-[32px] mb-3">${index === 0 ? 'checkroom' : index === 1 ? 'footprints' : 'hat'}</span>
+                <h3 class="font-display font-semibold text-xl text-white mb-2">${item.title}</h3>
+                <p class="text-sm text-white/80 leading-relaxed mb-4">${item.desc}</p>
+                <span class="inline-block w-full py-3 bg-white/20 backdrop-blur-sm rounded-xl font-semibold text-sm text-center text-white hover:bg-white/30 transition-colors">Shop on AliExpress</span>
+            </div>
+        </a>
+    `).join('');
+
+    // Food Section Updates
+    DOM.foodBadge.textContent = data.food.badge;
+    DOM.foodTitle.textContent = data.food.title;
+    DOM.foodDescription.textContent = data.food.desc;
+
+    // Tips Section
+    renderWeatherTips(data.tips);
+}
+
+// ============================================
+// RAIN ALERT CHECK
+// ============================================
 function checkRainAlert(data) {
     if (!data.daily || !data.daily.precipitation_probability_max) {
         DOM.rainAlert.classList.add('hidden');
@@ -441,113 +377,12 @@ function checkRainAlert(data) {
 
     if (todayRainChance >= 80) {
         DOM.rainAlert.classList.remove('hidden');
-        DOM.rainAlertText.textContent = `Rain Alert: ${todayRainChance}% chance of rain today! We recommend waterproof gear and dark-colored clothes.`;
+        DOM.rainAlertText.textContent = `Rain Alert: ${todayRainChance}% chance of rain today! We recommend waterproof gear.`;
         return true;
     }
 
     DOM.rainAlert.classList.add('hidden');
     return false;
-}
-
-function updateOutfit(data) {
-    currentWeatherData = data;
-    const current = data.current;
-    const tempCategory = getTemperatureCategory(current.temperature_2m);
-    const weatherCat = getWeatherCategory(current.weather_code);
-
-    const isRainAlert = checkRainAlert(data);
-
-    let outfitKey = tempCategory;
-    if (weatherCat === 'rainy') outfitKey = 'rainy';
-
-    let outfits;
-    if (isRainAlert) {
-        outfits = RAIN_ALERT_ITEMS;
-    } else {
-        const styleData = currentStyle === 'desi' ? OUTFIT_DESI : OUTFIT_WESTERN;
-        const genderData = styleData[currentGender] || styleData.men;
-        outfits = genderData[outfitKey] || genderData.warm;
-    }
-
-    const tempF = Math.round((current.temperature_2m * 9/5) + 32);
-    DOM.outfitSubtitle.textContent = `Curated essentials for a ${tempF}°F afternoon.`;
-
-    const uv = data.daily && data.daily.uv_index_max ? data.daily.uv_index_max[0] : 0;
-    if (uv > 5) {
-        DOM.spfTip.textContent = 'SPF 50 is your best friend today!';
-    } else if (uv > 2) {
-        DOM.spfTip.textContent = 'SPF 30 recommended for today.';
-    } else {
-        DOM.spfTip.textContent = 'Low UV - enjoy the outdoors!';
-    }
-
-    DOM.outfitGrid.innerHTML = outfits.map(item => `
-        <a href="${item.link}" target="_blank" rel="noopener noreferrer" class="outfit-card glass-card rounded-2xl overflow-hidden soft-shadow block hover:scale-[1.02] transition-transform">
-            <div class="h-56 overflow-hidden relative">
-                <img class="outfit-img w-full h-full object-cover" src="${item.img}" alt="${item.name}"/>
-                <div class="absolute top-4 right-4 bg-white/90 backdrop-blur-sm px-3 py-1 rounded-full">
-                    <span class="text-xs font-semibold text-primary">${item.tag}</span>
-                </div>
-            </div>
-            <div class="p-5 space-y-3">
-                <h3 class="font-display font-semibold text-lg text-on-surface">${item.name}</h3>
-                <p class="text-sm text-on-surface-variant leading-relaxed">${item.desc}</p>
-                <span class="inline-block w-full py-3 bg-primary text-white rounded-xl font-semibold text-sm text-center hover:bg-primary/90 transition-colors">Shop on Amazon</span>
-            </div>
-        </a>
-    `).join('');
-}
-
-function updateFood(data) {
-    const current = data.current;
-    const tempCategory = getTemperatureCategory(current.temperature_2m);
-    const weatherCat = getWeatherCategory(current.weather_code);
-
-    let foodKey = tempCategory;
-    if (weatherCat === 'rainy') foodKey = 'rainy';
-
-    const food = FOOD_DATA[foodKey] || FOOD_DATA.warm;
-
-    DOM.foodBadge.textContent = food.badge;
-    DOM.foodTitle.textContent = food.title;
-    DOM.foodDescription.textContent = food.desc;
-    DOM.foodImage.src = food.img;
-}
-
-function updateWeekend(data) {
-    const daily = data.daily;
-    if (!daily) return;
-
-    const activities = WEEKEND_ACTIVITIES.clear;
-
-    let html = '';
-    for (let i = 0; i < 3 && i < daily.time.length; i++) {
-        const code = daily.weather_code[i];
-        const maxTemp = Math.round((daily.temperature_2m_max[i] * 9/5) + 32);
-        const icon = getWeatherIcon(code);
-        const condition = getWeatherCondition(code);
-        const activity = activities[i % activities.length];
-        const isBest = i === 1;
-
-        html += `
-            <div class="relative ${isBest ? 'weekend-best' : ''}">
-                <div class="glass-card p-6 rounded-2xl soft-shadow text-center space-y-4 ${isBest ? 'border-2 border-primary/20' : ''}">
-                    ${isBest ? '<div class="absolute top-4 right-4 bg-primary text-white text-[10px] px-3 py-1 rounded-full font-bold uppercase tracking-wider">Best Vibe</div>' : ''}
-                    <p class="text-xs font-bold text-outline uppercase tracking-widest">${formatDay(daily.time[i])}</p>
-                    <div class="flex flex-col items-center space-y-2">
-                        <span class="material-symbols-outlined text-[56px] ${isBest ? 'text-primary' : 'text-primary/60'}" style="font-variation-settings: 'FILL' 1;">${icon}</span>
-                        <p class="font-display font-bold text-3xl text-on-surface">${maxTemp}°</p>
-                        <p class="text-sm text-on-surface-variant">${condition}</p>
-                    </div>
-                    <div class="pt-4 border-t border-outline-variant/30">
-                        <p class="text-sm font-semibold ${isBest ? 'text-primary' : 'text-on-surface'}">${activity}</p>
-                    </div>
-                </div>
-            </div>
-        `;
-    }
-
-    DOM.weekendGrid.innerHTML = html;
 }
 
 // ============================================
@@ -561,10 +396,58 @@ async function displayWeather(lat, lon, cityName) {
         return;
     }
 
-    updateHero(data, cityName);
-    updateOutfit(data);
-    updateFood(data);
-    updateWeekend(data);
+    currentWeatherData = data;
+    const current = data.current;
+
+    // Update hero stats
+    const tempC = current.temperature_2m;
+    const tempF = Math.round((tempC * 9/5) + 32);
+    DOM.temperature.textContent = `${tempF}°F`;
+
+    const weatherInfo = WEATHER_CODES[current.weather_code] || WEATHER_CODES[0];
+    const isNight = current.is_day === 0;
+
+    // Update hero weather icon
+    DOM.heroWeatherIcon.textContent = isNight ? 'night_clear' : weatherInfo.icon;
+    DOM.weatherBadgeIcon.textContent = isNight ? 'night_clear' : weatherInfo.icon;
+    DOM.weatherBadgeText.textContent = isNight ? 'CLEAR NIGHT' : weatherInfo.badge;
+
+    // Update weather details
+    DOM.windSpeed.textContent = `${Math.round(current.wind_speed_10m)} km/h`;
+    DOM.humidity.textContent = `${current.relative_humidity_2m}%`;
+
+    // Update sunrise/sunset
+    if (data.daily && data.daily.sunrise && data.daily.sunset) {
+        DOM.sunriseTime.textContent = formatTime(data.daily.sunrise[0]);
+        DOM.sunsetTime.textContent = formatTime(data.daily.sunset[0]);
+    }
+
+    // UV Index
+    const uv = data.daily && data.daily.uv_index_max ? data.daily.uv_index_max[0] : 0;
+
+    // Determine lifestyle state and update sections
+    const lifestyleState = getLifestyleState(tempC, current.weather_code);
+    updateWebsiteVibe(lifestyleState);
+
+    // Update outfit subtitle with temperature
+    DOM.outfitSubtitle.textContent = `Curated essentials for a ${tempF}°F afternoon.`;
+
+    // Update SPF tip based on UV
+    if (uv > 5) {
+        DOM.spfTip.textContent = 'SPF 50 is your best friend today!';
+    } else if (uv > 2) {
+        DOM.spfTip.textContent = 'SPF 30 recommended for today.';
+    } else {
+        DOM.spfTip.textContent = 'Low UV - enjoy the outdoors!';
+    }
+
+    // Render hourly forecast
+    if (data.hourly) {
+        renderHourlyForecast(data.hourly);
+    }
+
+    // Rain alert check
+    checkRainAlert(data);
 }
 
 // ============================================
@@ -588,29 +471,8 @@ function closeModal() {
 // EVENT LISTENERS
 // ============================================
 
-// Gender filter buttons
-DOM.genderBtns.forEach(btn => {
-    btn.addEventListener('click', () => {
-        DOM.genderBtns.forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-        currentGender = btn.dataset.gender;
-        if (currentWeatherData) {
-            updateOutfit(currentWeatherData);
-        }
-    });
-});
-
-// Style filter buttons
-DOM.styleBtns.forEach(btn => {
-    btn.addEventListener('click', () => {
-        DOM.styleBtns.forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-        currentStyle = btn.dataset.style;
-        if (currentWeatherData) {
-            updateOutfit(currentWeatherData);
-        }
-    });
-});
+// Theme Toggle
+DOM.themeToggle.addEventListener('click', toggleTheme);
 
 // Search
 DOM.searchBtn.addEventListener('click', openModal);
@@ -704,4 +566,5 @@ DOM.locationBtn.addEventListener('click', () => {
 // ============================================
 // INITIALIZATION
 // ============================================
-displayWeather(24.8607, 67.0011, CONFIG.DEFAULT_CITY);
+initTheme();
+displayWeather(34.0151, 71.5249, CONFIG.DEFAULT_CITY);

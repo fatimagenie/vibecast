@@ -8,6 +8,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700&family=Inter:wght@400;500;600&family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
     <script>
         tailwind.config = {
+            darkMode: 'class',
             theme: {
                 extend: {
                     colors: {
@@ -38,10 +39,17 @@
     </script>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
+
         body {
             font-family: 'Inter', sans-serif;
             background-color: #f4faff;
             color: #0A1628;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        html.dark body {
+            background-color: #0f0a1a;
+            color: #ffffff;
         }
 
         .glass-card {
@@ -50,17 +58,34 @@
             border: 1px solid rgba(255, 255, 255, 0.6);
         }
 
+        html.dark .glass-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
         .soft-shadow {
             box-shadow: 0 4px 24px -4px rgba(30, 90, 122, 0.08);
+        }
+
+        html.dark .soft-shadow {
+            box-shadow: 0 4px 24px -4px rgba(0, 0, 0, 0.3);
         }
 
         .soft-shadow-lg {
             box-shadow: 0 8px 32px -4px rgba(30, 90, 122, 0.12);
         }
 
+        html.dark .soft-shadow-lg {
+            box-shadow: 0 8px 32px -4px rgba(0, 0, 0, 0.4);
+        }
+
         .section-divider {
             height: 1px;
             background: linear-gradient(90deg, transparent, #CBD5E1, transparent);
+        }
+
+        html.dark .section-divider {
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
         }
 
         #location-modal {
@@ -76,12 +101,214 @@
             align-items: center;
             justify-content: center;
         }
+
+        /* Theme Toggle */
+        .theme-toggle {
+            width: 40px;
+            height: 40px;
+            border-radius: 12px;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+            background: transparent;
+        }
+        .theme-toggle:hover {
+            background: rgba(255,255,255,0.1);
+        }
+        html:not(.dark) .theme-toggle:hover {
+            background: rgba(0,0,0,0.05);
+        }
+        .theme-toggle .icon-sun { display: none; }
+        .theme-toggle .icon-moon { display: block; }
+        html.dark .theme-toggle .icon-sun { display: block; }
+        html.dark .theme-toggle .icon-moon { display: none; }
+
+        /* Weather Details Cards */
+        .weather-detail-card {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 16px 20px;
+            border-radius: 16px;
+        }
+        .weather-detail-card .detail-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+        .weather-detail-card .detail-label {
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            opacity: 0.6;
+        }
+        .weather-detail-card .detail-value {
+            font-family: 'Lexend', sans-serif;
+            font-weight: 600;
+            font-size: 16px;
+        }
+
+        /* Hourly Forecast */
+        .hourly-scroll {
+            display: flex;
+            gap: 12px;
+            overflow-x: auto;
+            padding-bottom: 12px;
+            scroll-behavior: smooth;
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        .hourly-scroll::-webkit-scrollbar { display: none; }
+
+        .hourly-card {
+            flex: 0 0 auto;
+            width: 72px;
+            padding: 16px 8px;
+            border-radius: 16px;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s;
+        }
+        html:not(.dark) .hourly-card {
+            background: rgba(255,255,255,0.6);
+            border: 1px solid rgba(255,255,255,0.8);
+        }
+        html.dark .hourly-card {
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+        .hourly-card.active {
+            background: linear-gradient(135deg, #c084fc, #f472b6) !important;
+            color: white;
+            border: none;
+        }
+        .hourly-card .hour-time {
+            font-size: 12px;
+            font-weight: 500;
+            opacity: 0.7;
+        }
+        .hourly-card .hour-temp {
+            font-family: 'Lexend', sans-serif;
+            font-weight: 700;
+            font-size: 16px;
+        }
+
+        /* Today Tips */
+        .tip-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 16px;
+            border-radius: 12px;
+            font-size: 13px;
+            font-weight: 500;
+        }
+        html:not(.dark) .tip-item {
+            background: rgba(0,0,0,0.03);
+        }
+        html.dark .tip-item {
+            background: rgba(255,255,255,0.03);
+        }
+
+        /* Gradient Cards */
+        .gradient-card {
+            border-radius: 20px;
+            padding: 20px;
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+        .gradient-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle, rgba(255,255,255,0.2) 0%, transparent 70%);
+            border-radius: 50%;
+        }
+
+        /* Hero Dark */
+        html.dark .hero-gradient {
+            background: linear-gradient(180deg, #1a0f2e 0%, #0f0a1a 60%) !important;
+        }
+        html:not(.dark) .hero-gradient {
+            background: linear-gradient(180deg, #bee9ff 0%, #f4faff 60%) !important;
+        }
+
+        /* Header Dark */
+        html.dark header {
+            background: rgba(15, 10, 26, 0.85) !important;
+            border-color: rgba(255,255,255,0.1) !important;
+        }
+        html:not(.dark) header {
+            background: rgba(255, 255, 255, 0.8) !important;
+            border-color: rgba(203, 213, 225, 0.3) !important;
+        }
+
+        /* Footer Dark */
+        html.dark footer {
+            background: #0a0714 !important;
+            border-color: rgba(255,255,255,0.1) !important;
+        }
+        html:not(.dark) footer {
+            background: white !important;
+            border-color: rgba(203, 213, 225, 0.3) !important;
+        }
+
+        /* Modal Dark */
+        html.dark #location-modal > div {
+            background: #1a1028;
+            color: white;
+        }
+        html.dark #location-modal input {
+            background: rgba(255,255,255,0.05);
+            border-color: rgba(255,255,255,0.1);
+            color: white;
+        }
+
+        /* Nav links dark */
+        html.dark nav a.text-on-surface-variant {
+            color: rgba(255,255,255,0.6);
+        }
+        html.dark nav a.text-on-surface-variant:hover {
+            color: #c084fc;
+        }
+        html.dark nav a.text-primary {
+            color: #c084fc;
+            border-color: #c084fc;
+        }
+
+        /* Text colors dark */
+        html.dark .text-on-surface {
+            color: #ffffff;
+        }
+        html.dark .text-on-surface-variant {
+            color: rgba(255,255,255,0.6);
+        }
+
+        /* Outfit card gradient */
+        .outfit-gradient-1 { background: linear-gradient(135deg, #f472b6, #fb923c); }
+        .outfit-gradient-2 { background: linear-gradient(135deg, #a78bfa, #c084fc); }
+        .outfit-gradient-3 { background: linear-gradient(135deg, #60a5fa, #34d399); }
     </style>
 </head>
 <body>
 
     <!-- ========== HEADER / NAVBAR ========== -->
-    <header class="fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-md border-b border-outline-variant/30">
+    <header class="fixed top-0 left-0 right-0 z-50 backdrop-blur-md border-b transition-colors">
         <div class="max-w-7xl mx-auto px-5 md:px-12 h-16 flex items-center justify-between">
             <!-- Logo -->
             <div class="flex items-center gap-2">
@@ -99,6 +326,10 @@
             </nav>
             <!-- Actions -->
             <div class="flex items-center gap-2">
+                <button id="theme-toggle" class="theme-toggle" title="Toggle Theme">
+                    <span class="material-symbols-outlined text-[20px] icon-sun">light_mode</span>
+                    <span class="material-symbols-outlined text-[20px] icon-moon">dark_mode</span>
+                </button>
                 <button id="location-btn" class="w-9 h-9 rounded-xl flex items-center justify-center hover:bg-surface-low transition-colors" title="My Location">
                     <span class="material-symbols-outlined text-primary text-[20px]">my_location</span>
                 </button>
@@ -128,50 +359,97 @@
         <!-- ========== HERO SECTION ========== -->
         <section class="relative min-h-[85vh] flex flex-col items-center justify-center text-center px-5 overflow-hidden">
             <!-- Background Gradient -->
-            <div class="absolute inset-0 z-0" style="background: linear-gradient(180deg, #bee9ff 0%, #f4faff 60%);"></div>
+            <div class="absolute inset-0 z-0 hero-gradient" style="background: linear-gradient(180deg, #bee9ff 0%, #f4faff 60%);"></div>
 
             <div class="relative z-10 space-y-5 max-w-2xl">
                 <!-- Weather Badge -->
-                <div id="weather-badge" class="inline-flex items-center gap-2 px-5 py-2 bg-white/70 backdrop-blur-sm rounded-full border border-white/60">
+                <div id="weather-badge" class="inline-flex items-center gap-2 px-5 py-2 bg-white/70 backdrop-blur-sm rounded-full border border-white/60 dark:bg-white/10 dark:border-white/10">
                     <span class="material-symbols-outlined text-primary text-[16px]" style="font-variation-settings: 'FILL' 1;" id="weather-badge-icon">wb_sunny</span>
                     <span class="text-xs font-semibold text-primary uppercase tracking-wider" id="weather-badge-text">Loading...</span>
                 </div>
 
-                <!-- Temperature -->
-                <h1 class="font-display font-bold text-[80px] md:text-[100px] leading-none text-primary tracking-tight" id="temperature">--°F</h1>
+                <!-- Large Weather Icon + Temperature -->
+                <div class="flex flex-col items-center gap-2">
+                    <span class="material-symbols-outlined text-primary" style="font-size: 80px; font-variation-settings: 'FILL' 1;" id="hero-weather-icon">wb_sunny</span>
+                    <h1 class="font-display font-bold text-[80px] md:text-[100px] leading-none text-primary tracking-tight" id="temperature">--°</h1>
+                </div>
 
                 <!-- Vibe Title -->
                 <div>
                     <h2 class="font-display font-semibold text-2xl md:text-3xl text-on-surface mb-2" id="vibe-title">Today's Vibe</h2>
                     <p class="text-base text-on-surface-variant max-w-md mx-auto" id="vibe-description">Fetching weather data...</p>
                 </div>
+            </div>
+        </section>
 
-                <!-- Weather Stats -->
-                <div class="flex flex-wrap justify-center gap-4 pt-4">
-                    <div class="glass-card soft-shadow px-5 py-3 rounded-2xl flex items-center gap-3">
-                        <span class="material-symbols-outlined text-primary text-[20px]">air</span>
-                        <div class="text-left">
-                            <p class="text-[11px] font-semibold text-outline uppercase tracking-wider">Wind</p>
-                            <p class="font-display font-semibold text-base text-on-surface" id="wind-speed">-- mph</p>
-                        </div>
+        <!-- ========== WEATHER DETAILS CARDS ========== -->
+        <section class="max-w-7xl mx-auto px-5 md:px-12 -mt-8 relative z-20">
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4" id="weather-details-grid">
+                <!-- Sunrise -->
+                <div class="glass-card soft-shadow weather-detail-card">
+                    <div class="detail-icon" style="background: rgba(251, 146, 60, 0.15);">
+                        <span class="material-symbols-outlined text-orange-500 text-[22px]">wb_twilight</span>
                     </div>
-                    <div class="glass-card soft-shadow px-5 py-3 rounded-2xl flex items-center gap-3">
-                        <span class="material-symbols-outlined text-primary text-[20px]">water_drop</span>
-                        <div class="text-left">
-                            <p class="text-[11px] font-semibold text-outline uppercase tracking-wider">Humidity</p>
-                            <p class="font-display font-semibold text-base text-on-surface" id="humidity">--%</p>
-                        </div>
+                    <div>
+                        <p class="detail-label text-on-surface-variant">Sunrise</p>
+                        <p class="detail-value text-on-surface" id="sunrise-time">--:--</p>
                     </div>
-                    <div class="glass-card soft-shadow px-5 py-3 rounded-2xl flex items-center gap-3">
-                        <span class="material-symbols-outlined text-primary text-[20px]">wb_sunny</span>
-                        <div class="text-left">
-                            <p class="text-[11px] font-semibold text-outline uppercase tracking-wider">UV Index</p>
-                            <p class="font-display font-semibold text-base text-on-surface" id="uv-index">--</p>
-                        </div>
+                </div>
+                <!-- Sunset -->
+                <div class="glass-card soft-shadow weather-detail-card">
+                    <div class="detail-icon" style="background: rgba(168, 85, 247, 0.15);">
+                        <span class="material-symbols-outlined text-purple-500 text-[22px]">nights_stay</span>
+                    </div>
+                    <div>
+                        <p class="detail-label text-on-surface-variant">Sunset</p>
+                        <p class="detail-value text-on-surface" id="sunset-time">--:--</p>
+                    </div>
+                </div>
+                <!-- Wind -->
+                <div class="glass-card soft-shadow weather-detail-card">
+                    <div class="detail-icon" style="background: rgba(59, 130, 246, 0.15);">
+                        <span class="material-symbols-outlined text-blue-500 text-[22px]">air</span>
+                    </div>
+                    <div>
+                        <p class="detail-label text-on-surface-variant">Wind</p>
+                        <p class="detail-value text-on-surface" id="wind-speed">-- km/h</p>
+                    </div>
+                </div>
+                <!-- Humidity -->
+                <div class="glass-card soft-shadow weather-detail-card">
+                    <div class="detail-icon" style="background: rgba(34, 197, 94, 0.15);">
+                        <span class="material-symbols-outlined text-green-500 text-[22px]">water_drop</span>
+                    </div>
+                    <div>
+                        <p class="detail-label text-on-surface-variant">Humidity</p>
+                        <p class="detail-value text-on-surface" id="humidity">--%</p>
                     </div>
                 </div>
             </div>
         </section>
+
+        <!-- ========== HOURLY FORECAST ========== -->
+        <section class="max-w-7xl mx-auto px-5 md:px-12 py-12">
+            <h2 class="font-display font-bold text-2xl text-on-surface mb-6">Hourly Forecast</h2>
+            <div class="glass-card soft-shadow rounded-2xl p-5">
+                <div class="hourly-scroll" id="hourly-scroll">
+                    <!-- Injected by JS -->
+                </div>
+            </div>
+        </section>
+
+        <!-- ========== TODAY'S TIPS ========== -->
+        <section class="max-w-7xl mx-auto px-5 md:px-12 pb-8">
+            <h2 class="font-display font-bold text-2xl text-on-surface mb-4">Today's Tips</h2>
+            <div class="glass-card soft-shadow rounded-2xl p-5">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-3" id="tips-container">
+                    <!-- Injected by JS -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Divider -->
+        <div class="max-w-7xl mx-auto px-5 md:px-12"><div class="section-divider"></div></div>
 
         <!-- ========== OUTFIT SECTION ========== -->
         <section id="outfit-section" class="max-w-7xl mx-auto px-5 md:px-12 py-16">
@@ -181,32 +459,10 @@
                 <p class="text-sm font-medium text-blue-700" id="rain-alert-text">Rain Alert: 80% chance of rain today!</p>
             </div>
 
-            <!-- Filter Controls -->
-            <div class="flex flex-wrap items-center gap-4 mb-8">
-                <!-- Gender Filter -->
-                <div class="flex items-center gap-2">
-                    <span class="text-xs font-bold text-outline uppercase tracking-wider">Gender:</span>
-                    <div class="flex bg-surface-low rounded-xl p-1">
-                        <button class="gender-btn active px-4 py-2 rounded-lg text-xs font-semibold transition-all" data-gender="men">Men</button>
-                        <button class="gender-btn px-4 py-2 rounded-lg text-xs font-semibold transition-all" data-gender="women">Women</button>
-                        <button class="gender-btn px-4 py-2 rounded-lg text-xs font-semibold transition-all" data-gender="unisex">Unisex</button>
-                    </div>
-                </div>
-
-                <!-- Style Toggle -->
-                <div class="flex items-center gap-2">
-                    <span class="text-xs font-bold text-outline uppercase tracking-wider">Style:</span>
-                    <div class="flex bg-surface-low rounded-xl p-1">
-                        <button class="style-btn active px-4 py-2 rounded-lg text-xs font-semibold transition-all" data-style="western">Western</button>
-                        <button class="style-btn px-4 py-2 rounded-lg text-xs font-semibold transition-all" data-style="desi">Desi</button>
-                    </div>
-                </div>
-            </div>
-
             <!-- Section Header -->
             <div class="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-10">
                 <div>
-                    <h2 class="font-display font-bold text-3xl text-primary mb-2">Style Your Day</h2>
+                    <h2 class="font-display font-bold text-3xl text-primary mb-2">What to Wear</h2>
                     <p class="text-on-surface-variant" id="outfit-subtitle">Curated essentials for your day.</p>
                 </div>
                 <div class="flex items-center gap-3 bg-primary-container/20 border border-primary-container/40 px-5 py-3 rounded-2xl">
@@ -228,7 +484,7 @@
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
                 <!-- Text Content -->
                 <div class="space-y-5">
-                    <h2 class="font-display font-bold text-3xl text-primary">Taste the Weather</h2>
+                    <h2 class="font-display font-bold text-3xl text-primary">What to Eat</h2>
                     <span class="inline-block bg-secondary text-on-secondary px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider" id="food-badge">Sunny Day Pick</span>
                     <h3 class="font-display font-semibold text-2xl text-on-surface" id="food-title">Mango Gelato & Iced Matcha</h3>
                     <p class="text-on-surface-variant leading-relaxed" id="food-description">The perfect pairing for a warm day. Light, refreshing, and photogenic.</p>
@@ -277,7 +533,7 @@
     </main>
 
     <!-- ========== FOOTER ========== -->
-    <footer class="bg-white border-t border-outline-variant/30">
+    <footer class="border-t transition-colors">
         <div class="max-w-7xl mx-auto px-5 md:px-12 py-14">
             <div class="grid grid-cols-1 md:grid-cols-3 gap-10">
                 <!-- Brand -->
@@ -323,7 +579,7 @@
         </div>
     </footer>
 
-    <script src="js/app.js"></script>
+    <script src="app.js"></script>
     <script>
         // Scroll header hide/show
         let lastScroll = 0;
