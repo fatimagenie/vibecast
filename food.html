@@ -478,6 +478,7 @@
         document.querySelectorAll('.cat-btn').forEach(btn => {
             btn.addEventListener('click', () => {
                 updateFoodPage(btn.dataset.category);
+                applyWeatherBackground(btn.dataset.category);
             });
         });
 
@@ -489,11 +490,14 @@
                 if (data && data.current) {
                     const category = getLifestyleState(data.current.temperature_2m, data.current.weather_code);
                     updateFoodPage(category);
+                    applyWeatherBackground(category);
                 } else {
                     updateFoodPage('hot');
+                    applyWeatherBackground('hot');
                 }
             } catch(e) {
                 updateFoodPage('hot');
+                applyWeatherBackground('hot');
             }
         }
         initFoodPage();

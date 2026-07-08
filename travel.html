@@ -299,17 +299,29 @@
         document.querySelectorAll('.cat-btn').forEach(btn => {
             btn.addEventListener('click', () => {
                 updateTravelPage(btn.dataset.category);
+                applyWeatherBackground(btn.dataset.category);
             });
         });
 
-        function waitForWeather() {
-            if (window.VibeCastWeather) {
-                updateTravelPage(window.VibeCastWeather.category);
-            } else {
-                setTimeout(waitForWeather, 200);
+        async function initTravelPage() {
+            const defaultLat = 34.0151;
+            const defaultLon = 71.5249;
+            try {
+                const data = await fetchWeather(defaultLat, defaultLon);
+                if (data && data.current) {
+                    const category = getLifestyleState(data.current.temperature_2m, data.current.weather_code);
+                    updateTravelPage(category);
+                    applyWeatherBackground(category);
+                } else {
+                    updateTravelPage('hot');
+                    applyWeatherBackground('hot');
+                }
+            } catch(e) {
+                updateTravelPage('hot');
+                applyWeatherBackground('hot');
             }
         }
-        waitForWeather();
+        initTravelPage();
     </script>
 </body>
 </html>
