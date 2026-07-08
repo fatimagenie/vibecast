@@ -61,6 +61,8 @@
             overflow: hidden;
             transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             animation: cardFadeIn 0.8s ease-out;
+            width: 100%;
+            max-width: 320px;
         }
 
         .weather-card-premium:hover {
@@ -84,7 +86,7 @@
         .weather-card-premium .card-content {
             background: linear-gradient(145deg, rgba(26, 16, 40, 0.95), rgba(15, 10, 26, 0.98));
             border-radius: 25px;
-            padding: 28px 24px;
+            padding: 24px 22px;
             position: relative;
             z-index: 1;
         }
@@ -103,21 +105,22 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
-            gap: 16px;
+            gap: 12px;
             margin-bottom: 12px;
         }
 
         .weather-icon-wrapper {
             position: relative;
-            width: 72px;
-            height: 72px;
+            width: 60px;
+            height: 60px;
             display: flex;
             align-items: center;
             justify-content: center;
+            flex-shrink: 0;
         }
 
         .weather-icon-main {
-            font-size: 56px;
+            font-size: 44px;
             color: #F5A623;
             font-variation-settings: 'FILL' 1;
             filter: drop-shadow(0 0 20px rgba(245, 166, 35, 0.4));
@@ -136,15 +139,17 @@
         .weather-temp-block {
             text-align: right;
             flex: 1;
+            min-width: 0;
+            overflow: hidden;
         }
 
         .weather-time-label {
             font-family: 'Lexend', sans-serif;
-            font-size: 13px;
+            font-size: 11px;
             font-weight: 700;
             letter-spacing: 0.15em;
             color: #F5A623;
-            margin-bottom: 4px;
+            margin-bottom: 2px;
             text-shadow: 0 0 20px rgba(245, 166, 35, 0.4);
         }
 
@@ -152,21 +157,16 @@
             display: flex;
             align-items: baseline;
             justify-content: flex-end;
-            gap: 6px;
         }
 
         .weather-separator {
-            font-family: 'Lexend', sans-serif;
-            font-size: 28px;
-            font-weight: 300;
-            color: rgba(255, 255, 255, 0.5);
-            line-height: 1;
+            display: none;
         }
 
         .weather-temp-display {
             font-family: 'Lexend', sans-serif;
             font-weight: 700;
-            font-size: 52px;
+            font-size: 42px;
             line-height: 1;
             color: #ffffff;
             text-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
