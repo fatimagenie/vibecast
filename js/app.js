@@ -236,6 +236,170 @@ function renderWeekendGrid() {
     `).join('');
 }
 
+// ========== EXPANDED PAGE DATA ==========
+const outfitItems = {
+    hot: [
+        { name: "Cotton Kurta / Kameez", desc: "Light, breathable fabric for hot summer days", image: "https://images.unsplash.com/photo-1594938298603-c8148c4dae35?w=500&h=600&fit=crop", affiliateUrl: "#" },
+        { name: "Linen Summer Shirt", desc: "Cool and stylish linen shirt for outdoor wear", image: "https://images.unsplash.com/photo-1596755094514-f87e34085b2c?w=500&h=600&fit=crop", affiliateUrl: "#" },
+        { name: "Wide-Brim Straw Hat", desc: "Protect yourself from harsh UV rays", image: "https://images.unsplash.com/photo-1521369909029-2afed882baee?w=500&h=600&fit=crop", affiliateUrl: "#" },
+        { name: "Polarized Sunglasses", desc: "UV400 protection for bright sunny days", image: "https://images.unsplash.com/photo-1572635196237-14b3f281503f?w=500&h=600&fit=crop", affiliateUrl: "#" },
+        { name: "Breathable Sandals", desc: "Comfortable open-toe footwear for summer", image: "https://images.unsplash.com/photo-1603487742131-4160ec999306?w=500&h=600&fit=crop", affiliateUrl: "#" },
+        { name: "SPF 50+ Sunscreen", desc: "Essential skin protection from UV damage", image: "https://images.unsplash.com/photo-1556228578-0d85b1a4d571?w=500&h=600&fit=crop", affiliateUrl: "#" },
+        { name: "Light Chinos", desc: "Comfortable lightweight pants for everyday", image: "https://images.unsplash.com/photo-1473966968600-fa801b869a1a?w=500&h=600&fit=crop", affiliateUrl: "#" },
+        { name: "Cotton Scarf / Dupatta", desc: "Versatile accessory for sun and style", image: "https://images.unsplash.com/photo-1601924994987-69e26d50dc64?w=500&h=600&fit=crop", affiliateUrl: "#" }
+    ],
+    rainy: [
+        { name: "Waterproof Jacket", desc: "Stay dry with a lightweight rain jacket", image: "https://images.unsplash.com/photo-1544022613-e87ca75a784a?w=500&h=600&fit=crop", affiliateUrl: "#" },
+        { name: "Compact Umbrella", desc: "Foldable umbrella that fits in your bag", image: "https://images.unsplash.com/photo-1534274988757-a28bf1a57c17?w=500&h=600&fit=crop", affiliateUrl: "#" },
+        { name: "Rain Boots", desc: "Waterproof boots for puddle-proof walks", image: "https://images.unsplash.com/photo-1608256246200-53e635b5b65f?w=500&h=600&fit=crop", affiliateUrl: "#" },
+        { name: "Quick-Dry Pants", desc: "Drying fast, perfect for wet weather", image: "https://images.unsplash.com/photo-1624378439575-d8705ad7ae80?w=500&h=600&fit=crop", affiliateUrl: "#" },
+        { name: "Waterproof Bag Cover", desc: "Protect your belongings from rain", image: "https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=500&h=600&fit=crop", affiliateUrl: "#" },
+        { name: "Rain Poncho", desc: "Full-body protection in heavy downpour", image: "https://images.unsplash.com/photo-1504280390367-361c6d9f38f4?w=500&h=600&fit=crop", affiliateUrl: "#" },
+        { name: "Waterproof Phone Case", desc: "Keep your phone safe from water damage", image: "https://images.unsplash.com/photo-1601784551446-20c9e07cdbdb?w=500&h=600&fit=crop", affiliateUrl: "#" },
+        { name: "Fleece Hoodie", desc: "Warm layer for cool rainy evenings", image: "https://images.unsplash.com/photo-1556821840-3a63f95609a7?w=500&h=600&fit=crop", affiliateUrl: "#" }
+    ],
+    cold: [
+        { name: "Wool Sweater", desc: "Cozy knitwear for chilly winter days", image: "https://images.unsplash.com/photo-1576566588028-4147f3842f27?w=500&h=600&fit=crop", affiliateUrl: "#" },
+        { name: "Down Puffer Jacket", desc: "Maximum warmth with lightweight fill", image: "https://images.unsplash.com/photo-1544923246-77307dd270da?w=500&h=600&fit=crop", affiliateUrl: "#" },
+        { name: "Thermal Innerwear Set", desc: "Base layer for extreme cold protection", image: "https://images.unsplash.com/photo-1578587018452-892bacefd3f2?w=500&h=600&fit=crop", affiliateUrl: "#" },
+        { name: "Knitted Beanie", desc: "Keep your head warm in freezing temps", image: "https://images.unsplash.com/photo-1576871337632-b9aef4c17ab9?w=500&h=600&fit=crop", affiliateUrl: "#" },
+        { name: "Leather Gloves", desc: "Stylish and warm hand protection", image: "https://images.unsplash.com/photo-1516762689617-e1cffcef479d?w=500&h=600&fit=crop", affiliateUrl: "#" },
+        { name: "Winter Boots", desc: "Insulated boots with grip for icy roads", image: "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=500&h=600&fit=crop", affiliateUrl: "#" },
+        { name: "Scarf / Muffler", desc: "Warm neck protection in cold winds", image: "https://images.unsplash.com/photo-1520903920243-00d872a2d1c9?w=500&h=600&fit=crop", affiliateUrl: "#" },
+        { name: "Warm Socks (Pack of 3)", desc: "Thick cushioned socks for cold feet", image: "https://images.unsplash.com/photo-1586350977771-b3b0abd50c87?w=500&h=600&fit=crop", affiliateUrl: "#" }
+    ]
+};
+
+const foodItems = {
+    hot: [
+        { name: "Dahi / Raita", desc: "Cooling yogurt with spices and herbs", image: "https://images.unsplash.com/photo-1631452180519-c014fe946bc7?w=500&h=400&fit=crop", affiliateUrl: "#" },
+        { name: "Mango Lassi", desc: "Sweet and refreshing yogurt drink", image: "https://images.unsplash.com/photo-1527661591475-527312dd65f5?w=500&h=400&fit=crop", affiliateUrl: "#" },
+        { name: "Watermelon", desc: "Hydrating and naturally sweet summer fruit", image: "https://images.unsplash.com/photo-1587049352846-4a222e784d38?w=500&h=400&fit=crop", affiliateUrl: "#" },
+        { name: "Cucumber Salad", desc: "Crisp and refreshing side dish", image: "https://images.unsplash.com/photo-1540420773420-3366772f4999?w=500&h=400&fit=crop", affiliateUrl: "#" },
+        { name: "Cold Coffee", desc: "Chilled coffee with ice cream topping", image: "https://images.unsplash.com/photo-1461023058943-07fcbe16d735?w=500&h=400&fit=crop", affiliateUrl: "#" },
+        { name: "Fruit Chaat", desc: "Mixed seasonal fruits with chat masala", image: "https://images.unsplash.com/photo-1546548970-71785318a17b?w=500&h=400&fit=crop", affiliateUrl: "#" },
+        { name: "Mint Lemonade", desc: "Fresh mint blended with tangy lemon", image: "https://images.unsplash.com/photo-1621263764928-df1444c5e859?w=500&h=400&fit=crop", affiliateUrl: "#" },
+        { name: "Golgappa / Pani Puri", desc: "Crispy shells with tangy water", image: "https://images.unsplash.com/photo-1601050690597-df0568f70950?w=500&h=400&fit=crop", affiliateUrl: "#" }
+    ],
+    rainy: [
+        { name: "Hot Pakoras", desc: "Crispy fried fritters with green chutney", image: "https://images.unsplash.com/photo-1604908176997-125f25cc6f3d?w=500&h=400&fit=crop", affiliateUrl: "#" },
+        { name: "Samosa", desc: "Golden crispy pastry with spiced filling", image: "https://images.unsplash.com/photo-1601050690597-df0568f70950?w=500&h=400&fit=crop", affiliateUrl: "#" },
+        { name: "Karak Chai", desc: "Strong spiced tea to warm your soul", image: "https://images.unsplash.com/photo-1571934811356-5cc061b6821f?w=500&h=400&fit=crop", affiliateUrl: "#" },
+        { name: "Chicken Soup", desc: "Hot and soothing comfort in a bowl", image: "https://images.unsplash.com/photo-1547592166-23ac45744acd?w=500&h=400&fit=crop", affiliateUrl: "#" },
+        { name: "Biryani", desc: "Aromatic rice with tender spiced meat", image: "https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?w=500&h=400&fit=crop", affiliateUrl: "#" },
+        { name: "Naan with Karahi", desc: "Soft bread with rich gravy curry", image: "https://images.unsplash.com/photo-1565557623262-b51c2513a641?w=500&h=400&fit=crop", affiliateUrl: "#" },
+        { name: "Halwa Puri", desc: "Sweet halwa with crispy deep-fried bread", image: "https://images.unsplash.com/photo-1567337710282-00832b415979?w=500&h=400&fit=crop", affiliateUrl: "#" },
+        { name: "French Fries", desc: "Crispy golden fries with ketchup", image: "https://images.unsplash.com/photo-1573080496219-bb080dd4f877?w=500&h=400&fit=crop", affiliateUrl: "#" }
+    ],
+    cold: [
+        { name: "Chicken Soup", desc: "Steaming hot soup for cold winter nights", image: "https://images.unsplash.com/photo-1547592166-23ac45744acd?w=500&h=400&fit=crop", affiliateUrl: "#" },
+        { name: "Garam Chai", desc: "Traditional spiced hot tea", image: "https://images.unsplash.com/photo-1571934811356-5cc061b6821f?w=500&h=400&fit=crop", affiliateUrl: "#" },
+        { name: "Butter Chicken", desc: "Creamy rich curry, perfect with naan", image: "https://images.unsplash.com/photo-1603894584373-5ac82b2ae398?w=500&h=400&fit=crop", affiliateUrl: "#" },
+        { name: "Sarson ka Saag", desc: "Traditional mustard greens with makki roti", image: "https://images.unsplash.com/photo-1606491956689-2ea866880049?w=500&h=400&fit=crop", affiliateUrl: "#" },
+        { name: "Haleem", desc: "Slow-cooked meat and lentil stew", image: "https://images.unsplash.com/photo-1585937421612-70a008356fbe?w=500&h=400&fit=crop", affiliateUrl: "#" },
+        { name: "Gajar ka Halwa", desc: "Sweet carrot pudding with cardamom", image: "https://images.unsplash.com/photo-1666190462699-e1fef2e8d09d?w=500&h=400&fit=crop", affiliateUrl: "#" },
+        { name: "Hot Coffee", desc: "Freshly brewed coffee to beat the cold", image: "https://images.unsplash.com/photo-1509042239860-f550ce710b93?w=500&h=400&fit=crop", affiliateUrl: "#" },
+        { name: "Naan with Haleem", desc: "Warm bread dipped in rich stew", image: "https://images.unsplash.com/photo-1565557623262-b51c2513a641?w=500&h=400&fit=crop", affiliateUrl: "#" }
+    ]
+};
+
+const travelDestinations = {
+    hot: [
+        { name: "Clifton Beach", desc: "Cool sea breeze and golden sand", temp: "32°C", tag: "Beach", image: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=600&h=400&fit=crop", affiliateUrl: "#" },
+        { name: "Gwadar Coast", desc: "Pristine beaches and crystal clear water", temp: "30°C", tag: "Coastal", image: "https://images.unsplash.com/photo-1519046904884-53103b34b206?w=600&h=400&fit=crop", affiliateUrl: "#" },
+        { name: "Astola Island", desc: "Pakistan's hidden island paradise", temp: "29°C", tag: "Island", image: "https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=600&h=400&fit=crop", affiliateUrl: "#" },
+        { name: "Ormara Beach", desc: "Secluded coastal gem with turquoise water", temp: "31°C", tag: "Hidden Gem", image: "https://images.unsplash.com/photo-1505228395891-9a51e7e86bf6?w=600&h=400&fit=crop", affiliateUrl: "#" },
+        { name: "Sonmiani Beach", desc: "Calm waters and scenic dunes", temp: "33°C", tag: "Relaxing", image: "https://images.unsplash.com/photo-1473116763249-2faaef81ccda?w=600&h=400&fit=crop", affiliateUrl: "#" },
+        { name: "Makran Coast", desc: "Dramatic cliffs meet the Arabian Sea", temp: "30°C", tag: "Scenic", image: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=600&h=400&fit=crop", affiliateUrl: "#" }
+    ],
+    rainy: [
+        { name: "Murree Hills", desc: "Cool breezy hill station with pine forests", temp: "18°C", tag: "Popular", image: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=600&h=400&fit=crop", affiliateUrl: "#" },
+        { name: "Abbottabad", desc: "Green valley surrounded by mountains", temp: "20°C", tag: "Peaceful", image: "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=600&h=400&fit=crop", affiliateUrl: "#" },
+        { name: "Patriata", desc: "Chairlift ride through misty hills", temp: "17°C", tag: "Adventure", image: "https://images.unsplash.com/photo-1486870591958-9b9d0d1dda99?w=600&h=400&fit=crop", affiliateUrl: "#" },
+        { name: "Nathia Gali", desc: "Foggy trails and colonial-era charm", temp: "15°C", tag: "Scenic", image: "https://images.unsplash.com/photo-1483728642387-6c3bdd6c93e5?w=600&h=400&fit=crop", affiliateUrl: "#" },
+        { name: "Ayubia", desc: "Nature trails and butterfly museum", temp: "16°C", tag: "Family", image: "https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?w=600&h=400&fit=crop", affiliateUrl: "#" },
+        { name: "Chitral", desc: "Remote valley with rich culture", temp: "19°C", tag: "Offbeat", image: "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=600&h=400&fit=crop", affiliateUrl: "#" }
+    ],
+    cold: [
+        { name: "Skardu", desc: "Land of mountains and frozen lakes", temp: "5°C", tag: "Adventure", image: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=600&h=400&fit=crop", affiliateUrl: "#" },
+        { name: "Hunza Valley", desc: "Breathtaking peaks and ancient forts", temp: "8°C", tag: "Scenic", image: "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=600&h=400&fit=crop", affiliateUrl: "#" },
+        { name: "Naran Kaghan", desc: "Snow-capped mountains and crystal lakes", temp: "3°C", tag: "Popular", image: "https://images.unsplash.com/photo-1486870591958-9b9d0d1dda99?w=600&h=400&fit=crop", affiliateUrl: "#" },
+        { name: "Swat Valley", desc: "Pakistan's Switzerland in winter snow", temp: "6°C", tag: "Beautiful", image: "https://images.unsplash.com/photo-1483728642387-6c3bdd6c93e5?w=600&h=400&fit=crop", affiliateUrl: "#" },
+        { name: "Fairy Meadows", desc: "Gateway to Nanga Parbat base camp", temp: "2°C", tag: "Epic", image: "https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?w=600&h=400&fit=crop", affiliateUrl: "#" },
+        { name: "Deosai Plains", desc: "World's second highest plateau", temp: "0°C", tag: "Wildlife", image: "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=600&h=400&fit=crop", affiliateUrl: "#" }
+    ]
+};
+
+// ========== PAGE RENDER FUNCTIONS ==========
+function renderOutfitPage(category) {
+    const grid = document.getElementById('outfit-grid-page');
+    if (!grid) return;
+    const items = outfitItems[category] || outfitItems.hot;
+    grid.innerHTML = items.map(item => `
+        <a href="${item.affiliateUrl}" target="_blank" class="item-card">
+            <div class="item-card-img-wrapper">
+                <img src="${item.image}" alt="${item.name}" loading="lazy"/>
+                <span class="item-card-tag">${category.toUpperCase()}</span>
+            </div>
+            <div class="item-card-info">
+                <h3 class="item-card-title">${item.name}</h3>
+                <p class="item-card-desc">${item.desc}</p>
+                <span class="item-card-cta">
+                    View on Store
+                    <span class="material-symbols-outlined text-[16px]">arrow_forward</span>
+                </span>
+            </div>
+        </a>
+    `).join('');
+}
+
+function renderFoodPage(category) {
+    const grid = document.getElementById('food-grid-page');
+    if (!grid) return;
+    const items = foodItems[category] || foodItems.hot;
+    grid.innerHTML = items.map(item => `
+        <a href="${item.affiliateUrl}" target="_blank" class="item-card">
+            <div class="item-card-img-wrapper">
+                <img src="${item.image}" alt="${item.name}" loading="lazy"/>
+                <span class="item-card-tag">${category.toUpperCase()}</span>
+            </div>
+            <div class="item-card-info">
+                <h3 class="item-card-title">${item.name}</h3>
+                <p class="item-card-desc">${item.desc}</p>
+                <span class="item-card-cta">
+                    View Recipe
+                    <span class="material-symbols-outlined text-[16px]">arrow_forward</span>
+                </span>
+            </div>
+        </a>
+    `).join('');
+}
+
+function renderTravelPage(category) {
+    const grid = document.getElementById('travel-grid-page');
+    if (!grid) return;
+    const items = travelDestinations[category] || travelDestinations.hot;
+    grid.innerHTML = items.map(item => `
+        <a href="${item.affiliateUrl}" target="_blank" class="item-card travel-card">
+            <div class="item-card-img-wrapper">
+                <img src="${item.image}" alt="${item.name}" loading="lazy"/>
+                <span class="item-card-tag">${item.tag}</span>
+            </div>
+            <div class="item-card-info">
+                <div class="flex items-center justify-between">
+                    <h3 class="item-card-title">${item.name}</h3>
+                    <span class="text-primary font-display font-bold text-sm">${item.temp}</span>
+                </div>
+                <p class="item-card-desc">${item.desc}</p>
+                <span class="item-card-cta">
+                    Plan Trip
+                    <span class="material-symbols-outlined text-[16px]">arrow_forward</span>
+                </span>
+            </div>
+        </a>
+    `).join('');
+}
+
 function getTemperatureCategory(tempC) {
     if (tempC >= 30) return 'hot';
     if (tempC >= 20) return 'warm';
@@ -449,6 +613,17 @@ async function displayWeather(lat, lon, cityName) {
     const lifestyleState = getLifestyleState(tempC, current.weather_code);
     renderLifestyle(lifestyleState);
 
+    // Expose global state for page scripts
+    window.VibeCastWeather = {
+        city: cityName,
+        temp: tempC,
+        feelsLike: feelsLikeC,
+        condition: weatherInfo.condition,
+        category: lifestyleState,
+        icon: isNight ? 'night_clear' : weatherInfo.icon,
+        isNight: isNight
+    };
+
     renderWeekendGrid();
 
     if (data.hourly) {
@@ -644,28 +819,19 @@ DOM.locationBtn.addEventListener('click', () => {
     );
 });
 
-// ========== CATEGORY BUTTONS (Scroll to sections) ==========
+// ========== CATEGORY BUTTONS (Navigate to pages) ==========
 document.querySelectorAll('.cat-btn').forEach(btn => {
     btn.addEventListener('click', () => {
         document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
         btn.classList.add('active');
 
         const text = btn.textContent.trim().toLowerCase();
-        let targetId = null;
-
         if (text === 'outfit') {
-            targetId = 'outfit-section';
+            window.location.href = 'outfit.html';
         } else if (text === 'food') {
-            targetId = 'food-section';
+            window.location.href = 'food.html';
         } else if (text === 'travel') {
-            targetId = 'weekend-section';
-        }
-
-        if (targetId) {
-            const target = document.getElementById(targetId);
-            if (target) {
-                target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-            }
+            window.location.href = 'travel.html';
         }
     });
 });
