@@ -452,7 +452,7 @@ async function fetchWeather(lat, lon) {
         longitude: lon,
         current: 'temperature_2m,relative_humidity_2m,apparent_temperature,weather_code,wind_speed_10m,is_day',
         hourly: 'temperature_2m,weather_code',
-        daily: 'weather_code,temperature_2m_max,temperature_2m_min,uv_index_max,precipitation_probability_max,sunrise,sunset',
+        daily: 'weather_code,temperature_2m_max,temperature_2m_min,uv_index_max,sunrise,sunset',
         timezone: 'auto',
         forecast_days: 7,
     });
@@ -672,7 +672,12 @@ async function displayWeather(lat, lon, cityName) {
     }
 
     if (data.daily) {
+        console.log('Daily data keys:', Object.keys(data.daily));
+        console.log('Daily time:', data.daily.time);
+        console.log('Daily max temps:', data.daily.temperature_2m_max);
         renderDailyForecast(data.daily);
+    } else {
+        console.error('No daily data in API response');
     }
 }
 
