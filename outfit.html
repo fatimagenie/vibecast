@@ -273,7 +273,7 @@
         </div>
     </footer>
 
-    <script src="js/app.js"></script>
+    <script src="js/app.js?v=3"></script>
     <script>
         let currentCategory = 'hot';
 
@@ -308,15 +308,23 @@
             });
         });
 
-        // Wait for weather to load, then render
-        function waitForWeather() {
-            if (window.VibeCastWeather) {
-                updateOutfitPage(window.VibeCastWeather.category);
-            } else {
-                setTimeout(waitForWeather, 200);
+        // Auto-detect weather and render
+        async function initOutfitPage() {
+            const defaultLat = 34.0151;
+            const defaultLon = 71.5249;
+            try {
+                const data = await fetchWeather(defaultLat, defaultLon);
+                if (data && data.current) {
+                    const category = getLifestyleState(data.current.temperature_2m, data.current.weather_code);
+                    updateOutfitPage(category);
+                } else {
+                    updateOutfitPage('hot');
+                }
+            } catch(e) {
+                updateOutfitPage('hot');
             }
         }
-        waitForWeather();
+        initOutfitPage();
     </script>
 </body>
 </html>

@@ -427,7 +427,7 @@
         </div>
     </div>
 
-    <script src="js/app.js"></script>
+    <script src="js/app.js?v=3"></script>
     <script>
         function openRecipeModal(index, category) {
             const item = foodItems[category][index];
@@ -481,14 +481,22 @@
             });
         });
 
-        function waitForWeather() {
-            if (window.VibeCastWeather) {
-                updateFoodPage(window.VibeCastWeather.category);
-            } else {
-                setTimeout(waitForWeather, 200);
+        async function initFoodPage() {
+            const defaultLat = 34.0151;
+            const defaultLon = 71.5249;
+            try {
+                const data = await fetchWeather(defaultLat, defaultLon);
+                if (data && data.current) {
+                    const category = getLifestyleState(data.current.temperature_2m, data.current.weather_code);
+                    updateFoodPage(category);
+                } else {
+                    updateFoodPage('hot');
+                }
+            } catch(e) {
+                updateFoodPage('hot');
             }
         }
-        waitForWeather();
+        initFoodPage();
     </script>
 </body>
 </html>
