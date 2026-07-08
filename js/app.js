@@ -693,6 +693,8 @@ async function displayWeather(lat, lon, cityName) {
 
     DOM.temperature.textContent = formatTemp(tempC);
     DOM.feelsLike.textContent = formatTemp(feelsLikeC);
+    DOM.temperature.classList.add('loaded');
+    DOM.feelsLike.classList.add('loaded');
 
     const weatherInfo = WEATHER_CODES[current.weather_code] || WEATHER_CODES[0];
     const isNight = current.is_day === 0;
