@@ -81,7 +81,7 @@ const lifestyleDatabase = {
                 "Sunscreen SPF 50+"
             ]
         },
-        outfitImage: "https://images.unsplash.com/photo-1523381210434-271e8be1f52b?w=600&h=300&fit=crop",
+        outfitImage: "https://images.unsplash.com/photo-1594938298603-c8148c4dae35?w=600&h=300&fit=crop&q=80",
         food: {
             title: "Cooling Food",
             items: [
@@ -91,7 +91,7 @@ const lifestyleDatabase = {
                 "Light dal-chawal"
             ]
         },
-        foodImage: "https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=600&h=200&fit=crop",
+        foodImage: "https://images.unsplash.com/photo-1498837167922-ddd27525d352?w=600&h=200&fit=crop&q=80",
         hydration: [
             "Nimbu pani",
             "Coconut water",
@@ -121,7 +121,7 @@ const lifestyleDatabase = {
                 "Rain cover for bag"
             ]
         },
-        outfitImage: "https://images.unsplash.com/photo-1544022613-e87ca75a784a?w=600&h=300&fit=crop",
+        outfitImage: "https://images.unsplash.com/photo-1551698618-1dfe5d97d256?w=600&h=300&fit=crop&q=80",
         food: {
             title: "Comfort Food",
             items: [
@@ -131,7 +131,7 @@ const lifestyleDatabase = {
                 "Crispy samosa"
             ]
         },
-        foodImage: "https://images.unsplash.com/photo-1604908176997-125f25cc6f3d?w=600&h=200&fit=crop",
+        foodImage: "https://images.unsplash.com/photo-1547592166-23ac45744acd?w=600&h=200&fit=crop&q=80",
         hydration: [
             "Hot tea",
             "Masala chai",
@@ -161,7 +161,7 @@ const lifestyleDatabase = {
                 "Scarf for neck"
             ]
         },
-        outfitImage: "https://images.unsplash.com/photo-1544923246-77307dd270da?w=600&h=300&fit=crop",
+        outfitImage: "https://images.unsplash.com/photo-1576871337632-b9aef4c17ab9?w=600&h=300&fit=crop&q=80",
         food: {
             title: "Hot & Warming",
             items: [
@@ -171,7 +171,7 @@ const lifestyleDatabase = {
                 "Garam masala dishes"
             ]
         },
-        foodImage: "https://images.unsplash.com/photo-1547592166-23ac45744acd?w=600&h=200&fit=crop",
+        foodImage: "https://images.unsplash.com/photo-1509042239860-f550ce710b93?w=600&h=200&fit=crop&q=80",
         hydration: [
             "Hot coffee",
             "Ginger tea",
