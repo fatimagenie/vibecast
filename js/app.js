@@ -830,8 +830,6 @@ document.querySelectorAll('.cat-btn').forEach(btn => {
             window.location.href = 'outfit.html';
         } else if (text === 'food') {
             window.location.href = 'food.html';
-        } else if (text === 'travel') {
-            window.location.href = 'travel.html';
         }
     });
 });
