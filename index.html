@@ -837,6 +837,12 @@
     </style>
 </head>
 <body>
+    <script>
+    if (!sessionStorage.getItem('vc-v2')) {
+        sessionStorage.setItem('vc-v2', '1');
+        location.reload();
+    }
+    </script>
 
     <!-- ========== HEADER ========== -->
     <header class="fixed top-0 left-0 right-0 z-50" style="background: rgba(15, 10, 26, 0.85); backdrop-filter: blur(12px); border-bottom: 1px solid rgba(255,255,255,0.05);">
