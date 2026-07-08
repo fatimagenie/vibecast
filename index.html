@@ -48,12 +48,191 @@
                         linear-gradient(180deg, #1a0f2e 0%, #0f0a1a 100%);
         }
 
-        .weather-card {
-            background: linear-gradient(135deg, rgba(168, 85, 247, 0.2), rgba(244, 114, 182, 0.15));
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 24px;
-            padding: 24px;
-            backdrop-filter: blur(20px);
+        /* ========================================
+           PREMIUM WEATHER CARD
+           ======================================== */
+        .weather-card-premium {
+            position: relative;
+            border-radius: 28px;
+            padding: 3px;
+            background: linear-gradient(135deg, rgba(168, 85, 247, 0.5), rgba(244, 114, 182, 0.3), rgba(251, 146, 60, 0.2));
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            animation: cardFadeIn 0.8s ease-out;
+        }
+
+        .weather-card-premium:hover {
+            transform: translateY(-4px) scale(1.02);
+            box-shadow: 0 20px 60px rgba(168, 85, 247, 0.35),
+                        0 0 40px rgba(168, 85, 247, 0.15);
+        }
+
+        .weather-card-premium .card-glow {
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle, rgba(244, 114, 182, 0.2) 0%, transparent 70%);
+            border-radius: 50%;
+            pointer-events: none;
+            animation: glowPulse 3s ease-in-out infinite;
+        }
+
+        .weather-card-premium .card-content {
+            background: linear-gradient(145deg, rgba(26, 16, 40, 0.95), rgba(15, 10, 26, 0.98));
+            border-radius: 25px;
+            padding: 28px 24px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .weather-region-label {
+            display: block;
+            font-size: 9px;
+            font-weight: 700;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: rgba(255, 255, 255, 0.4);
+            margin-bottom: 20px;
+        }
+
+        .weather-main-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            margin-bottom: 12px;
+        }
+
+        .weather-icon-wrapper {
+            position: relative;
+            width: 72px;
+            height: 72px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .weather-icon-main {
+            font-size: 56px;
+            color: #F5A623;
+            font-variation-settings: 'FILL' 1;
+            filter: drop-shadow(0 0 20px rgba(245, 166, 35, 0.4));
+            z-index: 1;
+            animation: iconFloat 4s ease-in-out infinite;
+        }
+
+        .weather-icon-wrapper .icon-glow {
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle, rgba(245, 166, 35, 0.25) 0%, transparent 70%);
+            border-radius: 50%;
+            animation: iconGlow 2s ease-in-out infinite;
+        }
+
+        .weather-temp-block {
+            text-align: right;
+            flex: 1;
+        }
+
+        .weather-time-label {
+            font-family: 'Lexend', sans-serif;
+            font-size: 13px;
+            font-weight: 700;
+            letter-spacing: 0.15em;
+            color: #F5A623;
+            margin-bottom: 4px;
+            text-shadow: 0 0 20px rgba(245, 166, 35, 0.4);
+        }
+
+        .weather-temp-row {
+            display: flex;
+            align-items: baseline;
+            justify-content: flex-end;
+            gap: 6px;
+        }
+
+        .weather-separator {
+            font-family: 'Lexend', sans-serif;
+            font-size: 28px;
+            font-weight: 300;
+            color: rgba(255, 255, 255, 0.5);
+            line-height: 1;
+        }
+
+        .weather-temp-display {
+            font-family: 'Lexend', sans-serif;
+            font-weight: 700;
+            font-size: 52px;
+            line-height: 1;
+            color: #ffffff;
+            text-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .weather-condition-text {
+            font-size: 14px;
+            font-weight: 500;
+            color: rgba(255, 255, 255, 0.6);
+            margin-bottom: 16px;
+        }
+
+        .weather-divider {
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            margin-bottom: 16px;
+        }
+
+        .weather-info-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .weather-info-icon {
+            font-size: 16px;
+            color: #c084fc;
+        }
+
+        .weather-info-label {
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.4);
+        }
+
+        .weather-info-value {
+            font-family: 'Lexend', sans-serif;
+            font-size: 13px;
+            font-weight: 600;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        /* Card Animations */
+        @keyframes cardFadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px) scale(0.95);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        @keyframes glowPulse {
+            0%, 100% { opacity: 0.5; transform: scale(1); }
+            50% { opacity: 0.8; transform: scale(1.1); }
+        }
+
+        @keyframes iconFloat {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-4px); }
+        }
+
+        @keyframes iconGlow {
+            0%, 100% { opacity: 0.4; transform: scale(1); }
+            50% { opacity: 0.7; transform: scale(1.15); }
         }
 
         /* Hourly Forecast - Exact Match */
@@ -451,24 +630,34 @@
                     </div>
                 </div>
                 <div class="flex justify-center lg:justify-end">
-                    <div class="weather-card w-full max-w-[280px]">
-                        <div class="flex items-center gap-2 mb-4">
-                            <span class="text-xs text-white/50 font-medium">IN YOUR REGION</span>
-                        </div>
-                        <div class="flex items-center justify-between">
-                            <div>
-                                <span class="material-symbols-outlined text-yellow-400" style="font-size: 56px; font-variation-settings: 'FILL' 1;" id="hero-weather-icon">wb_sunny</span>
+                    <div class="weather-card-premium w-full max-w-[320px]">
+                        <div class="card-glow"></div>
+                        <div class="card-content">
+                            <span class="weather-region-label">IN YOUR REGION</span>
+
+                            <div class="weather-main-row">
+                                <div class="weather-icon-wrapper">
+                                    <span class="material-symbols-outlined weather-icon-main" id="hero-weather-icon">wb_sunny</span>
+                                    <div class="icon-glow"></div>
+                                </div>
+
+                                <div class="weather-temp-block">
+                                    <div class="weather-time-label" id="time-label">NIGHT</div>
+                                    <div class="weather-temp-row">
+                                        <span class="weather-separator">×</span>
+                                        <h2 class="weather-temp-display" id="temperature">--°</h2>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="text-right">
-                                <h2 class="font-display font-bold text-5xl text-white" id="temperature">--°</h2>
-                            </div>
-                        </div>
-                        <p class="text-white/60 text-sm mt-2" id="weather-condition">Clear Sky</p>
-                        <div class="flex items-center gap-4 mt-4 pt-4 border-t border-white/10">
-                            <div class="flex items-center gap-2">
-                                <span class="material-symbols-outlined text-primary text-[16px]">thermostat</span>
-                                <span class="text-xs text-white/50">Feels like</span>
-                                <span class="text-xs text-white font-medium" id="feels-like">--°</span>
+
+                            <p class="weather-condition-text" id="weather-condition">Clear Sky</p>
+
+                            <div class="weather-divider"></div>
+
+                            <div class="weather-info-row">
+                                <span class="material-symbols-outlined weather-info-icon">thermostat</span>
+                                <span class="weather-info-label">Feels like</span>
+                                <span class="weather-info-value" id="feels-like">--°</span>
                             </div>
                         </div>
                     </div>
