@@ -503,9 +503,14 @@ function renderHourlyForecast(hourlyData) {
 }
 
 function renderDailyForecast(dailyData) {
-    if (!DOM.dailyScroll) return;
+    const dailyScroll = document.getElementById('daily-scroll');
+    if (!dailyScroll) {
+        console.error('daily-scroll element not found');
+        return;
+    }
     if (!dailyData || !dailyData.time || !dailyData.temperature_2m_max) {
-        DOM.dailyScroll.innerHTML = '<p class="text-white/40 text-sm">Daily data unavailable</p>';
+        console.error('Daily data missing:', dailyData);
+        dailyScroll.innerHTML = '<p class="text-white/40 text-sm">Daily data unavailable</p>';
         return;
     }
 
@@ -516,8 +521,8 @@ function renderDailyForecast(dailyData) {
         const date = new Date(dailyData.time[i] + 'T00:00:00');
         const dayName = i === 0 ? 'Today' : dayNames[date.getDay()];
         const maxTemp = Math.round(dailyData.temperature_2m_max[i]);
-        const minTemp = Math.round(dailyData.temperature_2m_min[i]);
-        const weatherCode = dailyData.weather_code[i];
+        const minTemp = dailyData.temperature_2m_min ? Math.round(dailyData.temperature_2m_min[i]) : maxTemp - 8;
+        const weatherCode = dailyData.weather_code ? dailyData.weather_code[i] : 0;
         const weatherInfo = WEATHER_CODES[weatherCode] || WEATHER_CODES[0];
         const rainProb = dailyData.precipitation_probability_max ? dailyData.precipitation_probability_max[i] : null;
         const isActive = i === 0;
@@ -534,7 +539,7 @@ function renderDailyForecast(dailyData) {
             </div>
         `);
     }
-    DOM.dailyScroll.innerHTML = cards.join('');
+    dailyScroll.innerHTML = cards.join('');
 }
 
 function renderTips(tips) {
