@@ -42,6 +42,7 @@ const DOM = {
     heroSearchResults: document.getElementById('hero-search-results'),
     heroSearchSpinner: document.getElementById('hero-search-spinner'),
     weekendGrid: document.getElementById('weekend-grid'),
+    dailyScroll: document.getElementById('daily-scroll'),
 };
 
 const WEATHER_CODES = {
@@ -453,7 +454,7 @@ async function fetchWeather(lat, lon) {
         hourly: 'temperature_2m,weather_code',
         daily: 'weather_code,temperature_2m_max,temperature_2m_min,uv_index_max,precipitation_probability_max,sunrise,sunset',
         timezone: 'auto',
-        forecast_days: 1,
+        forecast_days: 7,
     });
     const url = `${CONFIG.WEATHER_API}?${params.toString()}`;
     try {
@@ -499,6 +500,41 @@ function renderHourlyForecast(hourlyData) {
         `);
     }
     DOM.hourlyScroll.innerHTML = cards.join('');
+}
+
+function renderDailyForecast(dailyData) {
+    if (!DOM.dailyScroll) return;
+    if (!dailyData || !dailyData.time || !dailyData.temperature_2m_max) {
+        DOM.dailyScroll.innerHTML = '<p class="text-white/40 text-sm">Daily data unavailable</p>';
+        return;
+    }
+
+    const dayNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+    const cards = [];
+
+    for (let i = 0; i < dailyData.time.length; i++) {
+        const date = new Date(dailyData.time[i] + 'T00:00:00');
+        const dayName = i === 0 ? 'Today' : dayNames[date.getDay()];
+        const maxTemp = Math.round(dailyData.temperature_2m_max[i]);
+        const minTemp = Math.round(dailyData.temperature_2m_min[i]);
+        const weatherCode = dailyData.weather_code[i];
+        const weatherInfo = WEATHER_CODES[weatherCode] || WEATHER_CODES[0];
+        const rainProb = dailyData.precipitation_probability_max ? dailyData.precipitation_probability_max[i] : null;
+        const isActive = i === 0;
+
+        cards.push(`
+            <div class="daily-card ${isActive ? 'active' : ''}">
+                <span class="daily-day">${dayName}</span>
+                <span class="material-symbols-outlined daily-icon ${isActive ? 'text-white' : 'text-primary'}" style="font-variation-settings: 'FILL' 1;">${weatherInfo.icon}</span>
+                <div class="daily-temps">
+                    <span class="daily-max">${maxTemp}°</span>
+                    <span class="daily-min">${minTemp}°</span>
+                </div>
+                ${rainProb !== null && rainProb > 0 ? `<span class="daily-rain"><span class="material-symbols-outlined text-[10px]">water_drop</span>${rainProb}%</span>` : ''}
+            </div>
+        `);
+    }
+    DOM.dailyScroll.innerHTML = cards.join('');
 }
 
 function renderTips(tips) {
@@ -628,6 +664,10 @@ async function displayWeather(lat, lon, cityName) {
 
     if (data.hourly) {
         renderHourlyForecast(data.hourly);
+    }
+
+    if (data.daily) {
+        renderDailyForecast(data.daily);
     }
 }
 

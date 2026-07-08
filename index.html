@@ -322,6 +322,81 @@
             transition: width 0.3s;
         }
 
+        /* Daily Forecast */
+        .daily-scroll {
+            display: flex;
+            gap: 12px;
+            overflow-x: auto;
+            padding: 8px 0;
+            scroll-behavior: smooth;
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        .daily-scroll::-webkit-scrollbar { display: none; }
+
+        .daily-card {
+            flex: 0 0 auto;
+            width: 100px;
+            padding: 16px 10px;
+            border-radius: 16px;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            transition: all 0.3s;
+        }
+        .daily-card:hover {
+            background: rgba(255, 255, 255, 0.08);
+        }
+        .daily-card.active {
+            background: linear-gradient(135deg, #c084fc, #f472b6);
+            border: none;
+            box-shadow: 0 4px 20px rgba(192, 132, 252, 0.3);
+        }
+        .daily-day {
+            font-size: 11px;
+            font-weight: 600;
+            color: rgba(255, 255, 255, 0.6);
+        }
+        .daily-card.active .daily-day {
+            color: rgba(255, 255, 255, 0.9);
+        }
+        .daily-icon {
+            font-size: 28px;
+        }
+        .daily-temps {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 2px;
+        }
+        .daily-max {
+            font-family: 'Lexend', sans-serif;
+            font-weight: 700;
+            font-size: 16px;
+            color: white;
+        }
+        .daily-min {
+            font-family: 'Lexend', sans-serif;
+            font-weight: 500;
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.4);
+        }
+        .daily-rain {
+            display: inline-flex;
+            align-items: center;
+            gap: 2px;
+            padding: 2px 6px;
+            background: rgba(59, 130, 246, 0.2);
+            border-radius: 4px;
+            font-size: 9px;
+            font-weight: 600;
+            color: #93c5fd;
+        }
+
         /* Tips Section - Exact Match */
         .tips-badge {
             display: inline-block;
@@ -875,6 +950,16 @@
                 </div>
                 <div class="scroll-arrow right" onclick="scrollHourly(1)">
                     <span class="material-symbols-outlined text-white text-[18px]">chevron_right</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- ========== DAILY FORECAST ========== -->
+        <section class="max-w-7xl mx-auto px-5 md:px-12 py-6">
+            <p class="text-white/40 text-xs font-semibold uppercase tracking-wider mb-3">7-DAY FORECAST</p>
+            <div class="glass-card rounded-2xl p-4">
+                <div class="daily-scroll" id="daily-scroll">
+                    <!-- Injected by JS -->
                 </div>
             </div>
         </section>
