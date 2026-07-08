@@ -10,6 +10,16 @@ const CONFIG = {
 };
 
 let currentWeatherData = null;
+let currentUnit = localStorage.getItem('vibecast-unit') || 'C';
+
+function celsiusToFahrenheit(c) {
+    return Math.round((c * 9 / 5) + 32);
+}
+
+function formatTemp(celsius) {
+    const val = currentUnit === 'F' ? celsiusToFahrenheit(celsius) : Math.round(celsius);
+    return `${val}°${currentUnit}`;
+}
 
 const DOM = {
     temperature: document.getElementById('temperature'),
@@ -366,28 +376,28 @@ const foodItems = {
 
 const travelDestinations = {
     hot: [
-        { name: "Clifton Beach", desc: "Cool sea breeze and golden sand", temp: "32°C", tag: "Beach", image: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=600&h=400&fit=crop", affiliateUrl: "#" },
-        { name: "Gwadar Coast", desc: "Pristine beaches and crystal clear water", temp: "30°C", tag: "Coastal", image: "https://images.unsplash.com/photo-1519046904884-53103b34b206?w=600&h=400&fit=crop", affiliateUrl: "#" },
-        { name: "Astola Island", desc: "Pakistan's hidden island paradise", temp: "29°C", tag: "Island", image: "https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=600&h=400&fit=crop", affiliateUrl: "#" },
-        { name: "Ormara Beach", desc: "Secluded coastal gem with turquoise water", temp: "31°C", tag: "Hidden Gem", image: "https://images.unsplash.com/photo-1505228395891-9a51e7e86bf6?w=600&h=400&fit=crop", affiliateUrl: "#" },
-        { name: "Sonmiani Beach", desc: "Calm waters and scenic dunes", temp: "33°C", tag: "Relaxing", image: "https://images.unsplash.com/photo-1473116763249-2faaef81ccda?w=600&h=400&fit=crop", affiliateUrl: "#" },
-        { name: "Makran Coast", desc: "Dramatic cliffs meet the Arabian Sea", temp: "30°C", tag: "Scenic", image: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=600&h=400&fit=crop", affiliateUrl: "#" }
+        { name: "Clifton Beach", desc: "Cool sea breeze and golden sand", tempC: 32, tag: "Beach", image: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=600&h=400&fit=crop", affiliateUrl: "#" },
+        { name: "Gwadar Coast", desc: "Pristine beaches and crystal clear water", tempC: 30, tag: "Coastal", image: "https://images.unsplash.com/photo-1519046904884-53103b34b206?w=600&h=400&fit=crop", affiliateUrl: "#" },
+        { name: "Astola Island", desc: "Pakistan's hidden island paradise", tempC: 29, tag: "Island", image: "https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=600&h=400&fit=crop", affiliateUrl: "#" },
+        { name: "Ormara Beach", desc: "Secluded coastal gem with turquoise water", tempC: 31, tag: "Hidden Gem", image: "https://images.unsplash.com/photo-1505228395891-9a51e7e86bf6?w=600&h=400&fit=crop", affiliateUrl: "#" },
+        { name: "Sonmiani Beach", desc: "Calm waters and scenic dunes", tempC: 33, tag: "Relaxing", image: "https://images.unsplash.com/photo-1473116763249-2faaef81ccda?w=600&h=400&fit=crop", affiliateUrl: "#" },
+        { name: "Makran Coast", desc: "Dramatic cliffs meet the Arabian Sea", tempC: 30, tag: "Scenic", image: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=600&h=400&fit=crop", affiliateUrl: "#" }
     ],
     rainy: [
-        { name: "Murree Hills", desc: "Cool breezy hill station with pine forests", temp: "18°C", tag: "Popular", image: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=600&h=400&fit=crop", affiliateUrl: "#" },
-        { name: "Abbottabad", desc: "Green valley surrounded by mountains", temp: "20°C", tag: "Peaceful", image: "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=600&h=400&fit=crop", affiliateUrl: "#" },
-        { name: "Patriata", desc: "Chairlift ride through misty hills", temp: "17°C", tag: "Adventure", image: "https://images.unsplash.com/photo-1486870591958-9b9d0d1dda99?w=600&h=400&fit=crop", affiliateUrl: "#" },
-        { name: "Nathia Gali", desc: "Foggy trails and colonial-era charm", temp: "15°C", tag: "Scenic", image: "https://images.unsplash.com/photo-1483728642387-6c3bdd6c93e5?w=600&h=400&fit=crop", affiliateUrl: "#" },
-        { name: "Ayubia", desc: "Nature trails and butterfly museum", temp: "16°C", tag: "Family", image: "https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?w=600&h=400&fit=crop", affiliateUrl: "#" },
-        { name: "Chitral", desc: "Remote valley with rich culture", temp: "19°C", tag: "Offbeat", image: "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=600&h=400&fit=crop", affiliateUrl: "#" }
+        { name: "Murree Hills", desc: "Cool breezy hill station with pine forests", tempC: 18, tag: "Popular", image: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=600&h=400&fit=crop", affiliateUrl: "#" },
+        { name: "Abbottabad", desc: "Green valley surrounded by mountains", tempC: 20, tag: "Peaceful", image: "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=600&h=400&fit=crop", affiliateUrl: "#" },
+        { name: "Patriata", desc: "Chairlift ride through misty hills", tempC: 17, tag: "Adventure", image: "https://images.unsplash.com/photo-1486870591958-9b9d0d1dda99?w=600&h=400&fit=crop", affiliateUrl: "#" },
+        { name: "Nathia Gali", desc: "Foggy trails and colonial-era charm", tempC: 15, tag: "Scenic", image: "https://images.unsplash.com/photo-1483728642387-6c3bdd6c93e5?w=600&h=400&fit=crop", affiliateUrl: "#" },
+        { name: "Ayubia", desc: "Nature trails and butterfly museum", tempC: 16, tag: "Family", image: "https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?w=600&h=400&fit=crop", affiliateUrl: "#" },
+        { name: "Chitral", desc: "Remote valley with rich culture", tempC: 19, tag: "Offbeat", image: "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=600&h=400&fit=crop", affiliateUrl: "#" }
     ],
     cold: [
-        { name: "Skardu", desc: "Land of mountains and frozen lakes", temp: "5°C", tag: "Adventure", image: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=600&h=400&fit=crop", affiliateUrl: "#" },
-        { name: "Hunza Valley", desc: "Breathtaking peaks and ancient forts", temp: "8°C", tag: "Scenic", image: "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=600&h=400&fit=crop", affiliateUrl: "#" },
-        { name: "Naran Kaghan", desc: "Snow-capped mountains and crystal lakes", temp: "3°C", tag: "Popular", image: "https://images.unsplash.com/photo-1486870591958-9b9d0d1dda99?w=600&h=400&fit=crop", affiliateUrl: "#" },
-        { name: "Swat Valley", desc: "Pakistan's Switzerland in winter snow", temp: "6°C", tag: "Beautiful", image: "https://images.unsplash.com/photo-1483728642387-6c3bdd6c93e5?w=600&h=400&fit=crop", affiliateUrl: "#" },
-        { name: "Fairy Meadows", desc: "Gateway to Nanga Parbat base camp", temp: "2°C", tag: "Epic", image: "https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?w=600&h=400&fit=crop", affiliateUrl: "#" },
-        { name: "Deosai Plains", desc: "World's second highest plateau", temp: "0°C", tag: "Wildlife", image: "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=600&h=400&fit=crop", affiliateUrl: "#" }
+        { name: "Skardu", desc: "Land of mountains and frozen lakes", tempC: 5, tag: "Adventure", image: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=600&h=400&fit=crop", affiliateUrl: "#" },
+        { name: "Hunza Valley", desc: "Breathtaking peaks and ancient forts", tempC: 8, tag: "Scenic", image: "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=600&h=400&fit=crop", affiliateUrl: "#" },
+        { name: "Naran Kaghan", desc: "Snow-capped mountains and crystal lakes", tempC: 3, tag: "Popular", image: "https://images.unsplash.com/photo-1486870591958-9b9d0d1dda99?w=600&h=400&fit=crop", affiliateUrl: "#" },
+        { name: "Swat Valley", desc: "Pakistan's Switzerland in winter snow", tempC: 6, tag: "Beautiful", image: "https://images.unsplash.com/photo-1483728642387-6c3bdd6c93e5?w=600&h=400&fit=crop", affiliateUrl: "#" },
+        { name: "Fairy Meadows", desc: "Gateway to Nanga Parbat base camp", tempC: 2, tag: "Epic", image: "https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?w=600&h=400&fit=crop", affiliateUrl: "#" },
+        { name: "Deosai Plains", desc: "World's second highest plateau", tempC: 0, tag: "Wildlife", image: "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=600&h=400&fit=crop", affiliateUrl: "#" }
     ]
 };
 
@@ -449,7 +459,7 @@ function renderTravelPage(category) {
             <div class="item-card-info">
                 <div class="flex items-center justify-between">
                     <h3 class="item-card-title">${item.name}</h3>
-                    <span class="text-primary font-display font-bold text-sm">${item.temp}</span>
+                    <span class="text-primary font-display font-bold text-sm">${formatTemp(item.tempC)}</span>
                 </div>
                 <p class="item-card-desc">${item.desc}</p>
                 <span class="item-card-cta">
@@ -555,7 +565,7 @@ function renderHourlyForecast(hourlyData) {
             <div class="hourly-card ${isActive ? 'active' : ''}">
                 <span class="hour-time">${isActive ? 'Now' : hourLabel}</span>
                 <span class="material-symbols-outlined hour-icon ${isActive ? 'text-white' : 'text-primary'}" style="font-variation-settings: 'FILL' 1;">${weatherInfo.icon}</span>
-                <span class="hour-temp">${temp}°</span>
+                <span class="hour-temp">${formatTemp(temp)}</span>
             </div>
         `);
     }
@@ -592,8 +602,8 @@ function renderDailyForecast(dailyData) {
                 <span class="daily-day">${dayName}</span>
                 <span class="material-symbols-outlined daily-icon ${isActive ? 'text-white' : 'text-primary'}" style="font-variation-settings: 'FILL' 1;">${weatherInfo.icon}</span>
                 <div class="daily-temps">
-                    <span class="daily-max">${maxTemp}°</span>
-                    <span class="daily-min">${minTemp}°</span>
+                    <span class="daily-max">${formatTemp(maxTemp)}</span>
+                    <span class="daily-min">${formatTemp(minTemp)}</span>
                 </div>
                 ${rainProb !== null && rainProb > 0 ? `<span class="daily-rain"><span class="material-symbols-outlined text-[10px]">water_drop</span>${rainProb}%</span>` : ''}
             </div>
@@ -681,8 +691,8 @@ async function displayWeather(lat, lon, cityName) {
     const tempC = current.temperature_2m;
     const feelsLikeC = Math.round(current.apparent_temperature);
 
-    DOM.temperature.textContent = `${tempC}°C`;
-    DOM.feelsLike.textContent = `${feelsLikeC}°C`;
+    DOM.temperature.textContent = formatTemp(tempC);
+    DOM.feelsLike.textContent = formatTemp(feelsLikeC);
 
     const weatherInfo = WEATHER_CODES[current.weather_code] || WEATHER_CODES[0];
     const isNight = current.is_day === 0;
@@ -943,6 +953,45 @@ document.querySelectorAll('.cat-btn').forEach(btn => {
         }
     });
 });
+
+// ========== UNIT TOGGLE ==========
+function reRenderTemperatures() {
+    if (!currentWeatherData) return;
+    const current = currentWeatherData.current;
+    const tempC = current.temperature_2m;
+    const feelsLikeC = Math.round(current.apparent_temperature);
+
+    if (DOM.temperature) DOM.temperature.textContent = formatTemp(tempC);
+    if (DOM.feelsLike) DOM.feelsLike.textContent = formatTemp(feelsLikeC);
+
+    if (currentWeatherData.hourly) renderHourlyForecast(currentWeatherData.hourly);
+    if (currentWeatherData.daily) renderDailyForecast(currentWeatherData.daily);
+}
+
+function initUnitToggle() {
+    const toggleBtns = document.querySelectorAll('.unit-btn');
+    if (!toggleBtns.length) return;
+
+    toggleBtns.forEach(btn => {
+        if (btn.dataset.unit === currentUnit) {
+            btn.classList.add('active');
+        } else {
+            btn.classList.remove('active');
+        }
+    });
+
+    toggleBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            currentUnit = btn.dataset.unit;
+            localStorage.setItem('vibecast-unit', currentUnit);
+            toggleBtns.forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            reRenderTemperatures();
+        });
+    });
+}
+
+initUnitToggle();
 
 // ========== INIT ==========
 displayWeather(34.0151, 71.5249, CONFIG.DEFAULT_CITY);
