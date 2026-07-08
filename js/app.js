@@ -39,6 +39,9 @@ const DOM = {
     searchInput: document.getElementById('search-input'),
     searchResults: document.getElementById('search-results'),
     heroSearchInput: document.getElementById('hero-search-input'),
+    heroSearchResults: document.getElementById('hero-search-results'),
+    heroSearchSpinner: document.getElementById('hero-search-spinner'),
+    weekendGrid: document.getElementById('weekend-grid'),
 };
 
 const WEATHER_CODES = {
@@ -78,6 +81,7 @@ const lifestyleDatabase = {
                 "Sunscreen SPF 50+"
             ]
         },
+        outfitImage: "https://images.unsplash.com/photo-1523381210434-271e8be1f52b?w=600&h=300&fit=crop",
         food: {
             title: "Cooling Food",
             items: [
@@ -87,6 +91,7 @@ const lifestyleDatabase = {
                 "Light dal-chawal"
             ]
         },
+        foodImage: "https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=600&h=200&fit=crop",
         hydration: [
             "Nimbu pani",
             "Coconut water",
@@ -116,6 +121,7 @@ const lifestyleDatabase = {
                 "Rain cover for bag"
             ]
         },
+        outfitImage: "https://images.unsplash.com/photo-1544022613-e87ca75a784a?w=600&h=300&fit=crop",
         food: {
             title: "Comfort Food",
             items: [
@@ -125,6 +131,7 @@ const lifestyleDatabase = {
                 "Crispy samosa"
             ]
         },
+        foodImage: "https://images.unsplash.com/photo-1604908176997-125f25cc6f3d?w=600&h=200&fit=crop",
         hydration: [
             "Hot tea",
             "Masala chai",
@@ -154,6 +161,7 @@ const lifestyleDatabase = {
                 "Scarf for neck"
             ]
         },
+        outfitImage: "https://images.unsplash.com/photo-1544923246-77307dd270da?w=600&h=300&fit=crop",
         food: {
             title: "Hot & Warming",
             items: [
@@ -163,6 +171,7 @@ const lifestyleDatabase = {
                 "Garam masala dishes"
             ]
         },
+        foodImage: "https://images.unsplash.com/photo-1547592166-23ac45744acd?w=600&h=200&fit=crop",
         hydration: [
             "Hot coffee",
             "Ginger tea",
@@ -180,6 +189,52 @@ const lifestyleDatabase = {
         ]
     }
 };
+
+const weekendDestinations = [
+    {
+        title: "Murree Hills",
+        description: "Cool breezy hill station with pine forests",
+        temp: "18°C",
+        image: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=600&h=350&fit=crop",
+        tag: "Popular"
+    },
+    {
+        title: "Swat Valley",
+        description: "Beautiful valley — the Switzerland of Pakistan",
+        temp: "22°C",
+        image: "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=600&h=350&fit=crop",
+        tag: "Scenic"
+    },
+    {
+        title: "Naran Kaghan",
+        description: "Mountain adventure with lakes & meadows",
+        temp: "15°C",
+        image: "https://images.unsplash.com/photo-1486870591958-9b9d0d1dda99?w=600&h=350&fit=crop",
+        tag: "Adventure"
+    }
+];
+
+function renderWeekendGrid() {
+    if (!DOM.weekendGrid) return;
+    DOM.weekendGrid.innerHTML = weekendDestinations.map(dest => `
+        <div class="glass-card rounded-2xl overflow-hidden weekend-card">
+            <div style="overflow:hidden;">
+                <img src="${dest.image}" alt="${dest.title}" class="weekend-card-img" loading="lazy"/>
+            </div>
+            <div class="p-5">
+                <div class="flex items-center justify-between mb-2">
+                    <h3 class="font-display font-bold text-lg text-white">${dest.title}</h3>
+                    <span class="text-[10px] font-bold uppercase tracking-wider text-primary bg-primary/15 px-2 py-1 rounded-md">${dest.tag}</span>
+                </div>
+                <p class="text-white/50 text-sm mb-3">${dest.description}</p>
+                <div class="flex items-center gap-2">
+                    <span class="material-symbols-outlined text-primary text-[16px]">thermostat</span>
+                    <span class="text-white font-display font-bold text-sm">${dest.temp}</span>
+                </div>
+            </div>
+        </div>
+    `).join('');
+}
 
 function getTemperatureCategory(tempC) {
     if (tempC >= 30) return 'hot';
@@ -304,12 +359,38 @@ function renderLifestyle(lifestyle) {
     // Outfit
     DOM.outfitBadge.textContent = data.outfit.badge;
     DOM.outfitTitle.textContent = data.outfit.title;
+
+    // Remove old image if exists
+    const oldOutfitImg = document.getElementById('outfit-dynamic-img');
+    if (oldOutfitImg) oldOutfitImg.remove();
+
+    // Add outfit image before the grid
+    if (data.outfitImage) {
+        const imgHtml = `<img id="outfit-dynamic-img" src="${data.outfitImage}" alt="Outfit suggestion" class="card-img" loading="lazy"/>`;
+        DOM.outfitGrid.insertAdjacentHTML('beforebegin', imgHtml);
+    }
+
     DOM.outfitGrid.innerHTML = data.outfit.items.map(item => `
         <div class="outfit-item">${item}</div>
     `).join('');
 
     // Food
     DOM.foodTitle.textContent = data.food.title;
+
+    // Remove old image if exists
+    const oldFoodImg = document.getElementById('food-dynamic-img');
+    if (oldFoodImg) oldFoodImg.remove();
+
+    // Add food image at top of food card
+    if (data.foodImage) {
+        const foodCard = document.getElementById('food-card');
+        const foodInner = foodCard.querySelector('.relative.z-10');
+        if (foodInner) {
+            const imgHtml = `<img id="food-dynamic-img" src="${data.foodImage}" alt="Food suggestion" class="card-img-sm" loading="lazy"/>`;
+            foodInner.insertAdjacentHTML('afterbegin', imgHtml);
+        }
+    }
+
     DOM.foodList.innerHTML = data.food.items.map(item => `<li>${item}</li>`).join('');
 
     // Hydration
@@ -368,6 +449,8 @@ async function displayWeather(lat, lon, cityName) {
     const lifestyleState = getLifestyleState(tempC, current.weather_code);
     renderLifestyle(lifestyleState);
 
+    renderWeekendGrid();
+
     if (data.hourly) {
         renderHourlyForecast(data.hourly);
     }
@@ -394,18 +477,105 @@ DOM.locationModal.addEventListener('click', (e) => {
     if (e.target === DOM.locationModal) closeModal();
 });
 
-DOM.heroSearchInput.addEventListener('keypress', async (e) => {
-    if (e.key === 'Enter') {
-        const query = e.target.value.trim();
-        if (query.length < 2) return;
-        const cities = await searchCity(query);
-        if (cities.length > 0) {
-            const city = cities[0];
-            displayWeather(city.latitude, city.longitude, `${city.name}, ${city.country || ''}`);
-            DOM.heroSearchInput.value = '';
-        }
+// ========== HERO SEARCH (Dropdown + Auto-search) ==========
+let heroSearchTimeout;
+let heroSearchFocused = false;
+
+function showHeroDropdown() {
+    if (DOM.heroSearchResults) DOM.heroSearchResults.classList.add('active');
+}
+function hideHeroDropdown() {
+    setTimeout(() => {
+        if (DOM.heroSearchResults) DOM.heroSearchResults.classList.remove('active');
+    }, 200);
+}
+function showHeroSpinner() {
+    if (DOM.heroSearchSpinner) DOM.heroSearchSpinner.style.display = 'flex';
+}
+function hideHeroSpinner() {
+    if (DOM.heroSearchSpinner) DOM.heroSearchSpinner.style.display = 'none';
+}
+
+function renderHeroSearchResults(cities) {
+    if (!DOM.heroSearchResults) return;
+    if (cities.length === 0) {
+        DOM.heroSearchResults.innerHTML = '<div class="hero-search-no-result">No cities found</div>';
+        showHeroDropdown();
+        return;
     }
-});
+    DOM.heroSearchResults.innerHTML = cities.map(city => `
+        <div class="hero-search-item" data-lat="${city.latitude}" data-lon="${city.longitude}" data-name="${city.name}, ${city.country || ''}">
+            <div class="search-icon">
+                <span class="material-symbols-outlined">location_on</span>
+            </div>
+            <div class="search-info">
+                <div class="search-city">${city.name}</div>
+                <div class="search-region">${city.admin1 ? city.admin1 + ', ' : ''}${city.country || ''}</div>
+            </div>
+        </div>
+    `).join('');
+
+    DOM.heroSearchResults.querySelectorAll('.hero-search-item').forEach(item => {
+        item.addEventListener('mousedown', (e) => {
+            e.preventDefault();
+            const lat = parseFloat(item.dataset.lat);
+            const lon = parseFloat(item.dataset.lon);
+            const name = item.dataset.name;
+            displayWeather(lat, lon, name);
+            DOM.heroSearchInput.value = '';
+            DOM.heroSearchResults.classList.remove('active');
+        });
+    });
+    showHeroDropdown();
+}
+
+if (DOM.heroSearchInput) {
+    DOM.heroSearchInput.addEventListener('focus', () => {
+        heroSearchFocused = true;
+        if (DOM.heroSearchInput.value.trim().length >= 2) {
+            showHeroDropdown();
+        }
+    });
+
+    DOM.heroSearchInput.addEventListener('blur', () => {
+        heroSearchFocused = false;
+        hideHeroDropdown();
+    });
+
+    DOM.heroSearchInput.addEventListener('input', (e) => {
+        clearTimeout(heroSearchTimeout);
+        const query = e.target.value.trim();
+        if (query.length < 2) {
+            DOM.heroSearchResults.innerHTML = '';
+            DOM.heroSearchResults.classList.remove('active');
+            hideHeroSpinner();
+            return;
+        }
+        showHeroSpinner();
+        heroSearchTimeout = setTimeout(async () => {
+            const cities = await searchCity(query);
+            hideHeroSpinner();
+            renderHeroSearchResults(cities);
+        }, 350);
+    });
+
+    DOM.heroSearchInput.addEventListener('keypress', async (e) => {
+        if (e.key === 'Enter') {
+            clearTimeout(heroSearchTimeout);
+            const query = e.target.value.trim();
+            if (query.length < 2) return;
+            showHeroSpinner();
+            const cities = await searchCity(query);
+            hideHeroSpinner();
+            if (cities.length > 0) {
+                const city = cities[0];
+                displayWeather(city.latitude, city.longitude, `${city.name}, ${city.country || ''}`);
+                DOM.heroSearchInput.value = '';
+                DOM.heroSearchResults.classList.remove('active');
+            }
+        }
+    });
+}
 
 let searchTimeout;
 DOM.searchInput.addEventListener('input', (e) => {
@@ -474,11 +644,31 @@ DOM.locationBtn.addEventListener('click', () => {
     );
 });
 
+// ========== CATEGORY BUTTONS (Scroll to sections) ==========
 document.querySelectorAll('.cat-btn').forEach(btn => {
     btn.addEventListener('click', () => {
         document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
         btn.classList.add('active');
+
+        const text = btn.textContent.trim().toLowerCase();
+        let targetId = null;
+
+        if (text === 'outfit') {
+            targetId = 'outfit-section';
+        } else if (text === 'food') {
+            targetId = 'food-section';
+        } else if (text === 'travel') {
+            targetId = 'weekend-section';
+        }
+
+        if (targetId) {
+            const target = document.getElementById(targetId);
+            if (target) {
+                target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+        }
     });
 });
 
+// ========== INIT ==========
 displayWeather(34.0151, 71.5249, CONFIG.DEFAULT_CITY);
