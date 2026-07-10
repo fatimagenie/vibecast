@@ -967,9 +967,9 @@ document.querySelectorAll('.cat-btn').forEach(btn => {
 
         const text = btn.textContent.trim().toLowerCase();
         if (text === 'outfit') {
-            window.location.href = 'outfit.html';
+            window.location.href = '/vibecast/outfit/';
         } else if (text === 'food') {
-            window.location.href = 'food.html';
+            window.location.href = '/vibecast/food/';
         }
     });
 });
