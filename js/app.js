@@ -265,6 +265,49 @@ function renderWeekendGrid(lat, lon) {
     `).join('');
 }
 
+function renderHomeTravelSection(category) {
+    const grid = document.getElementById('home-travel-grid');
+    const title = document.getElementById('travel-section-title');
+    const desc = document.getElementById('travel-section-desc');
+    if (!grid) return;
+
+    const items = travelDestinations[category] || travelDestinations.hot;
+
+    const titles = {
+        hot: 'Beach Destinations',
+        rainy: 'Hill Station Escapes',
+        cold: 'Mountain Adventures'
+    };
+    const descs = {
+        hot: 'Beach and coastal destinations to cool off in the heat.',
+        rainy: 'Hill stations and valleys to enjoy the monsoon vibes.',
+        cold: 'Mountain retreats with snow-capped peaks and warm hospitality.'
+    };
+
+    if (title) title.textContent = titles[category] || 'Travel Destinations';
+    if (desc) desc.textContent = descs[category] || 'Curated destinations based on current weather near you.';
+
+    grid.innerHTML = items.map(item => `
+        <a href="${item.affiliateUrl}" target="_blank" class="home-travel-card">
+            <div style="overflow:hidden;">
+                <img src="${item.image}" alt="${item.name}" class="home-travel-card-img" loading="lazy"/>
+            </div>
+            <div class="home-travel-card-body">
+                <span class="home-travel-card-tag">${item.tag}</span>
+                <div class="flex items-center justify-between">
+                    <h3 class="home-travel-card-name">${item.name}</h3>
+                    <span class="text-green-400 font-display font-bold text-sm">${formatTemp(item.tempC)}</span>
+                </div>
+                <p class="home-travel-card-desc">${item.desc}</p>
+                <span class="home-travel-card-cta">
+                    Plan Trip
+                    <span class="material-symbols-outlined text-[16px]">arrow_forward</span>
+                </span>
+            </div>
+        </a>
+    `).join('');
+}
+
 // ========== EXPANDED PAGE DATA ==========
 const outfitItems = loadFromStorage('vibecast-outfits', {
     hot: [
@@ -758,6 +801,7 @@ async function displayWeather(lat, lon, cityName) {
     };
 
     renderWeekendGrid(lat, lon);
+    renderHomeTravelSection(lifestyleState);
 
     if (data.hourly) {
         renderHourlyForecast(data.hourly);
