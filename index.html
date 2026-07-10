@@ -1107,77 +1107,75 @@
             <p class="text-white/40 text-xs font-semibold uppercase tracking-wider mb-2">DAILY ROUTINE</p>
             <h2 class="section-title">What to do, what to eat</h2>
 
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                <!-- Left: Outfit Card (Large) -->
-                <div class="gradient-card gradient-pink" id="outfit-card">
+            <!-- Outfit Card - Full Width -->
+            <div class="gradient-card gradient-pink mb-6" id="outfit-card">
+                <div class="relative z-10">
+                    <div class="flex items-center justify-between mb-2">
+                        <span class="material-symbols-outlined text-white/80 text-[28px]">shopping_bag</span>
+                        <span class="see-all-btn" id="outfit-badge">SEE EVERYTHING</span>
+                    </div>
+                    <h3 class="font-display font-bold text-xl mb-1" id="outfit-title">Very Hot — Light Clothes</h3>
+                    <div class="outfit-grid" id="outfit-grid">
+                        <!-- Injected by JS -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Food Card - Full Width -->
+            <div class="gradient-card gradient-orange mb-6" id="food-card">
+                <div class="relative z-10">
+                    <div class="flex items-center gap-2 mb-2">
+                        <span class="material-symbols-outlined text-white/80 text-[20px]">restaurant</span>
+                        <span class="text-[10px] font-bold uppercase tracking-wider text-white/60">HEALTHY</span>
+                    </div>
+                    <h3 class="font-display font-bold text-lg mb-2" id="food-title">Cooling Food</h3>
+                    <ul class="small-card-list" id="food-list">
+                        <!-- Injected by JS -->
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Tips + Hydration + Plan - 3 Columns -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <!-- Today's Tips Card -->
+                <div class="gradient-card gradient-dark" id="tips-card">
                     <div class="relative z-10">
-                        <div class="flex items-center justify-between mb-2">
-                            <span class="material-symbols-outlined text-white/80 text-[28px]">shopping_bag</span>
-                            <span class="see-all-btn" id="outfit-badge">SEE EVERYTHING</span>
+                        <div class="flex items-center gap-2 mb-2">
+                            <span class="material-symbols-outlined text-yellow-400 text-[20px]" style="font-variation-settings: 'FILL' 1;">lightbulb</span>
+                            <span class="text-[10px] font-bold uppercase tracking-wider text-white/60">IMPORTANT</span>
                         </div>
-                        <h3 class="font-display font-bold text-xl mb-1" id="outfit-title">Very Hot — Light Clothes</h3>
-                        <div class="outfit-grid" id="outfit-grid">
+                        <h3 class="font-display font-bold text-lg mb-2">Tips</h3>
+                        <div id="tips-container" class="space-y-2">
                             <!-- Injected by JS -->
                         </div>
                     </div>
                 </div>
 
-                <!-- Right: Small Cards -->
-                <div id="food-section" class="flex flex-col gap-3 md:gap-4">
-                    <!-- Hydration Card -->
-                    <div class="gradient-card gradient-purple flex-1" id="hydration-card">
-                        <div class="relative z-10">
-                            <div class="flex items-center gap-2 mb-2">
-                                <span class="material-symbols-outlined text-white/80 text-[20px]">water_drop</span>
-                                <span class="text-[10px] font-bold uppercase tracking-wider text-white/60">STAY FRESH</span>
-                            </div>
-                            <h3 class="font-display font-bold text-lg mb-2">Hydration</h3>
-                            <ul class="small-card-list" id="hydration-list">
-                                <!-- Injected by JS -->
-                            </ul>
+                <!-- Hydration Card -->
+                <div class="gradient-card gradient-purple" id="hydration-card">
+                    <div class="relative z-10">
+                        <div class="flex items-center gap-2 mb-2">
+                            <span class="material-symbols-outlined text-white/80 text-[20px]">water_drop</span>
+                            <span class="text-[10px] font-bold uppercase tracking-wider text-white/60">STAY FRESH</span>
                         </div>
+                        <h3 class="font-display font-bold text-lg mb-2">Hydration</h3>
+                        <ul class="small-card-list" id="hydration-list">
+                            <!-- Injected by JS -->
+                        </ul>
                     </div>
+                </div>
 
-                    <!-- Today's Plan Card -->
-                    <div class="gradient-card gradient-dark flex-1" id="today-card">
-                        <div class="relative z-10">
-                            <div class="flex items-center gap-2 mb-2">
-                                <span class="material-symbols-outlined text-white/80 text-[20px]">calendar_today</span>
-                                <span class="text-[10px] font-bold uppercase tracking-wider text-white/60">TODAY</span>
-                            </div>
-                            <h3 class="font-display font-bold text-lg mb-2">Today's Plan</h3>
-                            <ul class="small-card-list" id="today-list">
-                                <!-- Injected by JS -->
-                            </ul>
+                <!-- Today's Plan Card -->
+                <div class="gradient-card gradient-dark" id="today-card">
+                    <div class="relative z-10">
+                        <div class="flex items-center gap-2 mb-2">
+                            <span class="material-symbols-outlined text-white/80 text-[20px]">calendar_today</span>
+                            <span class="text-[10px] font-bold uppercase tracking-wider text-white/60">TODAY</span>
                         </div>
-                    </div>
-
-                    <!-- Today's Tips Card -->
-                    <div class="gradient-card gradient-dark flex-1" id="tips-card">
-                        <div class="relative z-10">
-                            <div class="flex items-center gap-2 mb-2">
-                                <span class="material-symbols-outlined text-yellow-400 text-[20px]" style="font-variation-settings: 'FILL' 1;">lightbulb</span>
-                                <span class="text-[10px] font-bold uppercase tracking-wider text-white/60">IMPORTANT</span>
-                            </div>
-                            <h3 class="font-display font-bold text-lg mb-2">Today's Tips</h3>
-                            <div id="tips-container" class="space-y-2">
-                                <!-- Injected by JS -->
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Food Card -->
-                    <div class="gradient-card gradient-orange flex-1" id="food-card">
-                        <div class="relative z-10">
-                            <div class="flex items-center gap-2 mb-2">
-                                <span class="material-symbols-outlined text-white/80 text-[20px]">restaurant</span>
-                                <span class="text-[10px] font-bold uppercase tracking-wider text-white/60">HEALTHY</span>
-                            </div>
-                            <h3 class="font-display font-bold text-lg mb-2" id="food-title">Cooling Food</h3>
-                            <ul class="small-card-list" id="food-list">
-                                <!-- Injected by JS -->
-                            </ul>
-                        </div>
+                        <h3 class="font-display font-bold text-lg mb-2">Today's Plan</h3>
+                        <ul class="small-card-list" id="today-list">
+                            <!-- Injected by JS -->
+                        </ul>
                     </div>
                 </div>
             </div>
