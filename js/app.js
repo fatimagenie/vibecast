@@ -26,7 +26,6 @@ const DOM = {
     heroWeatherIcon: document.getElementById('hero-weather-icon'),
     weatherCondition: document.getElementById('weather-condition'),
     feelsLike: document.getElementById('feels-like'),
-    timeLabel: document.getElementById('time-label'),
     vibeDescription: document.getElementById('vibe-description'),
     cityName: document.getElementById('city-name'),
     windSpeed: document.getElementById('wind-speed'),
@@ -721,11 +720,7 @@ async function displayWeather(lat, lon, cityName) {
     DOM.weatherCondition.textContent = weatherInfo.condition;
     DOM.cityName.textContent = cityName;
 
-    // Update time label (NIGHT/DAY) and icon color
-    if (DOM.timeLabel) {
-        DOM.timeLabel.textContent = isNight ? 'NIGHT' : 'DAY';
-        DOM.timeLabel.style.color = isNight ? '#F5A623' : '#FFD700';
-    }
+    // Update icon color for night
     if (DOM.heroWeatherIcon) {
         DOM.heroWeatherIcon.style.color = isNight ? '#F5A623' : '#FFD700';
         DOM.heroWeatherIcon.style.filter = isNight
