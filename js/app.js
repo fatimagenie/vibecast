@@ -299,10 +299,6 @@ function renderHomeTravelSection(category) {
                     <span class="text-green-400 font-display font-bold text-sm">${formatTemp(item.tempC)}</span>
                 </div>
                 <p class="home-travel-card-desc">${item.desc}</p>
-                <span class="home-travel-card-cta">
-                    Plan Trip
-                    <span class="material-symbols-outlined text-[16px]">arrow_forward</span>
-                </span>
             </div>
         </a>
     `).join('');
