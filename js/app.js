@@ -238,27 +238,41 @@ function haversineDistance(lat1, lon1, lat2, lon2) {
     return 6371 * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
 }
 
-function renderWeekendGrid(lat, lon) {
+function renderWeekendGrid(category) {
     if (!DOM.weekendGrid) return;
-    const withDist = weekendDestinationPool.map(dest => ({
-        ...dest,
-        distance: haversineDistance(lat, lon, dest.lat, dest.lon)
-    }));
-    const nearest = withDist.sort((a, b) => a.distance - b.distance).slice(0, 3);
-    DOM.weekendGrid.innerHTML = nearest.map(dest => `
+
+    const items = (travelDestinations[category] || travelDestinations.hot).slice(0, 3);
+
+    const titles = {
+        hot: 'Beach Getaways',
+        rainy: 'Hill Station Escapes',
+        cold: 'Mountain Retreats'
+    };
+    const descs = {
+        hot: 'Cool coastal spots to beat the heat this weekend.',
+        rainy: 'Misty hills and valleys for a monsoon escape.',
+        cold: 'Snow-capped peaks and cozy mountain stays.'
+    };
+
+    const heading = document.getElementById('weekend-title');
+    const subtext = document.getElementById('weekend-desc');
+    if (heading) heading.textContent = titles[category] || 'Your Weekend Escape';
+    if (subtext) subtext.textContent = descs[category] || 'Curated destinations for your perfect trip.';
+
+    DOM.weekendGrid.innerHTML = items.map(dest => `
         <div class="glass-card rounded-2xl overflow-hidden weekend-card">
             <div style="overflow:hidden;">
-                <img src="${dest.image}" alt="${dest.title}" class="weekend-card-img" loading="lazy"/>
+                <img src="${dest.image}" alt="${dest.name}" class="weekend-card-img" loading="lazy"/>
             </div>
             <div class="p-5">
                 <div class="flex items-center justify-between mb-2">
-                    <h3 class="font-display font-bold text-lg text-white">${dest.title}</h3>
+                    <h3 class="font-display font-bold text-lg text-white">${dest.name}</h3>
                     <span class="text-[10px] font-bold uppercase tracking-wider text-primary bg-primary/15 px-2 py-1 rounded-md">${dest.tag}</span>
                 </div>
-                <p class="text-white/50 text-sm mb-3">${dest.description}</p>
+                <p class="text-white/50 text-sm mb-3">${dest.desc}</p>
                 <div class="flex items-center gap-2">
-                    <span class="material-symbols-outlined text-primary text-[16px]">near_me</span>
-                    <span class="text-white font-display font-bold text-sm">${Math.round(dest.distance)} km away</span>
+                    <span class="material-symbols-outlined text-primary text-[16px]">thermostat</span>
+                    <span class="text-white font-display font-bold text-sm">${formatTemp(dest.tempC)}</span>
                 </div>
             </div>
         </div>
@@ -798,7 +812,7 @@ async function displayWeather(lat, lon, cityName) {
         isNight: isNight
     };
 
-    renderWeekendGrid(lat, lon);
+    renderWeekendGrid(lifestyleState);
     renderHomeTravelSection(lifestyleState);
 
     if (data.hourly) {
