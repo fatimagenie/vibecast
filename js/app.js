@@ -716,7 +716,7 @@ async function displayWeather(lat, lon, cityName) {
     const weatherInfo = WEATHER_CODES[current.weather_code] || WEATHER_CODES[0];
     const isNight = current.is_day === 0;
 
-    DOM.heroWeatherIcon.textContent = isNight ? 'night_clear' : weatherInfo.icon;
+    DOM.heroWeatherIcon.textContent = isNight ? 'clear_night' : weatherInfo.icon;
     DOM.weatherCondition.textContent = weatherInfo.condition;
     DOM.cityName.textContent = cityName;
 
@@ -746,7 +746,7 @@ async function displayWeather(lat, lon, cityName) {
         feelsLike: feelsLikeC,
         condition: weatherInfo.condition,
         category: lifestyleState,
-        icon: isNight ? 'night_clear' : weatherInfo.icon,
+        icon: isNight ? 'clear_night' : weatherInfo.icon,
         isNight: isNight
     };
 
