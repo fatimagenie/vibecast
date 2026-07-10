@@ -318,7 +318,13 @@ const foodItems = {
           recipe: ["Boil 1/2 cup water with sugar until dissolved", "Let the sugar syrup cool completely", "Blend mint leaves with a little water", "Strain the mint juice through a sieve", "Mix lemon juice, mint juice, and sugar syrup", "Add cold water and stir well", "Serve over ice cubes with a mint sprig"] },
         { name: "Golgappa / Pani Puri", desc: "Crispy shells with tangy water", image: "https://images.unsplash.com/photo-1601050690597-df0568f70950?w=500&h=400&fit=crop", affiliateUrl: "#",
           ingredients: ["24 ready-made puri shells", "2 potatoes (boiled & mashed)", "1 cup boiled chickpeas", "Tamarind chutney", "Mint-coriander chutney", "Cumin powder", "Chaat masala", "Cold water"],
-          recipe: ["Boil and mash potatoes with salt", "Mix chickpeas with cumin and chaat masala", "Prepare tamarind chutney (sweet)", "Blend mint, coriander with water for green chutney", "Mix all chutneys with cold water for pani", "Make a small hole in each puri shell", "Fill with potato-chickpea mixture", "Dip in flavored pani and eat immediately"] }
+          recipe: ["Boil and mash potatoes with salt", "Mix chickpeas with cumin and chaat masala", "Prepare tamarind chutney (sweet)", "Blend mint, coriander with water for green chutney", "Mix all chutneys with cold water for pani", "Make a small hole in each puri shell", "Fill with potato-chickpea mixture", "Dip in flavored pani and eat immediately"] },
+        { name: "Aam Panna", desc: "Tangy raw mango summer drink", image: "https://images.unsplash.com/photo-1595981234058-a9302fb97229?w=500&h=400&fit=crop", affiliateUrl: "#",
+          ingredients: ["2 raw green mangoes", "3 tbsp sugar or jaggery", "1 tsp cumin powder", "Fresh mint leaves", "Black salt", "Pinch of black pepper", "4 cups cold water"],
+          recipe: ["Boil raw mangoes until soft and pulpy", "Peel and squeeze out the pulp", "Dissolve sugar in a little warm water", "Mix mango pulp, sugar water, and cold water", "Add cumin powder, black salt, and pepper", "Blend with mint leaves until smooth", "Strain and serve over ice cubes"] },
+        { name: "Chana Chaat", desc: "Spicy chickpea street snack", image: "https://images.unsplash.com/photo-1606491956689-2ea866880049?w=500&h=400&fit=crop", affiliateUrl: "#",
+          ingredients: ["2 cups boiled chickpeas", "1 onion (finely chopped)", "1 tomato (diced)", "Green chilies", "Chaat masala", "Cumin powder", "Lemon juice", "Fresh coriander"],
+          recipe: ["Boil chickpeas until tender or use canned", "Chop onion, tomato, and green chilies finely", "Combine chickpeas with chopped vegetables", "Add chaat masala and cumin powder", "Squeeze fresh lemon juice over mixture", "Toss everything together gently", "Garnish with fresh coriander and serve"] }
     ],
     rainy: [
         { name: "Hot Pakoras", desc: "Crispy fried fritters with green chutney", image: "https://images.unsplash.com/photo-1604908176997-125f25cc6f3d?w=500&h=400&fit=crop", affiliateUrl: "#",
@@ -344,7 +350,13 @@ const foodItems = {
           recipe: ["Roast semolina in ghee until golden and aromatic", "Prepare sugar syrup with cardamom", "Slowly add syrup to semolina while stirring", "Add food color and mix well", "Make puri dough with flour, salt, and water", "Roll into thin circles", "Deep fry in hot oil until puffed", "Serve hot halwa with puris"] },
         { name: "French Fries", desc: "Crispy golden fries with ketchup", image: "https://images.unsplash.com/photo-1573080496219-bb080dd4f877?w=500&h=400&fit=crop", affiliateUrl: "#",
           ingredients: ["4 large potatoes", "Oil for deep frying", "Salt", "Black pepper", "Paprika (optional)", "Ketchup for serving"],
-          recipe: ["Peel and cut potatoes into thin strips", "Soak in cold water for 30 minutes", "Drain and pat completely dry with towel", "Heat oil to 160°C and fry for 3 minutes", "Remove and let cool for 5 minutes", "Increase oil heat to 190°C", "Fry again until golden and crispy", "Season with salt and serve with ketchup"] }
+          recipe: ["Peel and cut potatoes into thin strips", "Soak in cold water for 30 minutes", "Drain and pat completely dry with towel", "Heat oil to 160°C and fry for 3 minutes", "Remove and let cool for 5 minutes", "Increase oil heat to 190°C", "Fry again until golden and crispy", "Season with salt and serve with ketchup"] },
+        { name: "Aloo Paratha", desc: "Crispy stuffed potato flatbread", image: "https://images.unsplash.com/photo-1565557623262-b51c2513a641?w=500&h=400&fit=crop", affiliateUrl: "#",
+          ingredients: ["2 cups whole wheat flour", "3 potatoes (boiled and mashed)", "1 green chili (chopped)", "Cumin seeds", "Fresh coriander", "Salt to taste", "Ghee for cooking"],
+          recipe: ["Mix flour, salt and knead soft dough", "Rest dough for 20 minutes", "Mix mashed potatoes with chili, cumin, coriander and salt", "Divide dough and potato filling into equal balls", "Roll dough, place filling in center and seal", "Roll into flat circles carefully", "Cook on hot tawa with ghee on both sides", "Serve hot with yogurt and pickle"] },
+        { name: "Pakora Chaat", desc: "Crispy fritters with tangy chutneys", image: "https://images.unsplash.com/photo-1604908176997-125f25cc6f3d?w=500&h=400&fit=crop", affiliateUrl: "#",
+          ingredients: ["1 cup besan (gram flour)", "1 potato (sliced)", "1 onion (sliced)", "Green chilies", "Tamarind chutney", "Mint-coriander chutney", "Whisked yogurt", "Chaat masala"],
+          recipe: ["Mix besan with water, salt and spices for batter", "Dip potato and onion slices in batter", "Deep fry until golden and crispy", "Arrange pakoras on a serving plate", "Drizzle tamarind and mint chutneys on top", "Add whisked yogurt over the pakoras", "Sprinkle chaat masala generously", "Serve immediately while crispy"] }
     ],
     cold: [
         { name: "Chicken Soup", desc: "Steaming hot soup for cold winter nights", image: "https://images.unsplash.com/photo-1547592166-23ac45744acd?w=500&h=400&fit=crop", affiliateUrl: "#",
@@ -370,7 +382,13 @@ const foodItems = {
           recipe: ["Boil water and let it cool for 30 seconds", "Add coffee powder to a cup", "Pour hot water and stir until dissolved", "Heat milk separately until steaming", "Add sugar to coffee and mix well", "Pour hot milk over the coffee", "Top with cocoa powder or whipped cream", "Serve immediately and enjoy the warmth"] },
         { name: "Naan with Haleem", desc: "Warm bread dipped in rich stew", image: "https://images.unsplash.com/photo-1565557623262-b51c2513a641?w=500&h=400&fit=crop", affiliateUrl: "#",
           ingredients: ["2 cups flour", "Yeast", "Yogurt", "1 cup haleem (pre-made)", "Ghee", "Fried onions", "Lemon", "Green chilies"],
-          recipe: ["Prepare naan dough with flour, yeast, and yogurt", "Rest dough for 2 hours until doubled", "Heat haleem in a pan until bubbling", "Roll naan and cook on tawa until golden", "Brush naan with ghee", "Serve haleem in a bowl", "Garnish with fried onions and lemon", "Tear naan and dip into hot haleem"] }
+          recipe: ["Prepare naan dough with flour, yeast, and yogurt", "Rest dough for 2 hours until doubled", "Heat haleem in a pan until bubbling", "Roll naan and cook on tawa until golden", "Brush naan with ghee", "Serve haleem in a bowl", "Garnish with fried onions and lemon", "Tear naan and dip into hot haleem"] },
+        { name: "Mutton Paye", desc: "Rich slow-cooked bone soup", image: "https://images.unsplash.com/photo-1547592166-23ac45744acd?w=500&h=400&fit=crop", affiliateUrl: "#",
+          ingredients: ["4 mutton trotters (paye)", "2 onions (sliced)", "1 inch ginger", "6 garlic cloves", "2 bay leaves", "Cinnamon stick", "Garam masala", "Fresh ginger (julienned)"],
+          recipe: ["Clean and wash trotters thoroughly", "Pressure cook with water for 45 minutes", "Fry onions until golden brown", "Add ginger-garlic paste and cook 2 minutes", "Add bay leaves and cinnamon", "Pour in the cooked broth and trotters", "Simmer on low heat for 30 minutes", "Garnish with ginger and serve hot"] },
+        { name: "Moong Dal Khichdi", desc: "Warm rice and lentil comfort food", image: "https://images.unsplash.com/photo-1585937421612-70a008356fbe?w=500&h=400&fit=crop", affiliateUrl: "#",
+          ingredients: ["1 cup rice", "1/2 cup moong dal", "1 tsp turmeric", "1 tsp cumin seeds", "1 inch ginger (chopped)", "Ghee", "Salt", "4 cups water"],
+          recipe: ["Wash rice and dal together until clean", "Heat ghee in a pot and add cumin seeds", "Add chopped ginger and saute for 30 seconds", "Add rice and dal, mix well for 1 minute", "Add turmeric and salt", "Pour water and bring to a boil", "Cover and cook on low heat for 20 minutes", "Serve hot with ghee and pickle"] }
     ]
 };
 
