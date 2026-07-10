@@ -1102,20 +1102,6 @@
             </div>
         </section>
 
-        <!-- ========== TODAY'S TIPS ========== -->
-        <section class="max-w-7xl mx-auto px-5 md:px-12 py-6">
-            <div class="glass-card rounded-2xl p-5">
-                <span class="tips-badge">IMPORTANT</span>
-                <h2 class="section-title flex items-center gap-2">
-                    <span class="material-symbols-outlined text-yellow-400 text-[24px]" style="font-variation-settings: 'FILL' 1;">lightbulb</span>
-                    Today's tips
-                </h2>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4" id="tips-container">
-                    <!-- Injected by JS -->
-                </div>
-            </div>
-        </section>
-
         <!-- ========== LIFESTYLE SECTION ========== -->
         <section id="outfit-section" class="max-w-7xl mx-auto px-5 md:px-12 py-8">
             <p class="text-white/40 text-xs font-semibold uppercase tracking-wider mb-2">DAILY ROUTINE</p>
@@ -1136,22 +1122,8 @@
                     </div>
                 </div>
 
-                <!-- Right: 3 Small Cards -->
+                <!-- Right: Small Cards -->
                 <div id="food-section" class="flex flex-col gap-3 md:gap-4">
-                    <!-- Food Card -->
-                    <div class="gradient-card gradient-orange flex-1" id="food-card">
-                        <div class="relative z-10">
-                            <div class="flex items-center gap-2 mb-2">
-                                <span class="material-symbols-outlined text-white/80 text-[20px]">restaurant</span>
-                                <span class="text-[10px] font-bold uppercase tracking-wider text-white/60">HEALTHY</span>
-                            </div>
-                            <h3 class="font-display font-bold text-lg mb-2" id="food-title">Cooling Food</h3>
-                            <ul class="small-card-list" id="food-list">
-                                <!-- Injected by JS -->
-                            </ul>
-                        </div>
-                    </div>
-
                     <!-- Hydration Card -->
                     <div class="gradient-card gradient-purple flex-1" id="hydration-card">
                         <div class="relative z-10">
@@ -1175,6 +1147,34 @@
                             </div>
                             <h3 class="font-display font-bold text-lg mb-2">Today's Plan</h3>
                             <ul class="small-card-list" id="today-list">
+                                <!-- Injected by JS -->
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- Today's Tips Card -->
+                    <div class="gradient-card gradient-dark flex-1" id="tips-card">
+                        <div class="relative z-10">
+                            <div class="flex items-center gap-2 mb-2">
+                                <span class="material-symbols-outlined text-yellow-400 text-[20px]" style="font-variation-settings: 'FILL' 1;">lightbulb</span>
+                                <span class="text-[10px] font-bold uppercase tracking-wider text-white/60">IMPORTANT</span>
+                            </div>
+                            <h3 class="font-display font-bold text-lg mb-2">Today's Tips</h3>
+                            <div id="tips-container" class="space-y-2">
+                                <!-- Injected by JS -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Food Card -->
+                    <div class="gradient-card gradient-orange flex-1" id="food-card">
+                        <div class="relative z-10">
+                            <div class="flex items-center gap-2 mb-2">
+                                <span class="material-symbols-outlined text-white/80 text-[20px]">restaurant</span>
+                                <span class="text-[10px] font-bold uppercase tracking-wider text-white/60">HEALTHY</span>
+                            </div>
+                            <h3 class="font-display font-bold text-lg mb-2" id="food-title">Cooling Food</h3>
+                            <ul class="small-card-list" id="food-list">
                                 <!-- Injected by JS -->
                             </ul>
                         </div>

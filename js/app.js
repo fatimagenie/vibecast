@@ -681,13 +681,15 @@ function renderDailyForecast(dailyData) {
 
 function renderTips(tips) {
     if (!tips || tips.length === 0) {
-        DOM.tipsContainer.innerHTML = '<p class="text-white/40 text-sm">No tips available</p>';
+        DOM.tipsContainer.innerHTML = '<p class="text-white/40 text-xs">No tips available</p>';
         return;
     }
     DOM.tipsContainer.innerHTML = tips.map((tip, i) => `
-        <div class="tip-card">
-            <div class="tip-number">${i + 1}</div>
-            <p class="tip-text">${tip}</p>
+        <div class="flex items-start gap-2 p-2 rounded-lg bg-white/[0.06]">
+            <div class="w-5 h-5 rounded-full bg-yellow-400/20 flex items-center justify-center flex-shrink-0 mt-0.5">
+                <span class="text-[10px] font-bold text-yellow-400">${i + 1}</span>
+            </div>
+            <p class="text-xs text-white/70 leading-relaxed">${tip}</p>
         </div>
     `).join('');
 }
