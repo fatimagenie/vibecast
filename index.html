@@ -1152,31 +1152,34 @@
                 </div>
             </div>
 
-            <!-- Outfit Card - Full Width (LOWER) -->
-            <div class="gradient-card gradient-pink mb-6" id="outfit-card">
-                <div class="relative z-10">
-                    <div class="flex items-center justify-between mb-2">
-                        <span class="material-symbols-outlined text-white/80 text-[28px]">shopping_bag</span>
-                        <span class="see-all-btn" id="outfit-badge">SEE EVERYTHING</span>
-                    </div>
-                    <h3 class="font-display font-bold text-xl mb-1" id="outfit-title">Very Hot — Light Clothes</h3>
-                    <div class="outfit-grid" id="outfit-grid">
-                        <!-- Injected by JS -->
+            <!-- Outfit + Food - 2 Columns -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <!-- Outfit Card -->
+                <div class="gradient-card gradient-pink" id="outfit-card">
+                    <div class="relative z-10">
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="material-symbols-outlined text-white/80 text-[28px]">shopping_bag</span>
+                            <span class="see-all-btn" id="outfit-badge">SEE EVERYTHING</span>
+                        </div>
+                        <h3 class="font-display font-bold text-xl mb-1" id="outfit-title">Very Hot — Light Clothes</h3>
+                        <div class="outfit-grid" id="outfit-grid">
+                            <!-- Injected by JS -->
+                        </div>
                     </div>
                 </div>
-            </div>
 
-            <!-- Food Card - Full Width -->
-            <div class="gradient-card gradient-orange" id="food-card">
-                <div class="relative z-10">
-                    <div class="flex items-center gap-2 mb-2">
-                        <span class="material-symbols-outlined text-white/80 text-[20px]">restaurant</span>
-                        <span class="text-[10px] font-bold uppercase tracking-wider text-white/60">HEALTHY</span>
+                <!-- Food Card -->
+                <div class="gradient-card gradient-orange" id="food-card">
+                    <div class="relative z-10">
+                        <div class="flex items-center gap-2 mb-2">
+                            <span class="material-symbols-outlined text-white/80 text-[20px]">restaurant</span>
+                            <span class="text-[10px] font-bold uppercase tracking-wider text-white/60">HEALTHY</span>
+                        </div>
+                        <h3 class="font-display font-bold text-lg mb-2" id="food-title">Cooling Food</h3>
+                        <ul class="small-card-list" id="food-list">
+                            <!-- Injected by JS -->
+                        </ul>
                     </div>
-                    <h3 class="font-display font-bold text-lg mb-2" id="food-title">Cooling Food</h3>
-                    <ul class="small-card-list" id="food-list">
-                        <!-- Injected by JS -->
-                    </ul>
                 </div>
             </div>
         </section>
