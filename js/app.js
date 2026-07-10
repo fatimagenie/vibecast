@@ -17,6 +17,8 @@ function loadFromStorage(key, fallback) {
 }
 
 let currentWeatherData = null;
+let userLat = 34.0151;
+let userLon = 71.5249;
 let currentUnit = localStorage.getItem('vibecast-unit') || 'C';
 
 function celsiusToFahrenheit(c) {
@@ -241,12 +243,16 @@ function haversineDistance(lat1, lon1, lat2, lon2) {
 function renderWeekendGrid(category) {
     if (!DOM.weekendGrid) return;
 
-    const items = (travelDestinations[category] || travelDestinations.hot).slice(0, 3);
+    const allItems = travelDestinations[category] || travelDestinations.hot;
+    const items = allItems
+        .map(d => ({ ...d, distance: haversineDistance(userLat, userLon, d.lat, d.lon) }))
+        .sort((a, b) => a.distance - b.distance)
+        .slice(0, 3);
 
     const titles = {
-        hot: 'Beach Getaways',
-        rainy: 'Hill Station Escapes',
-        cold: 'Mountain Retreats'
+        hot: 'Your Weekend Escape',
+        rainy: 'Your Weekend Escape',
+        cold: 'Your Weekend Escape'
     };
     const descs = {
         hot: 'Cool coastal spots to beat the heat this weekend.',
@@ -271,50 +277,11 @@ function renderWeekendGrid(category) {
                 </div>
                 <p class="text-white/50 text-sm mb-3">${dest.desc}</p>
                 <div class="flex items-center gap-2">
-                    <span class="material-symbols-outlined text-primary text-[16px]">thermostat</span>
-                    <span class="text-white font-display font-bold text-sm">${formatTemp(dest.tempC)}</span>
+                    <span class="material-symbols-outlined text-primary text-[16px]">navigation</span>
+                    <span class="text-white font-display font-bold text-sm">${Math.round(dest.distance)} km away</span>
                 </div>
             </div>
         </div>
-    `).join('');
-}
-
-function renderHomeTravelSection(category) {
-    const grid = document.getElementById('home-travel-grid');
-    const title = document.getElementById('travel-section-title');
-    const desc = document.getElementById('travel-section-desc');
-    if (!grid) return;
-
-    const items = travelDestinations[category] || travelDestinations.hot;
-
-    const titles = {
-        hot: 'Beach Destinations',
-        rainy: 'Hill Station Escapes',
-        cold: 'Mountain Adventures'
-    };
-    const descs = {
-        hot: 'Beach and coastal destinations to cool off in the heat.',
-        rainy: 'Hill stations and valleys to enjoy the monsoon vibes.',
-        cold: 'Mountain retreats with snow-capped peaks and warm hospitality.'
-    };
-
-    if (title) title.textContent = titles[category] || 'Travel Destinations';
-    if (desc) desc.textContent = descs[category] || 'Curated destinations based on current weather near you.';
-
-    grid.innerHTML = items.map(item => `
-        <a href="${item.affiliateUrl}" target="_blank" class="home-travel-card">
-            <div style="overflow:hidden;">
-                <img src="${item.image}" alt="${item.name}" class="home-travel-card-img" loading="lazy"/>
-            </div>
-            <div class="home-travel-card-body">
-                <span class="home-travel-card-tag">${item.tag}</span>
-                <div class="flex items-center justify-between">
-                    <h3 class="home-travel-card-name">${item.name}</h3>
-                    <span class="text-green-400 font-display font-bold text-sm">${formatTemp(item.tempC)}</span>
-                </div>
-                <p class="home-travel-card-desc">${item.desc}</p>
-            </div>
-        </a>
     `).join('');
 }
 
@@ -453,28 +420,28 @@ const foodItems = loadFromStorage('vibecast-food', {
 
 const travelDestinations = loadFromStorage('vibecast-travel', {
     hot: [
-        { name: "Clifton Beach", desc: "Cool sea breeze and golden sand", tempC: 32, tag: "Beach", image: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=600&h=400&fit=crop", affiliateUrl: "#" },
-        { name: "Gwadar Coast", desc: "Pristine beaches and crystal clear water", tempC: 30, tag: "Coastal", image: "https://images.unsplash.com/photo-1519046904884-53103b34b206?w=600&h=400&fit=crop", affiliateUrl: "#" },
-        { name: "Astola Island", desc: "Pakistan's hidden island paradise", tempC: 29, tag: "Island", image: "https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=600&h=400&fit=crop", affiliateUrl: "#" },
-        { name: "Ormara Beach", desc: "Secluded coastal gem with turquoise water", tempC: 31, tag: "Hidden Gem", image: "https://images.unsplash.com/photo-1505228395891-9a51e7e86bf6?w=600&h=400&fit=crop", affiliateUrl: "#" },
-        { name: "Sonmiani Beach", desc: "Calm waters and scenic dunes", tempC: 33, tag: "Relaxing", image: "https://images.unsplash.com/photo-1473116763249-2faaef81ccda?w=600&h=400&fit=crop", affiliateUrl: "#" },
-        { name: "Makran Coast", desc: "Dramatic cliffs meet the Arabian Sea", tempC: 30, tag: "Scenic", image: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=600&h=400&fit=crop", affiliateUrl: "#" }
+        { name: "Clifton Beach", desc: "Cool sea breeze and golden sand", tempC: 32, tag: "Beach", image: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=600&h=400&fit=crop", affiliateUrl: "#", lat: 24.8084, lon: 67.0360 },
+        { name: "Gwadar Coast", desc: "Pristine beaches and crystal clear water", tempC: 30, tag: "Coastal", image: "https://images.unsplash.com/photo-1519046904884-53103b34b206?w=600&h=400&fit=crop", affiliateUrl: "#", lat: 25.1210, lon: 62.3250 },
+        { name: "Astola Island", desc: "Pakistan's hidden island paradise", tempC: 29, tag: "Island", image: "https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=600&h=400&fit=crop", affiliateUrl: "#", lat: 25.1080, lon: 65.5310 },
+        { name: "Ormara Beach", desc: "Secluded coastal gem with turquoise water", tempC: 31, tag: "Hidden Gem", image: "https://images.unsplash.com/photo-1505228395891-9a51e7e86bf6?w=600&h=400&fit=crop", affiliateUrl: "#", lat: 25.2631, lon: 64.5967 },
+        { name: "Sonmiani Beach", desc: "Calm waters and scenic dunes", tempC: 33, tag: "Relaxing", image: "https://images.unsplash.com/photo-1473116763249-2faaef81ccda?w=600&h=400&fit=crop", affiliateUrl: "#", lat: 24.8800, lon: 66.7900 },
+        { name: "Makran Coast", desc: "Dramatic cliffs meet the Arabian Sea", tempC: 30, tag: "Scenic", image: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=600&h=400&fit=crop", affiliateUrl: "#", lat: 25.3960, lon: 65.0970 }
     ],
     rainy: [
-        { name: "Murree Hills", desc: "Cool breezy hill station with pine forests", tempC: 18, tag: "Popular", image: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=600&h=400&fit=crop", affiliateUrl: "#" },
-        { name: "Abbottabad", desc: "Green valley surrounded by mountains", tempC: 20, tag: "Peaceful", image: "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=600&h=400&fit=crop", affiliateUrl: "#" },
-        { name: "Patriata", desc: "Chairlift ride through misty hills", tempC: 17, tag: "Adventure", image: "https://images.unsplash.com/photo-1486870591958-9b9d0d1dda99?w=600&h=400&fit=crop", affiliateUrl: "#" },
-        { name: "Nathia Gali", desc: "Foggy trails and colonial-era charm", tempC: 15, tag: "Scenic", image: "https://images.unsplash.com/photo-1483728642387-6c3bdd6c93e5?w=600&h=400&fit=crop", affiliateUrl: "#" },
-        { name: "Ayubia", desc: "Nature trails and butterfly museum", tempC: 16, tag: "Family", image: "https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?w=600&h=400&fit=crop", affiliateUrl: "#" },
-        { name: "Chitral", desc: "Remote valley with rich culture", tempC: 19, tag: "Offbeat", image: "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=600&h=400&fit=crop", affiliateUrl: "#" }
+        { name: "Murree Hills", desc: "Cool breezy hill station with pine forests", tempC: 18, tag: "Popular", image: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=600&h=400&fit=crop", affiliateUrl: "#", lat: 33.9070, lon: 73.3940 },
+        { name: "Abbottabad", desc: "Green valley surrounded by mountains", tempC: 20, tag: "Peaceful", image: "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=600&h=400&fit=crop", affiliateUrl: "#", lat: 34.1469, lon: 73.2138 },
+        { name: "Patriata", desc: "Chairlift ride through misty hills", tempC: 17, tag: "Adventure", image: "https://images.unsplash.com/photo-1486870591958-9b9d0d1dda99?w=600&h=400&fit=crop", affiliateUrl: "#", lat: 33.8870, lon: 73.4800 },
+        { name: "Nathia Gali", desc: "Foggy trails and colonial-era charm", tempC: 15, tag: "Scenic", image: "https://images.unsplash.com/photo-1483728642387-6c3bdd6c93e5?w=600&h=400&fit=crop", affiliateUrl: "#", lat: 34.0734, lon: 73.3867 },
+        { name: "Ayubia", desc: "Nature trails and butterfly museum", tempC: 16, tag: "Family", image: "https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?w=600&h=400&fit=crop", affiliateUrl: "#", lat: 34.0684, lon: 73.3847 },
+        { name: "Chitral", desc: "Remote valley with rich culture", tempC: 19, tag: "Offbeat", image: "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=600&h=400&fit=crop", affiliateUrl: "#", lat: 35.8516, lon: 71.7950 }
     ],
     cold: [
-        { name: "Skardu", desc: "Land of mountains and frozen lakes", tempC: 5, tag: "Adventure", image: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=600&h=400&fit=crop", affiliateUrl: "#" },
-        { name: "Hunza Valley", desc: "Breathtaking peaks and ancient forts", tempC: 8, tag: "Scenic", image: "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=600&h=400&fit=crop", affiliateUrl: "#" },
-        { name: "Naran Kaghan", desc: "Snow-capped mountains and crystal lakes", tempC: 3, tag: "Popular", image: "https://images.unsplash.com/photo-1486870591958-9b9d0d1dda99?w=600&h=400&fit=crop", affiliateUrl: "#" },
-        { name: "Swat Valley", desc: "Pakistan's Switzerland in winter snow", tempC: 6, tag: "Beautiful", image: "https://images.unsplash.com/photo-1483728642387-6c3bdd6c93e5?w=600&h=400&fit=crop", affiliateUrl: "#" },
-        { name: "Fairy Meadows", desc: "Gateway to Nanga Parbat base camp", tempC: 2, tag: "Epic", image: "https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?w=600&h=400&fit=crop", affiliateUrl: "#" },
-        { name: "Deosai Plains", desc: "World's second highest plateau", tempC: 0, tag: "Wildlife", image: "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=600&h=400&fit=crop", affiliateUrl: "#" }
+        { name: "Skardu", desc: "Land of mountains and frozen lakes", tempC: 5, tag: "Adventure", image: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=600&h=400&fit=crop", affiliateUrl: "#", lat: 35.2896, lon: 75.6498 },
+        { name: "Hunza Valley", desc: "Breathtaking peaks and ancient forts", tempC: 8, tag: "Scenic", image: "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=600&h=400&fit=crop", affiliateUrl: "#", lat: 36.3167, lon: 74.6500 },
+        { name: "Naran Kaghan", desc: "Snow-capped mountains and crystal lakes", tempC: 3, tag: "Popular", image: "https://images.unsplash.com/photo-1486870591958-9b9d0d1dda99?w=600&h=400&fit=crop", affiliateUrl: "#", lat: 34.9068, lon: 73.6491 },
+        { name: "Swat Valley", desc: "Pakistan's Switzerland in winter snow", tempC: 6, tag: "Beautiful", image: "https://images.unsplash.com/photo-1483728642387-6c3bdd6c93e5?w=600&h=400&fit=crop", affiliateUrl: "#", lat: 35.2220, lon: 72.4258 },
+        { name: "Fairy Meadows", desc: "Gateway to Nanga Parbat base camp", tempC: 2, tag: "Epic", image: "https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?w=600&h=400&fit=crop", affiliateUrl: "#", lat: 35.4028, lon: 74.5906 },
+        { name: "Deosai Plains", desc: "World's second highest plateau", tempC: 0, tag: "Wildlife", image: "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=600&h=400&fit=crop", affiliateUrl: "#", lat: 34.9900, lon: 75.4300 }
     ]
 });
 
@@ -758,6 +725,8 @@ function renderLifestyle(lifestyle) {
 }
 
 async function displayWeather(lat, lon, cityName) {
+    userLat = lat;
+    userLon = lon;
     const data = await fetchWeather(lat, lon);
     if (!data || data.error) {
         DOM.vibeDescription.textContent = 'Unable to load weather data. Please try again later.';
@@ -813,7 +782,6 @@ async function displayWeather(lat, lon, cityName) {
     };
 
     renderWeekendGrid(lifestyleState);
-    renderHomeTravelSection(lifestyleState);
 
     if (data.hourly) {
         renderHourlyForecast(data.hourly);
