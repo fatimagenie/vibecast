@@ -302,14 +302,22 @@
             });
         });
 
-        function waitForWeather() {
-            if (window.VibeCastWeather) {
-                updateTravelPage(window.VibeCastWeather.category);
-            } else {
-                setTimeout(waitForWeather, 200);
+        async function initTravelPage() {
+            const defaultLat = 34.0151;
+            const defaultLon = 71.5249;
+            try {
+                const data = await fetchWeather(defaultLat, defaultLon);
+                if (data && data.current) {
+                    const category = getLifestyleState(data.current.temperature_2m, data.current.weather_code);
+                    updateTravelPage(category);
+                } else {
+                    updateTravelPage('hot');
+                }
+            } catch(e) {
+                updateTravelPage('hot');
             }
         }
-        waitForWeather();
+        initTravelPage();
     </script>
 </body>
 </html>

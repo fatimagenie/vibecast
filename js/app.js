@@ -754,16 +754,14 @@ async function displayWeather(lat, lon, cityName) {
 }
 
 function openModal() {
-    DOM.locationModal.classList.remove('hidden');
-    DOM.locationModal.classList.add('flex');
+    DOM.locationModal.classList.add('active');
     DOM.searchInput.value = '';
     DOM.searchResults.innerHTML = '';
     setTimeout(() => DOM.searchInput.focus(), 100);
 }
 
 function closeModal() {
-    DOM.locationModal.classList.add('hidden');
-    DOM.locationModal.classList.remove('flex');
+    DOM.locationModal.classList.remove('active');
     DOM.searchResults.innerHTML = '';
 }
 
