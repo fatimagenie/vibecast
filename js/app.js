@@ -9,6 +9,13 @@ const CONFIG = {
     DEFAULT_CITY: 'Peshawar',
 };
 
+function loadFromStorage(key, fallback) {
+    try {
+        const stored = localStorage.getItem(key);
+        return stored ? JSON.parse(stored) : fallback;
+    } catch { return fallback; }
+}
+
 let currentWeatherData = null;
 let currentUnit = localStorage.getItem('vibecast-unit') || 'C';
 
@@ -77,7 +84,7 @@ const WEATHER_CODES = {
     96: { condition: 'Thunderstorm with Hail', icon: 'thunderstorm' },
 };
 
-const lifestyleDatabase = {
+const lifestyleDatabase = loadFromStorage('vibecast-tips', {
     hot: {
         description: "The warm weather in your area makes for a perfect afternoon. A great day to enjoy outdoor activities or visit a cafe.",
         outfit: {
@@ -198,7 +205,7 @@ const lifestyleDatabase = {
             "Layer up before heading outside"
         ]
     }
-};
+});
 
 const weekendDestinationPool = [
     { title: "Murree Hills", description: "Cool breezy hill station with pine forests", lat: 33.9071, lon: 73.3956, image: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=600&h=350&fit=crop", tag: "Popular" },
@@ -259,7 +266,7 @@ function renderWeekendGrid(lat, lon) {
 }
 
 // ========== EXPANDED PAGE DATA ==========
-const outfitItems = {
+const outfitItems = loadFromStorage('vibecast-outfits', {
     hot: [
         { name: "Cotton Kurta / Kameez", desc: "Light, breathable fabric for hot summer days", image: "https://images.unsplash.com/photo-1594938298603-c8148c4dae35?w=500&h=600&fit=crop", affiliateUrl: "#" },
         { name: "Linen Summer Shirt", desc: "Cool and stylish linen shirt for outdoor wear", image: "https://images.unsplash.com/photo-1596755094514-f87e34085b2c?w=500&h=600&fit=crop", affiliateUrl: "#" },
@@ -290,9 +297,9 @@ const outfitItems = {
         { name: "Scarf / Muffler", desc: "Warm neck protection in cold winds", image: "https://images.unsplash.com/photo-1520903920243-00d872a2d1c9?w=500&h=600&fit=crop", affiliateUrl: "#" },
         { name: "Warm Socks (Pack of 3)", desc: "Thick cushioned socks for cold feet", image: "https://images.unsplash.com/photo-1586350977771-b3b0abd50c87?w=500&h=600&fit=crop", affiliateUrl: "#" }
     ]
-};
+});
 
-const foodItems = {
+const foodItems = loadFromStorage('vibecast-food', {
     hot: [
         { name: "Dahi / Raita", desc: "Cooling yogurt with spices and herbs", image: "https://images.unsplash.com/photo-1631452180519-c014fe946bc7?w=500&h=400&fit=crop", affiliateUrl: "#",
           ingredients: ["2 cups plain yogurt", "1/2 tsp cumin powder", "Salt to taste", "Fresh coriander", "1 green chili (finely chopped)", "Pinch of chaat masala"],
@@ -389,9 +396,9 @@ const foodItems = {
           ingredients: ["1 cup rice", "1/2 cup moong dal", "1 tsp turmeric", "1 tsp cumin seeds", "1 inch ginger (chopped)", "Ghee", "Salt", "4 cups water"],
           recipe: ["Wash rice and dal together until clean", "Heat ghee in a pot and add cumin seeds", "Add chopped ginger and saute for 30 seconds", "Add rice and dal, mix well for 1 minute", "Add turmeric and salt", "Pour water and bring to a boil", "Cover and cook on low heat for 20 minutes", "Serve hot with ghee and pickle"] }
     ]
-};
+});
 
-const travelDestinations = {
+const travelDestinations = loadFromStorage('vibecast-travel', {
     hot: [
         { name: "Clifton Beach", desc: "Cool sea breeze and golden sand", tempC: 32, tag: "Beach", image: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=600&h=400&fit=crop", affiliateUrl: "#" },
         { name: "Gwadar Coast", desc: "Pristine beaches and crystal clear water", tempC: 30, tag: "Coastal", image: "https://images.unsplash.com/photo-1519046904884-53103b34b206?w=600&h=400&fit=crop", affiliateUrl: "#" },
@@ -416,7 +423,7 @@ const travelDestinations = {
         { name: "Fairy Meadows", desc: "Gateway to Nanga Parbat base camp", tempC: 2, tag: "Epic", image: "https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?w=600&h=400&fit=crop", affiliateUrl: "#" },
         { name: "Deosai Plains", desc: "World's second highest plateau", tempC: 0, tag: "Wildlife", image: "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=600&h=400&fit=crop", affiliateUrl: "#" }
     ]
-};
+});
 
 // ========== PAGE RENDER FUNCTIONS ==========
 function renderOutfitPage(category) {

@@ -1,0 +1,935 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>VibeCast Admin Panel</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700&family=Inter:wght@400;500;600&family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#c084fc",
+                        "primary-dark": "#a855f7",
+                        "accent": "#f472b6",
+                        "surface": "#0f0a1a",
+                        "surface-card": "#1a1028",
+                        "surface-elevated": "#231638",
+                    },
+                    fontFamily: {
+                        "display": ["Lexend", "sans-serif"],
+                        "body": ["Inter", "sans-serif"],
+                    },
+                },
+            },
+        }
+    </script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #0a0612;
+            color: #ffffff;
+            min-height: 100vh;
+        }
+        .login-bg {
+            background: linear-gradient(135deg, #1a0f2e 0%, #0f0a1a 50%, #0a0612 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .login-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 24px;
+            padding: 40px;
+            width: 100%;
+            max-width: 400px;
+        }
+        .login-input {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 14px 16px;
+            color: white;
+            font-size: 14px;
+            width: 100%;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+        .login-input:focus {
+            border-color: rgba(168, 85, 247, 0.5);
+            box-shadow: 0 0 20px rgba(168, 85, 247, 0.15);
+        }
+        .login-btn {
+            background: linear-gradient(135deg, #a855f7, #c084fc);
+            border: none;
+            border-radius: 12px;
+            padding: 14px;
+            color: white;
+            font-family: 'Lexend', sans-serif;
+            font-weight: 700;
+            font-size: 14px;
+            width: 100%;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .login-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(168, 85, 247, 0.4);
+        }
+        .login-error {
+            color: #f87171;
+            font-size: 13px;
+            margin-top: 8px;
+            display: none;
+        }
+
+        /* Dashboard Layout */
+        .dashboard { display: none; min-height: 100vh; }
+        .dashboard.active { display: flex; }
+
+        .sidebar {
+            width: 240px;
+            background: rgba(15, 10, 26, 0.95);
+            border-right: 1px solid rgba(255, 255, 255, 0.06);
+            padding: 24px 16px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            overflow-y: auto;
+            z-index: 50;
+            transition: transform 0.3s;
+        }
+        .sidebar-logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 0 8px;
+            margin-bottom: 32px;
+        }
+        .sidebar-logo .logo-icon {
+            width: 36px;
+            height: 36px;
+            background: linear-gradient(135deg, #a855f7, #c084fc);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .sidebar-nav { display: flex; flex-direction: column; gap: 4px; }
+        .sidebar-link {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 12px;
+            border-radius: 10px;
+            font-size: 13px;
+            font-weight: 500;
+            color: rgba(255, 255, 255, 0.5);
+            cursor: pointer;
+            transition: all 0.2s;
+            text-decoration: none;
+        }
+        .sidebar-link:hover {
+            background: rgba(255, 255, 255, 0.05);
+            color: rgba(255, 255, 255, 0.8);
+        }
+        .sidebar-link.active {
+            background: rgba(168, 85, 247, 0.15);
+            color: #c084fc;
+        }
+        .sidebar-link .material-symbols-outlined { font-size: 20px; }
+        .sidebar-divider {
+            height: 1px;
+            background: rgba(255, 255, 255, 0.06);
+            margin: 12px 8px;
+        }
+
+        .main-content {
+            margin-left: 240px;
+            flex: 1;
+            padding: 24px 32px;
+            min-height: 100vh;
+        }
+
+        .page-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 24px;
+        }
+        .page-title {
+            font-family: 'Lexend', sans-serif;
+            font-weight: 700;
+            font-size: 24px;
+            color: white;
+        }
+        .page-subtitle {
+            font-size: 13px;
+            color: rgba(255, 255, 255, 0.4);
+            margin-top: 4px;
+        }
+
+        /* Cards */
+        .stat-card {
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 16px;
+            padding: 20px;
+        }
+        .stat-number {
+            font-family: 'Lexend', sans-serif;
+            font-weight: 700;
+            font-size: 28px;
+            color: white;
+        }
+        .stat-label {
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.4);
+            margin-top: 4px;
+        }
+
+        /* Tables */
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .data-table th {
+            text-align: left;
+            padding: 12px 16px;
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: rgba(255, 255, 255, 0.4);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+        }
+        .data-table td {
+            padding: 12px 16px;
+            font-size: 13px;
+            color: rgba(255, 255, 255, 0.8);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+            vertical-align: middle;
+        }
+        .data-table tr:hover td {
+            background: rgba(255, 255, 255, 0.02);
+        }
+        .data-table .item-img {
+            width: 48px;
+            height: 48px;
+            border-radius: 10px;
+            object-fit: cover;
+        }
+
+        /* Buttons */
+        .btn-primary {
+            background: linear-gradient(135deg, #a855f7, #c084fc);
+            border: none;
+            border-radius: 10px;
+            padding: 10px 20px;
+            color: white;
+            font-family: 'Lexend', sans-serif;
+            font-weight: 600;
+            font-size: 13px;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .btn-primary:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 16px rgba(168, 85, 247, 0.3);
+        }
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 10px 20px;
+            color: rgba(255, 255, 255, 0.7);
+            font-weight: 600;
+            font-size: 13px;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+        }
+        .btn-danger {
+            background: rgba(239, 68, 68, 0.15);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            border-radius: 8px;
+            padding: 6px 12px;
+            color: #f87171;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .btn-danger:hover {
+            background: rgba(239, 68, 68, 0.25);
+        }
+        .btn-edit {
+            background: rgba(59, 130, 246, 0.15);
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            border-radius: 8px;
+            padding: 6px 12px;
+            color: #60a5fa;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .btn-edit:hover {
+            background: rgba(59, 130, 246, 0.25);
+        }
+
+        /* Tabs */
+        .tab-bar {
+            display: flex;
+            gap: 4px;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 12px;
+            padding: 4px;
+            margin-bottom: 20px;
+            width: fit-content;
+        }
+        .tab-btn {
+            padding: 8px 20px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 600;
+            color: rgba(255, 255, 255, 0.5);
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .tab-btn:hover { color: rgba(255, 255, 255, 0.8); }
+        .tab-btn.active {
+            background: rgba(168, 85, 247, 0.2);
+            color: #c084fc;
+        }
+
+        /* Modal */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(8px);
+            z-index: 100;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        .modal-overlay.active { display: flex; }
+        .modal-content {
+            background: #1a1028;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 28px;
+            width: 100%;
+            max-width: 560px;
+            max-height: 85vh;
+            overflow-y: auto;
+        }
+        .modal-content::-webkit-scrollbar { width: 4px; }
+        .modal-content::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.15); border-radius: 2px; }
+
+        .form-group { margin-bottom: 16px; }
+        .form-label {
+            display: block;
+            font-size: 12px;
+            font-weight: 600;
+            color: rgba(255, 255, 255, 0.5);
+            margin-bottom: 6px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        .form-input {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 10px 14px;
+            color: white;
+            font-size: 13px;
+            width: 100%;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+        .form-input:focus { border-color: rgba(168, 85, 247, 0.5); }
+        .form-textarea {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 10px 14px;
+            color: white;
+            font-size: 13px;
+            width: 100%;
+            outline: none;
+            resize: vertical;
+            min-height: 80px;
+            font-family: 'Inter', sans-serif;
+            transition: border-color 0.2s;
+        }
+        .form-textarea:focus { border-color: rgba(168, 85, 247, 0.5); }
+        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+
+        /* Toast */
+        .toast {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            background: rgba(34, 197, 94, 0.15);
+            border: 1px solid rgba(34, 197, 94, 0.3);
+            border-radius: 12px;
+            padding: 14px 20px;
+            color: #4ade80;
+            font-size: 13px;
+            font-weight: 600;
+            z-index: 200;
+            transform: translateY(100px);
+            opacity: 0;
+            transition: all 0.3s ease;
+        }
+        .toast.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        /* Mobile sidebar toggle */
+        .sidebar-toggle {
+            display: none;
+            position: fixed;
+            top: 16px;
+            left: 16px;
+            z-index: 60;
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            background: rgba(168, 85, 247, 0.2);
+            border: 1px solid rgba(168, 85, 247, 0.3);
+            color: #c084fc;
+            cursor: pointer;
+            align-items: center;
+            justify-content: center;
+        }
+
+        @media (max-width: 768px) {
+            .sidebar { transform: translateX(-100%); }
+            .sidebar.open { transform: translateX(0); }
+            .main-content { margin-left: 0; padding: 16px; padding-top: 60px; }
+            .sidebar-toggle { display: flex; }
+            .page-header { flex-direction: column; align-items: flex-start; gap: 12px; }
+            .form-row { grid-template-columns: 1fr; }
+            .stat-grid { grid-template-columns: 1fr 1fr !important; }
+        }
+
+        .hidden { display: none !important; }
+        .list-item-actions { display: flex; gap: 6px; }
+    </style>
+</head>
+<body>
+
+<!-- ========== LOGIN ========== -->
+<div class="login-bg" id="login-screen">
+    <div class="login-card">
+        <div class="flex items-center justify-center gap-3 mb-8">
+            <div class="w-10 h-10 rounded-xl bg-primary flex items-center justify-center">
+                <span class="material-symbols-outlined text-white text-[20px]">cloud</span>
+            </div>
+            <span class="font-display font-bold text-xl text-white">VibeCast</span>
+        </div>
+        <p class="text-center text-white/40 text-sm mb-6">Admin Panel Login</p>
+        <input type="password" id="login-password" class="login-input" placeholder="Enter password..." autofocus/>
+        <p class="login-error" id="login-error">Incorrect password. Try again.</p>
+        <button class="login-btn mt-4" onclick="login()">Login</button>
+    </div>
+</div>
+
+<!-- ========== DASHBOARD ========== -->
+<div class="dashboard" id="dashboard">
+    <button class="sidebar-toggle" onclick="toggleSidebar()">
+        <span class="material-symbols-outlined">menu</span>
+    </button>
+
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-logo">
+            <div class="logo-icon">
+                <span class="material-symbols-outlined text-white text-[18px]">cloud</span>
+            </div>
+            <div>
+                <div class="font-display font-bold text-sm text-white">VibeCast</div>
+                <div class="text-[10px] text-white/30">Admin Panel</div>
+            </div>
+        </div>
+
+        <nav class="sidebar-nav">
+            <a class="sidebar-link active" data-page="dashboard" onclick="showPage('dashboard')">
+                <span class="material-symbols-outlined">dashboard</span> Dashboard
+            </a>
+            <a class="sidebar-link" data-page="outfits" onclick="showPage('outfits')">
+                <span class="material-symbols-outlined">checkroom</span> Outfits
+            </a>
+            <a class="sidebar-link" data-page="food" onclick="showPage('food')">
+                <span class="material-symbols-outlined">restaurant</span> Food Items
+            </a>
+            <a class="sidebar-link" data-page="travel" onclick="showPage('travel')">
+                <span class="material-symbols-outlined">flight</span> Travel
+            </a>
+            <a class="sidebar-link" data-page="tips" onclick="showPage('tips')">
+                <span class="material-symbols-outlined">tips_and_updates</span> Tips & Lifestyle
+            </a>
+            <div class="sidebar-divider"></div>
+            <a class="sidebar-link" data-page="settings" onclick="showPage('settings')">
+                <span class="material-symbols-outlined">settings</span> Settings
+            </a>
+            <a class="sidebar-link" data-page="backup" onclick="showPage('backup')">
+                <span class="material-symbols-outlined">backup</span> Backup
+            </a>
+            <div class="sidebar-divider"></div>
+            <a class="sidebar-link" href="index.html">
+                <span class="material-symbols-outlined">open_in_new</span> View Site
+            </a>
+            <a class="sidebar-link" onclick="logout()" style="color: #f87171;">
+                <span class="material-symbols-outlined">logout</span> Logout
+            </a>
+        </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <div class="main-content">
+
+        <!-- ===== DASHBOARD PAGE ===== -->
+        <div class="admin-page active" id="page-dashboard">
+            <div class="page-header">
+                <div>
+                    <h1 class="page-title">Dashboard</h1>
+                    <p class="page-subtitle">Overview of your VibeCast content</p>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8 stat-grid">
+                <div class="stat-card">
+                    <div class="stat-number" id="stat-outfits">0</div>
+                    <div class="stat-label">Outfit Items</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="stat-food">0</div>
+                    <div class="stat-label">Food Items</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="stat-travel">0</div>
+                    <div class="stat-label">Travel Destinations</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="stat-tips">0</div>
+                    <div class="stat-label">Tips</div>
+                </div>
+            </div>
+
+            <h2 class="font-display font-semibold text-lg text-white mb-4">Quick Actions</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <button class="stat-card text-left hover:bg-white/[0.06] transition cursor-pointer" onclick="showPage('outfits')">
+                    <span class="material-symbols-outlined text-primary text-[24px] mb-2">checkroom</span>
+                    <div class="font-semibold text-white text-sm">Manage Outfits</div>
+                    <div class="text-xs text-white/40 mt-1">Add, edit or remove outfit items</div>
+                </button>
+                <button class="stat-card text-left hover:bg-white/[0.06] transition cursor-pointer" onclick="showPage('food')">
+                    <span class="material-symbols-outlined text-orange-400 text-[24px] mb-2">restaurant</span>
+                    <div class="font-semibold text-white text-sm">Manage Food</div>
+                    <div class="text-xs text-white/40 mt-1">Add food items with recipes</div>
+                </button>
+                <button class="stat-card text-left hover:bg-white/[0.06] transition cursor-pointer" onclick="showPage('travel')">
+                    <span class="material-symbols-outlined text-green-400 text-[24px] mb-2">flight</span>
+                    <div class="font-semibold text-white text-sm">Manage Travel</div>
+                    <div class="text-xs text-white/40 mt-1">Add travel destinations</div>
+                </button>
+            </div>
+        </div>
+
+        <!-- ===== OUTFITS PAGE ===== -->
+        <div class="admin-page hidden" id="page-outfits">
+            <div class="page-header">
+                <div>
+                    <h1 class="page-title">Outfit Manager</h1>
+                    <p class="page-subtitle">Manage outfit items for each weather category</p>
+                </div>
+                <button class="btn-primary" onclick="openOutfitModal()">
+                    <span class="material-symbols-outlined text-[16px]">add</span> Add Outfit
+                </button>
+            </div>
+            <div class="tab-bar">
+                <button class="tab-btn active" onclick="switchOutfitTab('hot', this)">Hot</button>
+                <button class="tab-btn" onclick="switchOutfitTab('rainy', this)">Rainy</button>
+                <button class="tab-btn" onclick="switchOutfitTab('cold', this)">Cold</button>
+            </div>
+            <div class="stat-card overflow-x-auto">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Image</th>
+                            <th>Name</th>
+                            <th>Description</th>
+                            <th>Link</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="outfit-table-body"></tbody>
+                </table>
+                <p class="text-white/30 text-sm text-center py-8 hidden" id="outfit-empty">No outfit items. Click "Add Outfit" to add one.</p>
+            </div>
+        </div>
+
+        <!-- ===== FOOD PAGE ===== -->
+        <div class="admin-page hidden" id="page-food">
+            <div class="page-header">
+                <div>
+                    <h1 class="page-title">Food Manager</h1>
+                    <p class="page-subtitle">Manage food items with ingredients and recipes</p>
+                </div>
+                <button class="btn-primary" onclick="openFoodModal()">
+                    <span class="material-symbols-outlined text-[16px]">add</span> Add Food
+                </button>
+            </div>
+            <div class="tab-bar">
+                <button class="tab-btn active" onclick="switchFoodTab('hot', this)">Hot</button>
+                <button class="tab-btn" onclick="switchFoodTab('rainy', this)">Rainy</button>
+                <button class="tab-btn" onclick="switchFoodTab('cold', this)">Cold</button>
+            </div>
+            <div class="stat-card overflow-x-auto">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Image</th>
+                            <th>Name</th>
+                            <th>Description</th>
+                            <th>Ingredients</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="food-table-body"></tbody>
+                </table>
+                <p class="text-white/30 text-sm text-center py-8 hidden" id="food-empty">No food items. Click "Add Food" to add one.</p>
+            </div>
+        </div>
+
+        <!-- ===== TRAVEL PAGE ===== -->
+        <div class="admin-page hidden" id="page-travel">
+            <div class="page-header">
+                <div>
+                    <h1 class="page-title">Travel Manager</h1>
+                    <p class="page-subtitle">Manage travel destinations for each weather category</p>
+                </div>
+                <button class="btn-primary" onclick="openTravelModal()">
+                    <span class="material-symbols-outlined text-[16px]">add</span> Add Destination
+                </button>
+            </div>
+            <div class="tab-bar">
+                <button class="tab-btn active" onclick="switchTravelTab('hot', this)">Hot</button>
+                <button class="tab-btn" onclick="switchTravelTab('rainy', this)">Rainy</button>
+                <button class="tab-btn" onclick="switchTravelTab('cold', this)">Cold</button>
+            </div>
+            <div class="stat-card overflow-x-auto">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Image</th>
+                            <th>Name</th>
+                            <th>Description</th>
+                            <th>Temp</th>
+                            <th>Tag</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="travel-table-body"></tbody>
+                </table>
+                <p class="text-white/30 text-sm text-center py-8 hidden" id="travel-empty">No destinations. Click "Add Destination" to add one.</p>
+            </div>
+        </div>
+
+        <!-- ===== TIPS & LIFESTYLE PAGE ===== -->
+        <div class="admin-page hidden" id="page-tips">
+            <div class="page-header">
+                <div>
+                    <h1 class="page-title">Tips & Lifestyle</h1>
+                    <p class="page-subtitle">Manage tips, hydration, and daily plan items</p>
+                </div>
+            </div>
+            <div class="tab-bar">
+                <button class="tab-btn active" onclick="switchLifestyleTab('hot', this)">Hot</button>
+                <button class="tab-btn" onclick="switchLifestyleTab('rainy', this)">Rainy</button>
+                <button class="tab-btn" onclick="switchLifestyleTab('cold', this)">Cold</button>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <!-- Tips -->
+                <div class="stat-card">
+                    <h3 class="font-display font-semibold text-sm text-white mb-3 flex items-center gap-2">
+                        <span class="material-symbols-outlined text-yellow-400 text-[18px]">lightbulb</span> Tips
+                    </h3>
+                    <div id="tips-list" class="space-y-2"></div>
+                    <button class="btn-secondary text-xs mt-3 w-full justify-center" onclick="addItemToList('tips')">
+                        <span class="material-symbols-outlined text-[14px]">add</span> Add Tip
+                    </button>
+                </div>
+                <!-- Hydration -->
+                <div class="stat-card">
+                    <h3 class="font-display font-semibold text-sm text-white mb-3 flex items-center gap-2">
+                        <span class="material-symbols-outlined text-blue-400 text-[18px]">water_drop</span> Hydration
+                    </h3>
+                    <div id="hydration-list-admin" class="space-y-2"></div>
+                    <button class="btn-secondary text-xs mt-3 w-full justify-center" onclick="addItemToList('hydration')">
+                        <span class="material-symbols-outlined text-[14px]">add</span> Add Item
+                    </button>
+                </div>
+                <!-- Today's Plan -->
+                <div class="stat-card">
+                    <h3 class="font-display font-semibold text-sm text-white mb-3 flex items-center gap-2">
+                        <span class="material-symbols-outlined text-green-400 text-[18px]">calendar_today</span> Today's Plan
+                    </h3>
+                    <div id="today-list-admin" class="space-y-2"></div>
+                    <button class="btn-secondary text-xs mt-3 w-full justify-center" onclick="addItemToList('todayPlan')">
+                        <span class="material-symbols-outlined text-[14px]">add</span> Add Item
+                    </button>
+                </div>
+            </div>
+            <!-- Description -->
+            <div class="stat-card mt-4">
+                <h3 class="font-display font-semibold text-sm text-white mb-3">Category Description</h3>
+                <textarea id="lifestyle-description" class="form-textarea" rows="3" placeholder="Description for this weather category..."></textarea>
+                <button class="btn-primary text-xs mt-3" onclick="saveLifestyleDescription()">Save Description</button>
+            </div>
+        </div>
+
+        <!-- ===== SETTINGS PAGE ===== -->
+        <div class="admin-page hidden" id="page-settings">
+            <div class="page-header">
+                <div>
+                    <h1 class="page-title">Settings</h1>
+                    <p class="page-subtitle">Configure your VibeCast website</p>
+                </div>
+            </div>
+            <div class="stat-card max-w-lg">
+                <div class="form-group">
+                    <label class="form-label">Default City</label>
+                    <input type="text" id="setting-city" class="form-input" placeholder="e.g. Peshawar"/>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label">Default Latitude</label>
+                        <input type="text" id="setting-lat" class="form-input" placeholder="e.g. 34.0151"/>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Default Longitude</label>
+                        <input type="text" id="setting-lon" class="form-input" placeholder="e.g. 71.5249"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Brand Name</label>
+                    <input type="text" id="setting-brand" class="form-input" placeholder="e.g. VibeCast"/>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Copyright Text</label>
+                    <input type="text" id="setting-copyright" class="form-input" placeholder="e.g. 2024 VibeCast. All rights reserved."/>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Admin Password</label>
+                    <input type="password" id="setting-password" class="form-input" placeholder="Change admin password"/>
+                </div>
+                <button class="btn-primary mt-2" onclick="saveSettings()">Save Settings</button>
+            </div>
+        </div>
+
+        <!-- ===== BACKUP PAGE ===== -->
+        <div class="admin-page hidden" id="page-backup">
+            <div class="page-header">
+                <div>
+                    <h1 class="page-title">Backup & Restore</h1>
+                    <p class="page-subtitle">Export or import your website data</p>
+                </div>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-2xl">
+                <div class="stat-card">
+                    <span class="material-symbols-outlined text-primary text-[28px] mb-3">download</span>
+                    <h3 class="font-display font-semibold text-white mb-2">Export Data</h3>
+                    <p class="text-xs text-white/40 mb-4">Download all your data as a JSON file. Keep this as a backup.</p>
+                    <button class="btn-primary w-full justify-center" onclick="exportData()">
+                        <span class="material-symbols-outlined text-[16px]">download</span> Export JSON
+                    </button>
+                </div>
+                <div class="stat-card">
+                    <span class="material-symbols-outlined text-green-400 text-[28px] mb-3">upload</span>
+                    <h3 class="font-display font-semibold text-white mb-2">Import Data</h3>
+                    <p class="text-xs text-white/40 mb-4">Upload a previously exported JSON file to restore your data.</p>
+                    <input type="file" id="import-file" accept=".json" class="hidden" onchange="importData(event)"/>
+                    <button class="btn-secondary w-full justify-center" onclick="document.getElementById('import-file').click()">
+                        <span class="material-symbols-outlined text-[16px]">upload</span> Import JSON
+                    </button>
+                </div>
+            </div>
+            <div class="stat-card mt-6 max-w-2xl">
+                <h3 class="font-display font-semibold text-sm text-white mb-2 flex items-center gap-2">
+                    <span class="material-symbols-outlined text-yellow-400 text-[18px]">warning</span> Reset All Data
+                </h3>
+                <p class="text-xs text-white/40 mb-4">This will delete all custom data and restore hardcoded defaults. This cannot be undone.</p>
+                <button class="btn-danger" onclick="resetAllData()">Reset to Defaults</button>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<!-- ========== OUTFIT MODAL ========== -->
+<div class="modal-overlay" id="outfit-modal">
+    <div class="modal-content">
+        <div class="flex items-center justify-between mb-6">
+            <h2 class="font-display font-semibold text-lg text-white" id="outfit-modal-title">Add Outfit</h2>
+            <button onclick="closeModal('outfit-modal')" class="w-8 h-8 rounded-lg flex items-center justify-center hover:bg-white/10">
+                <span class="material-symbols-outlined text-white/50">close</span>
+            </button>
+        </div>
+        <input type="hidden" id="outfit-edit-index" value="-1"/>
+        <div class="form-group">
+            <label class="form-label">Name</label>
+            <input type="text" id="outfit-name" class="form-input" placeholder="e.g. Cotton Kurta"/>
+        </div>
+        <div class="form-group">
+            <label class="form-label">Description</label>
+            <input type="text" id="outfit-desc" class="form-input" placeholder="e.g. Light breathable fabric"/>
+        </div>
+        <div class="form-group">
+            <label class="form-label">Image URL</label>
+            <input type="text" id="outfit-image" class="form-input" placeholder="https://images.unsplash.com/..."/>
+        </div>
+        <div class="form-group">
+            <label class="form-label">Affiliate Link</label>
+            <input type="text" id="outfit-link" class="form-input" placeholder="https://..."/>
+        </div>
+        <div class="flex gap-3 mt-6">
+            <button class="btn-primary flex-1 justify-center" onclick="saveOutfit()">Save</button>
+            <button class="btn-secondary" onclick="closeModal('outfit-modal')">Cancel</button>
+        </div>
+    </div>
+</div>
+
+<!-- ========== FOOD MODAL ========== -->
+<div class="modal-overlay" id="food-modal">
+    <div class="modal-content">
+        <div class="flex items-center justify-between mb-6">
+            <h2 class="font-display font-semibold text-lg text-white" id="food-modal-title">Add Food Item</h2>
+            <button onclick="closeModal('food-modal')" class="w-8 h-8 rounded-lg flex items-center justify-center hover:bg-white/10">
+                <span class="material-symbols-outlined text-white/50">close</span>
+            </button>
+        </div>
+        <input type="hidden" id="food-edit-index" value="-1"/>
+        <div class="form-group">
+            <label class="form-label">Name</label>
+            <input type="text" id="food-name" class="form-input" placeholder="e.g. Biryani"/>
+        </div>
+        <div class="form-group">
+            <label class="form-label">Description</label>
+            <input type="text" id="food-desc" class="form-input" placeholder="e.g. Aromatic rice with tender meat"/>
+        </div>
+        <div class="form-group">
+            <label class="form-label">Image URL</label>
+            <input type="text" id="food-image" class="form-input" placeholder="https://images.unsplash.com/..."/>
+        </div>
+        <div class="form-group">
+            <label class="form-label">Ingredients (one per line)</label>
+            <textarea id="food-ingredients" class="form-textarea" rows="4" placeholder="2 cups basmati rice&#10;500g chicken&#10;2 onions"></textarea>
+        </div>
+        <div class="form-group">
+            <label class="form-label">Recipe Steps (one per line)</label>
+            <textarea id="food-recipe" class="form-textarea" rows="4" placeholder="Marinate chicken for 1 hour&#10;Boil rice until 70% done&#10;Layer meat and rice"></textarea>
+        </div>
+        <div class="flex gap-3 mt-6">
+            <button class="btn-primary flex-1 justify-center" onclick="saveFood()">Save</button>
+            <button class="btn-secondary" onclick="closeModal('food-modal')">Cancel</button>
+        </div>
+    </div>
+</div>
+
+<!-- ========== TRAVEL MODAL ========== -->
+<div class="modal-overlay" id="travel-modal">
+    <div class="modal-content">
+        <div class="flex items-center justify-between mb-6">
+            <h2 class="font-display font-semibold text-lg text-white" id="travel-modal-title">Add Destination</h2>
+            <button onclick="closeModal('travel-modal')" class="w-8 h-8 rounded-lg flex items-center justify-center hover:bg-white/10">
+                <span class="material-symbols-outlined text-white/50">close</span>
+            </button>
+        </div>
+        <input type="hidden" id="travel-edit-index" value="-1"/>
+        <div class="form-group">
+            <label class="form-label">Name</label>
+            <input type="text" id="travel-name" class="form-input" placeholder="e.g. Murree Hills"/>
+        </div>
+        <div class="form-group">
+            <label class="form-label">Description</label>
+            <input type="text" id="travel-desc" class="form-input" placeholder="e.g. Cool breezy hill station"/>
+        </div>
+        <div class="form-row">
+            <div class="form-group">
+                <label class="form-label">Temperature (°C)</label>
+                <input type="number" id="travel-temp" class="form-input" placeholder="e.g. 18"/>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Tag</label>
+                <input type="text" id="travel-tag" class="form-input" placeholder="e.g. Popular"/>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="form-label">Image URL</label>
+            <input type="text" id="travel-image" class="form-input" placeholder="https://images.unsplash.com/..."/>
+        </div>
+        <div class="form-group">
+            <label class="form-label">Affiliate Link</label>
+            <input type="text" id="travel-link" class="form-input" placeholder="https://..."/>
+        </div>
+        <div class="flex gap-3 mt-6">
+            <button class="btn-primary flex-1 justify-center" onclick="saveTravel()">Save</button>
+            <button class="btn-secondary" onclick="closeModal('travel-modal')">Cancel</button>
+        </div>
+    </div>
+</div>
+
+<!-- ========== LIST ITEM MODAL ========== -->
+<div class="modal-overlay" id="list-modal">
+    <div class="modal-content" style="max-width: 400px;">
+        <div class="flex items-center justify-between mb-6">
+            <h2 class="font-display font-semibold text-lg text-white" id="list-modal-title">Add Item</h2>
+            <button onclick="closeModal('list-modal')" class="w-8 h-8 rounded-lg flex items-center justify-center hover:bg-white/10">
+                <span class="material-symbols-outlined text-white/50">close</span>
+            </button>
+        </div>
+        <input type="hidden" id="list-edit-index" value="-1"/>
+        <input type="hidden" id="list-type" value=""/>
+        <div class="form-group">
+            <label class="form-label">Item Text</label>
+            <input type="text" id="list-item-text" class="form-input" placeholder="Enter text..."/>
+        </div>
+        <div class="flex gap-3 mt-6">
+            <button class="btn-primary flex-1 justify-center" onclick="saveListItem()">Save</button>
+            <button class="btn-secondary" onclick="closeModal('list-modal')">Cancel</button>
+        </div>
+    </div>
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast">Saved successfully!</div>
+
+<script src="js/admin.js"></script>
+</body>
+</html>
