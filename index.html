@@ -64,9 +64,23 @@
                 <button id="search-btn" class="w-8 h-8 rounded-lg flex items-center justify-center hover:bg-white/10 transition-colors" title="Search">
                     <span class="material-symbols-outlined text-white/70 text-[18px]">search</span>
                 </button>
+                <button id="mobile-menu-btn" class="md:hidden w-8 h-8 rounded-lg flex items-center justify-center hover:bg-white/10 transition-colors">
+                    <span class="material-symbols-outlined text-white/70 text-[18px]">menu</span>
+                </button>
             </div>
         </div>
     </header>
+
+    <!-- Mobile Nav Drawer -->
+    <div id="mobile-nav" class="fixed inset-0 z-[60] hidden">
+        <div id="mobile-nav-overlay" class="absolute inset-0 bg-black/60 backdrop-blur-sm"></div>
+        <div class="absolute right-0 top-0 h-full w-64 bg-[#1a1028] border-l border-white/10 p-6 pt-20 space-y-4" id="mobile-nav-panel">
+            <a class="block text-white font-semibold text-sm py-2 border-b border-white/5" href="/vibecast/">Home</a>
+            <a class="block text-white/50 hover:text-primary text-sm py-2 transition-colors" href="/vibecast/outfit/">Outfit</a>
+            <a class="block text-white/50 hover:text-primary text-sm py-2 transition-colors" href="/vibecast/food/">Food</a>
+            <a class="block text-white/50 hover:text-primary text-sm py-2 transition-colors" href="/vibecast/admin/">Admin</a>
+        </div>
+    </div>
 
     <!-- ========== SEARCH MODAL ========== -->
     <div id="location-modal">
@@ -113,6 +127,15 @@
                     <div class="weather-card-google" id="weather-card">
                         <div class="weather-bg-layer" id="weather-bg-layer"></div>
                         <div class="weather-card-inner">
+                        <div class="weather-skeleton" id="weather-skeleton">
+                            <div class="skeleton-line" style="width:40%;height:10px;"></div>
+                            <div class="skeleton-row">
+                                <div class="skeleton-line skeleton-temp"></div>
+                                <div class="skeleton-line skeleton-icon"></div>
+                            </div>
+                            <div class="skeleton-line" style="width:50%;"></div>
+                            <div class="skeleton-line" style="width:70%;"></div>
+                        </div>
                             <div class="weather-location-row">
                                 <span class="material-symbols-outlined" style="font-size:14px; color:rgba(255,255,255,0.6);">location_on</span>
                                 <span class="weather-city" id="city-name">Peshawar, Pakistan</span>
@@ -286,35 +309,21 @@
     <!-- ========== FOOTER ========== -->
     <footer>
         <div class="max-w-7xl mx-auto px-5 md:px-12 py-12">
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-10">
-                <div class="space-y-4">
-                    <div class="flex items-center gap-2">
-                        <div class="w-8 h-8 rounded-lg bg-primary flex items-center justify-center">
-                            <span class="material-symbols-outlined text-white text-[16px]">cloud</span>
-                        </div>
-                        <span class="font-display font-bold text-white">VibeCast</span>
+            <div class="flex flex-col md:flex-row items-center justify-between gap-8">
+                <div class="flex items-center gap-2">
+                    <div class="w-8 h-8 rounded-lg bg-primary flex items-center justify-center">
+                        <span class="material-symbols-outlined text-white text-[16px]">cloud</span>
                     </div>
-                    <p class="text-sm text-white/40 leading-relaxed">Your daily companion for a lifestyle-first weather experience.</p>
-                    <p class="text-xs text-white/30">&copy; 2024 VibeCast. All rights reserved.</p>
+                    <span class="font-display font-bold text-white">VibeCast</span>
                 </div>
-                <div class="grid grid-cols-2 gap-6">
-                    <div class="space-y-3">
-                        <h4 class="text-xs font-bold text-primary uppercase tracking-wider">Explore</h4>
-                        <ul class="space-y-2">
-                            <li><a class="text-sm text-white/40 hover:text-primary transition-colors" href="#">About</a></li>
-                            <li><a class="text-sm text-white/40 hover:text-primary transition-colors" href="#">Daily Guide</a></li>
-                            <li><a class="text-sm text-white/40 hover:text-primary transition-colors" href="#">Destinations</a></li>
-                        </ul>
-                    </div>
-                </div>
-                <div class="space-y-3">
-                    <h4 class="text-xs font-bold text-primary uppercase tracking-wider">Stay Tuned</h4>
-                    <p class="text-sm text-white/40">Get a weekly vibe digest in your inbox.</p>
-                    <form class="flex gap-2" onsubmit="event.preventDefault();">
-                        <input class="flex-1 bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-sm text-white placeholder-white/30 outline-none focus:ring-2 focus:ring-primary" placeholder="Email address" type="email"/>
-                        <button class="bg-primary text-white px-5 py-2.5 rounded-xl font-semibold text-sm hover:bg-primary/90 transition-colors">Join</button>
-                    </form>
-                </div>
+                <p class="text-sm text-white/40 leading-relaxed text-center">Your daily companion for a lifestyle-first weather experience.</p>
+                <form class="flex gap-2" id="newsletter-form">
+                    <input class="flex-1 bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-sm text-white placeholder-white/30 outline-none focus:ring-2 focus:ring-primary" placeholder="Email address" type="email" required/>
+                    <button class="bg-primary text-white px-5 py-2.5 rounded-xl font-semibold text-sm hover:bg-primary/90 transition-colors" type="submit">Join</button>
+                </form>
+            </div>
+            <div class="border-t border-white/5 mt-8 pt-6 text-center">
+                <p class="text-xs text-white/30">&copy; 2026 VibeCast. All rights reserved.</p>
             </div>
         </div>
     </footer>

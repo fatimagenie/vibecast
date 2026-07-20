@@ -20,15 +20,34 @@ import {
 } from '../views/adminView.js';
 
 // ========== Default Data ==========
-const DEFAULT_PASSWORD = 'Wather@';
+const DEFAULT_PASSWORD = 'Weather@';
 const DEFAULT_SETTINGS = {
     city: 'Peshawar',
     lat: '34.0151',
     lon: '71.5249',
     brand: 'VibeCast',
-    copyright: '2024 VibeCast. All rights reserved.',
+    copyright: '2026 VibeCast. All rights reserved.',
     password: DEFAULT_PASSWORD
 };
+
+// ========== Custom Confirm Dialog ==========
+function showConfirm(message) {
+    return new Promise((resolve) => {
+        const overlay = document.createElement('div');
+        overlay.style.cssText = 'position:fixed;inset:0;z-index:10000;background:rgba(0,0,0,0.7);backdrop-filter:blur(4px);display:flex;align-items:center;justify-content:center;animation:fadeIn 0.2s ease;';
+        overlay.innerHTML = `
+            <div style="background:#1a1028;border:1px solid rgba(255,255,255,0.1);border-radius:16px;padding:28px;max-width:380px;width:90%;text-align:center;">
+                <p style="color:white;font-size:14px;font-weight:600;margin-bottom:20px;line-height:1.5;">${message}</p>
+                <div style="display:flex;gap:10px;justify-content:center;">
+                    <button id="confirm-cancel" style="padding:10px 24px;border-radius:10px;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.1);color:rgba(255,255,255,0.6);font-size:13px;font-weight:600;cursor:pointer;">Cancel</button>
+                    <button id="confirm-ok" style="padding:10px 24px;border-radius:10px;background:#ef4444;border:none;color:white;font-size:13px;font-weight:600;cursor:pointer;">Confirm</button>
+                </div>
+            </div>`;
+        document.body.appendChild(overlay);
+        overlay.querySelector('#confirm-cancel').onclick = () => { overlay.remove(); resolve(false); };
+        overlay.querySelector('#confirm-ok').onclick = () => { overlay.remove(); resolve(true); };
+    });
+}
 
 // ========== State ==========
 let currentPage = 'dashboard';
@@ -146,10 +165,11 @@ export function saveOutfit() {
     const link = document.getElementById('outfit-link').value.trim();
     const editIndex = parseInt(document.getElementById('outfit-edit-index').value);
 
-    if (!name) { alert('Name is required'); return; }
+    if (!name) { showToast('Name is required'); return; }
 
     const outfits = loadFromStorage(STORAGE_KEYS.OUTFITS, defaultOutfits);
-    const item = { name, desc, image: image || 'https://via.placeholder.com/500x600', affiliateUrl: link || '#' };
+    const placeholderImg = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='500' height='600'%3E%3Crect fill='%231a1028' width='500' height='600'/%3E%3Ctext x='250' y='300' text-anchor='middle' fill='%23666' font-size='16'%3ENo Image%3C/text%3E%3C/svg%3E";
+    const item = { name, desc, image: image || placeholderImg, affiliateUrl: link || '#' };
 
     if (editIndex >= 0) {
         outfits[currentOutfitTab][editIndex] = item;
@@ -164,8 +184,8 @@ export function saveOutfit() {
     showToast(editIndex >= 0 ? 'Outfit updated' : 'Outfit added');
 }
 
-export function deleteOutfit(index) {
-    if (!confirm('Delete this outfit item?')) return;
+export async function deleteOutfit(index) {
+    if (!await showConfirm('Delete this outfit item?')) return;
     const outfits = loadFromStorage(STORAGE_KEYS.OUTFITS, defaultOutfits);
     outfits[currentOutfitTab].splice(index, 1);
     saveToStorage(STORAGE_KEYS.OUTFITS, outfits);
@@ -212,10 +232,11 @@ export function saveFood() {
     const recipe = document.getElementById('food-recipe').value.split('\n').map(s => s.trim()).filter(Boolean);
     const editIndex = parseInt(document.getElementById('food-edit-index').value);
 
-    if (!name) { alert('Name is required'); return; }
+    if (!name) { showToast('Name is required'); return; }
 
     const food = loadFromStorage(STORAGE_KEYS.FOOD, defaultFood);
-    const item = { name, desc, image: image || 'https://via.placeholder.com/500x400', affiliateUrl: '#', ingredients, recipe };
+    const placeholderImg = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='500' height='400'%3E%3Crect fill='%231a1028' width='500' height='400'/%3E%3Ctext x='250' y='200' text-anchor='middle' fill='%23666' font-size='16'%3ENo Image%3C/text%3E%3C/svg%3E";
+    const item = { name, desc, image: image || placeholderImg, affiliateUrl: '#', ingredients, recipe };
 
     if (editIndex >= 0) {
         food[currentFoodTab][editIndex] = item;
@@ -230,8 +251,8 @@ export function saveFood() {
     showToast(editIndex >= 0 ? 'Food item updated' : 'Food item added');
 }
 
-export function deleteFood(index) {
-    if (!confirm('Delete this food item?')) return;
+export async function deleteFood(index) {
+    if (!await showConfirm('Delete this food item?')) return;
     const food = loadFromStorage(STORAGE_KEYS.FOOD, defaultFood);
     food[currentFoodTab].splice(index, 1);
     saveToStorage(STORAGE_KEYS.FOOD, food);
@@ -281,10 +302,11 @@ export function saveTravel() {
     const link = document.getElementById('travel-link').value.trim();
     const editIndex = parseInt(document.getElementById('travel-edit-index').value);
 
-    if (!name) { alert('Name is required'); return; }
+    if (!name) { showToast('Name is required'); return; }
 
     const travel = loadFromStorage(STORAGE_KEYS.TRAVEL, defaultTravel);
-    const item = { name, desc, tempC, tag: tag || 'Popular', image: image || 'https://via.placeholder.com/600x400', affiliateUrl: link || '#' };
+    const placeholderImg = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='600' height='400'%3E%3Crect fill='%231a1028' width='600' height='400'/%3E%3Ctext x='300' y='200' text-anchor='middle' fill='%23666' font-size='16'%3ENo Image%3C/text%3E%3C/svg%3E";
+    const item = { name, desc, tempC, tag: tag || 'Popular', image: image || placeholderImg, affiliateUrl: link || '#' };
 
     if (editIndex >= 0) {
         travel[currentTravelTab][editIndex] = item;
@@ -299,8 +321,8 @@ export function saveTravel() {
     showToast(editIndex >= 0 ? 'Destination updated' : 'Destination added');
 }
 
-export function deleteTravel(index) {
-    if (!confirm('Delete this destination?')) return;
+export async function deleteTravel(index) {
+    if (!await showConfirm('Delete this destination?')) return;
     const travel = loadFromStorage(STORAGE_KEYS.TRAVEL, defaultTravel);
     travel[currentTravelTab].splice(index, 1);
     saveToStorage(STORAGE_KEYS.TRAVEL, travel);
@@ -338,8 +360,8 @@ export function editListItem(type, index) {
     openModal('list-modal');
 }
 
-export function deleteListItem(type, index) {
-    if (!confirm('Delete this item?')) return;
+export async function deleteListItem(type, index) {
+    if (!await showConfirm('Delete this item?')) return;
     const tips = loadFromStorage(STORAGE_KEYS.TIPS, defaultTips);
     tips[currentLifestyleTab][type].splice(index, 1);
     saveToStorage(STORAGE_KEYS.TIPS, tips);
@@ -455,16 +477,16 @@ export function importData(event) {
             showToast('Data imported successfully');
             showPage(currentPage);
         } catch (err) {
-            alert('Invalid JSON file: ' + err.message);
+            showToast('Invalid JSON file: ' + err.message);
         }
     };
     reader.readAsText(file);
     event.target.value = '';
 }
 
-export function resetAllData() {
-    if (!confirm('This will DELETE all your custom data and restore defaults. Are you sure?')) return;
-    if (!confirm('Final confirmation: Reset everything?')) return;
+export async function resetAllData() {
+    if (!await showConfirm('This will DELETE all your custom data and restore defaults. Are you sure?')) return;
+    if (!await showConfirm('Final confirmation: Reset everything?')) return;
 
     resetStorage();
     showToast('All data reset to defaults');

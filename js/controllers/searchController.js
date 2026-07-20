@@ -7,6 +7,14 @@ import { searchCity } from '../models/weather.js';
 import { DOM, renderHeroSearchResults } from '../views/homeView.js';
 import { displayWeather } from './weatherController.js';
 
+function showToast(msg) {
+    const t = document.createElement('div');
+    t.style.cssText = 'position:fixed;bottom:24px;right:24px;background:linear-gradient(135deg,#a855f7,#f472b6);color:#fff;padding:14px 24px;border-radius:12px;font-size:14px;font-weight:600;z-index:9999;box-shadow:0 8px 32px rgba(168,85,247,0.4);';
+    t.textContent = msg;
+    document.body.appendChild(t);
+    setTimeout(() => { t.style.opacity = '0'; t.style.transition = 'opacity 0.3s'; setTimeout(() => t.remove(), 300); }, 3000);
+}
+
 let heroSearchTimeout;
 let searchTimeout;
 
@@ -144,7 +152,7 @@ export function initModalSearch() {
 export function initGeolocation() {
     DOM.locationBtn.addEventListener('click', () => {
         if (!navigator.geolocation) {
-            alert('Geolocation is not supported by your browser.');
+            showToast('Geolocation is not supported by your browser.');
             return;
         }
         DOM.vibeDescription.textContent = 'Detecting your location...';

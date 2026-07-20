@@ -30,7 +30,15 @@ export function renderFoodPage(category) {
 export function openRecipeModal(index, category) {
     const item = foodItems[category][index];
     if (!item) return;
-    document.getElementById('recipe-modal-img').src = item.image;
+    
+    const img = document.getElementById('recipe-modal-img');
+    const placeholder = document.getElementById('recipe-modal-placeholder');
+    if (img && placeholder) {
+        img.src = item.image;
+        img.style.display = 'block';
+        placeholder.style.display = 'none';
+    }
+    
     document.getElementById('recipe-modal-title').textContent = item.name;
     document.getElementById('recipe-modal-desc').textContent = item.desc;
 

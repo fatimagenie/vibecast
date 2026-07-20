@@ -60,7 +60,7 @@ export function renderOutfitTable(currentTab) {
     if (tbody) {
         tbody.innerHTML = items.map((item, i) => `
             <tr>
-                <td><img src="${item.image}" alt="${item.name}" class="item-img" onerror="this.src='https://via.placeholder.com/48'"/></td>
+                <td><img src="${item.image}" alt="${item.name}" class="item-img" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%2748%27 height=%2748%27%3E%3Crect fill=%27%231a1028%27 width=%2748%27 height=%2748%27/%3E%3C/svg%3E'"/></td>
                 <td class="font-semibold">${item.name}</td>
                 <td class="text-white/50 max-w-[200px] truncate">${item.desc}</td>
                 <td class="text-primary text-xs">${item.affiliateUrl || '-'}</td>
@@ -91,7 +91,7 @@ export function renderFoodTable(currentTab) {
     if (tbody) {
         tbody.innerHTML = items.map((item, i) => `
             <tr>
-                <td><img src="${item.image}" alt="${item.name}" class="item-img" onerror="this.src='https://via.placeholder.com/48'"/></td>
+                <td><img src="${item.image}" alt="${item.name}" class="item-img" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%2748%27 height=%2748%27%3E%3Crect fill=%27%231a1028%27 width=%2748%27 height=%2748%27/%3E%3C/svg%3E'"/></td>
                 <td class="font-semibold">${item.name}</td>
                 <td class="text-white/50 max-w-[200px] truncate">${item.desc}</td>
                 <td class="text-white/40 text-xs">${(item.ingredients || []).length} items</td>
@@ -122,7 +122,7 @@ export function renderTravelTable(currentTab) {
     if (tbody) {
         tbody.innerHTML = items.map((item, i) => `
             <tr>
-                <td><img src="${item.image}" alt="${item.name}" class="item-img" onerror="this.src='https://via.placeholder.com/48'"/></td>
+                <td><img src="${item.image}" alt="${item.name}" class="item-img" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%2748%27 height=%2748%27%3E%3Crect fill=%27%231a1028%27 width=%2748%27 height=%2748%27/%3E%3C/svg%3E'"/></td>
                 <td class="font-semibold">${item.name}</td>
                 <td class="text-white/50 max-w-[200px] truncate">${item.desc}</td>
                 <td>${item.tempC}°C</td>

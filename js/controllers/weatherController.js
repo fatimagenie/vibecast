@@ -46,6 +46,10 @@ export async function displayWeather(lat, lon, cityName) {
     DOM.temperature.classList.add('loaded');
     DOM.feelsLike.classList.add('loaded');
 
+    // Hide loading skeleton
+    const skeleton = document.getElementById('weather-skeleton');
+    if (skeleton) skeleton.classList.add('hidden');
+
     const { WEATHER_CODES } = await import('../config.js');
     const weatherInfo = WEATHER_CODES[current.weather_code] || WEATHER_CODES[0];
     const isNight = current.is_day === 0;

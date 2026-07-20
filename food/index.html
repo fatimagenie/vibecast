@@ -84,7 +84,7 @@
                     </div>
                     <span class="font-display font-bold text-white">VibeCast</span>
                 </div>
-                <p class="text-xs text-white/30">&copy; 2024 VibeCast. All rights reserved.</p>
+                <p class="text-xs text-white/30">&copy; 2026 VibeCast. All rights reserved.</p>
             </div>
         </div>
     </footer>
@@ -93,9 +93,14 @@
     <div id="recipe-modal" class="recipe-modal">
         <div class="recipe-modal-overlay"></div>
         <div class="recipe-modal-content">
-            <button class="recipe-modal-close">&#10005;</button>
+            <button class="recipe-modal-close"><span class="material-symbols-outlined">close</span></button>
             <div class="recipe-modal-scroll">
-                <img id="recipe-modal-img" class="recipe-modal-img" src="" alt="">
+                <div id="recipe-modal-img-wrapper">
+                    <img id="recipe-modal-img" class="recipe-modal-img" style="display:none;" alt="Recipe image">
+                    <div id="recipe-modal-placeholder" class="recipe-modal-img" style="background:linear-gradient(135deg,rgba(168,85,247,0.2),rgba(244,114,182,0.2));display:flex;align-items:center;justify-content:center;">
+                        <span class="material-symbols-outlined" style="font-size:48px;color:rgba(255,255,255,0.3);">restaurant</span>
+                    </div>
+                </div>
                 <div class="recipe-modal-body">
                     <h3 id="recipe-modal-title" class="recipe-modal-title"></h3>
                     <p id="recipe-modal-desc" class="recipe-modal-desc"></p>
