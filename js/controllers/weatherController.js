@@ -117,8 +117,9 @@ export async function displayWeather(lat, lon, cityName) {
 
     // Apply dynamic hero background
     if (DOM.heroBg) {
+        const heroClass = nightBg.replace('weather-bg-', 'hero-bg-');
         DOM.heroBg.className = 'hero-bg min-h-[80vh] flex items-center px-5 md:px-12 pt-20';
-        DOM.heroBg.classList.add(nightBg);
+        DOM.heroBg.classList.add(heroClass);
     }
 
     const lifestyleState = getLifestyleState(tempC, current.weather_code);
