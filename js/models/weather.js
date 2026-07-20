@@ -10,7 +10,7 @@ export async function fetchWeather(lat, lon) {
         longitude: lon,
         current: 'temperature_2m,relative_humidity_2m,apparent_temperature,weather_code,wind_speed_10m,is_day',
         hourly: 'temperature_2m,weather_code',
-        daily: 'weather_code,temperature_2m_max,temperature_2m_min,uv_index_max,sunrise,sunset',
+        daily: 'weather_code,temperature_2m_max,temperature_2m_min,uv_index_max,sunrise,sunset,precipitation_probability_max,precipitation_sum',
         timezone: 'auto',
         forecast_days: 7,
     });

@@ -52,6 +52,11 @@ export function initDOM() {
 }
 
 // ========== Format Helpers ==========
+export function formatTemp(celsius, unit) {
+    const val = unit === 'F' ? Math.round((celsius * 9 / 5) + 32) : Math.round(celsius);
+    return `${val}°${unit}`;
+}
+
 export function formatTempDual(celsius) {
     const c = Math.round(celsius);
     const f = Math.round(celsiusToFahrenheit(celsius));
