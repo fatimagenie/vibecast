@@ -111,6 +111,12 @@ export async function displayWeather(lat, lon, cityName) {
     DOM.weatherCard.className = 'weather-card-google';
     DOM.weatherCard.classList.add(nightBg);
 
+    // Apply dynamic hero background
+    if (DOM.heroBg) {
+        DOM.heroBg.className = 'hero-bg min-h-[80vh] flex items-center px-5 md:px-12 pt-20';
+        DOM.heroBg.classList.add(nightBg);
+    }
+
     const lifestyleState = getLifestyleState(tempC, current.weather_code);
     renderLifestyle(lifestyleState);
 

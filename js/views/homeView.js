@@ -49,6 +49,7 @@ export function initDOM() {
     DOM.rainAmount = document.getElementById('rain-amount');
     DOM.rainRow = document.getElementById('rain-row');
     DOM.weatherTimestamp = document.getElementById('weather-timestamp');
+    DOM.heroBg = document.getElementById('hero-bg');
 }
 
 // ========== Format Helpers ==========

@@ -11,6 +11,58 @@ body {
     background: radial-gradient(ellipse at 50% 0%, rgba(168, 85, 247, 0.15) 0%, transparent 60%),
                 radial-gradient(ellipse at 80% 20%, rgba(244, 114, 182, 0.1) 0%, transparent 50%),
                 linear-gradient(180deg, #1a0f2e 0%, #0f0a1a 100%);
+    transition: background 0.8s ease;
+}
+
+/* ========================================
+   DYNAMIC HERO BACKGROUNDS (by weather)
+   ======================================== */
+.hero-bg-sunny {
+    background: radial-gradient(ellipse at 50% 0%, rgba(251, 191, 36, 0.2) 0%, transparent 60%),
+                radial-gradient(ellipse at 80% 20%, rgba(245, 158, 11, 0.15) 0%, transparent 50%),
+                linear-gradient(180deg, #1a0f2e 0%, #0f0a1a 100%) !important;
+}
+
+.hero-bg-night {
+    background: radial-gradient(ellipse at 50% 0%, rgba(30, 58, 138, 0.2) 0%, transparent 60%),
+                radial-gradient(ellipse at 80% 20%, rgba(15, 23, 42, 0.3) 0%, transparent 50%),
+                linear-gradient(180deg, #0f172a 0%, #020617 100%) !important;
+}
+
+.hero-bg-cloudy {
+    background: radial-gradient(ellipse at 50% 0%, rgba(148, 163, 184, 0.15) 0%, transparent 60%),
+                radial-gradient(ellipse at 80% 20%, rgba(100, 116, 139, 0.1) 0%, transparent 50%),
+                linear-gradient(180deg, #1e293b 0%, #0f172a 100%) !important;
+}
+
+.hero-bg-night-cloudy {
+    background: radial-gradient(ellipse at 50% 0%, rgba(71, 85, 105, 0.15) 0%, transparent 60%),
+                radial-gradient(ellipse at 80% 20%, rgba(51, 65, 85, 0.1) 0%, transparent 50%),
+                linear-gradient(180deg, #1e293b 0%, #0f172a 100%) !important;
+}
+
+.hero-bg-rainy {
+    background: radial-gradient(ellipse at 50% 0%, rgba(59, 130, 246, 0.15) 0%, transparent 60%),
+                radial-gradient(ellipse at 80% 20%, rgba(30, 64, 175, 0.1) 0%, transparent 50%),
+                linear-gradient(180deg, #1e293b 0%, #0c1526 100%) !important;
+}
+
+.hero-bg-thunder {
+    background: radial-gradient(ellipse at 50% 0%, rgba(147, 51, 234, 0.2) 0%, transparent 60%),
+                radial-gradient(ellipse at 80% 20%, rgba(88, 28, 135, 0.15) 0%, transparent 50%),
+                linear-gradient(180deg, #1a0a2e 0%, #0f0520 100%) !important;
+}
+
+.hero-bg-snow {
+    background: radial-gradient(ellipse at 50% 0%, rgba(226, 232, 240, 0.1) 0%, transparent 60%),
+                radial-gradient(ellipse at 80% 20%, rgba(203, 213, 225, 0.08) 0%, transparent 50%),
+                linear-gradient(180deg, #1e293b 0%, #0f172a 100%) !important;
+}
+
+.hero-bg-fog {
+    background: radial-gradient(ellipse at 50% 0%, rgba(156, 163, 175, 0.12) 0%, transparent 60%),
+                radial-gradient(ellipse at 80% 20%, rgba(107, 114, 128, 0.08) 0%, transparent 50%),
+                linear-gradient(180deg, #1f2937 0%, #111827 100%) !important;
 }
 
 /* ========================================
@@ -19,8 +71,8 @@ body {
 .weather-card-google {
     position: relative;
     width: 100%;
-    max-width: 480px;
-    border-radius: 24px;
+    max-width: 360px;
+    border-radius: 20px;
     overflow: hidden;
     transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275),
                 box-shadow 0.4s ease;
@@ -41,7 +93,7 @@ body {
 .weather-card-inner {
     position: relative;
     z-index: 1;
-    padding: 28px;
+    padding: 20px;
     background: rgba(0, 0, 0, 0.15);
     backdrop-filter: blur(2px);
     -webkit-backdrop-filter: blur(2px);
@@ -51,19 +103,19 @@ body {
 .weather-location-row {
     display: flex;
     align-items: center;
-    gap: 6px;
-    margin-bottom: 16px;
+    gap: 5px;
+    margin-bottom: 10px;
     flex-wrap: wrap;
 }
 
 .weather-city {
-    font-size: 14px;
+    font-size: 12px;
     font-weight: 500;
     color: rgba(255, 255, 255, 0.85);
 }
 
 .weather-timestamp {
-    font-size: 11px;
+    font-size: 10px;
     color: rgba(255, 255, 255, 0.5);
     margin-left: auto;
 }
@@ -73,13 +125,13 @@ body {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin-bottom: 16px;
+    margin-bottom: 10px;
 }
 
 .weather-temp-big {
     font-family: 'Lexend', sans-serif;
     font-weight: 700;
-    font-size: 80px;
+    font-size: 56px;
     line-height: 1;
     color: #ffffff;
     text-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
@@ -90,12 +142,12 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 6px;
+    gap: 4px;
     flex-shrink: 0;
 }
 
 .weather-icon-google {
-    font-size: 56px;
+    font-size: 44px;
     color: #ffffff;
     font-variation-settings: 'FILL' 1;
     filter: drop-shadow(0 4px 20px rgba(255, 255, 255, 0.3));
@@ -103,7 +155,7 @@ body {
 }
 
 .weather-condition-google {
-    font-size: 14px;
+    font-size: 12px;
     font-weight: 600;
     color: rgba(255, 255, 255, 0.9);
     text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
@@ -123,10 +175,10 @@ body {
 .weather-info-row-google {
     display: flex;
     align-items: center;
-    gap: 10px;
-    font-size: 13px;
+    gap: 8px;
+    font-size: 11px;
     color: rgba(255, 255, 255, 0.7);
-    margin-bottom: 10px;
+    margin-bottom: 6px;
     flex-wrap: wrap;
 }
 
@@ -144,10 +196,10 @@ body {
 .weather-rain-row {
     display: flex;
     align-items: center;
-    gap: 8px;
-    font-size: 13px;
+    gap: 6px;
+    font-size: 11px;
     color: rgba(255, 255, 255, 0.7);
-    margin-bottom: 14px;
+    margin-bottom: 0;
 }
 
 .weather-rain-row strong {
@@ -1184,12 +1236,16 @@ footer {
    RESPONSIVE
    ======================================== */
 @media (max-width: 768px) {
-    .weather-icon-google { font-size: 44px; }
-    .weather-temp-big { font-size: 56px; letter-spacing: -1px; }
-    .weather-card-inner { padding: 20px; }
-    .weather-main-section { gap: 8px; }
-    .weather-info-row-google { font-size: 12px; gap: 6px; }
-    .weather-rain-row { font-size: 12px; gap: 6px; }
+    .weather-card-google { max-width: 300px; }
+    .weather-icon-google { font-size: 36px; }
+    .weather-temp-big { font-size: 44px; letter-spacing: -1px; }
+    .weather-card-inner { padding: 16px; }
+    .weather-main-section { gap: 6px; }
+    .weather-info-row-google { font-size: 10px; gap: 5px; }
+    .weather-rain-row { font-size: 10px; gap: 5px; }
+    .weather-city { font-size: 11px; }
+    .weather-timestamp { font-size: 9px; }
+    .weather-condition-google { font-size: 11px; }
     .gradient-card { padding: 16px; }
     .outfit-grid { gap: 6px; margin-top: 12px; }
     .outfit-item { padding: 8px 10px; font-size: 10px; }
