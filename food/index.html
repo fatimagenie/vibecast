@@ -6,6 +6,8 @@
     <title>VibeCast - Food Guide</title>
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
     <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700&family=Inter:wght@400;500;600&family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+    <link rel="stylesheet" href="../css/base.css">
+    <link rel="stylesheet" href="../css/food.css">
     <script>
         tailwind.config = {
             theme: {
@@ -24,321 +26,8 @@
             },
         }
     </script>
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body {
-            font-family: 'Inter', sans-serif;
-            background: linear-gradient(180deg, #1a0f2e 0%, #0f0a1a 50%, #0d0816 100%);
-            color: #ffffff;
-            min-height: 100vh;
-        }
-        .glass-card {
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-        }
-        .section-title {
-            font-family: 'Lexend', sans-serif;
-            font-weight: 700;
-            font-size: 22px;
-            color: white;
-            margin-bottom: 16px;
-        }
-        .cat-btn {
-            padding: 8px 16px;
-            border-radius: 10px;
-            font-size: 12px;
-            font-weight: 600;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            color: rgba(255, 255, 255, 0.7);
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-        .cat-btn:hover, .cat-btn.active {
-            background: rgba(251, 146, 60, 0.2);
-            border-color: rgba(251, 146, 60, 0.3);
-            color: #fb923c;
-        }
-        .page-hero {
-            display: grid;
-            grid-template-columns: 1fr auto;
-            gap: 24px;
-            align-items: center;
-            padding: 32px 0;
-        }
-        @media (max-width: 768px) {
-            .page-hero { grid-template-columns: 1fr; }
-        }
-        .page-weather-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            padding: 6px 14px;
-            background: rgba(251, 146, 60, 0.15);
-            border: 1px solid rgba(251, 146, 60, 0.25);
-            border-radius: 20px;
-            font-size: 11px;
-            font-weight: 600;
-            color: #fb923c;
-            margin-bottom: 12px;
-        }
-        .page-title {
-            font-family: 'Lexend', sans-serif;
-            font-weight: 700;
-            font-size: 36px;
-            line-height: 1.2;
-            color: white;
-            margin-bottom: 8px;
-        }
-        @media (max-width: 768px) {
-            .page-title { font-size: 28px; }
-        }
-        .page-desc {
-            font-size: 14px;
-            color: rgba(255, 255, 255, 0.5);
-            max-width: 500px;
-            line-height: 1.6;
-        }
-        .page-filters {
-            display: flex;
-            gap: 8px;
-            flex-wrap: wrap;
-        }
-        .items-grid {
-            display: grid;
-            grid-template-columns: repeat(1, 1fr);
-            gap: 20px;
-            padding: 24px 0 48px;
-        }
-        @media (min-width: 640px) {
-            .items-grid { grid-template-columns: repeat(2, 1fr); }
-        }
-        @media (min-width: 1024px) {
-            .items-grid { grid-template-columns: repeat(3, 1fr); }
-        }
-        @media (min-width: 1280px) {
-            .items-grid { grid-template-columns: repeat(4, 1fr); }
-        }
-        .item-card {
-            display: block;
-            background: rgba(255, 255, 255, 0.04);
-            border: 1px solid rgba(255, 255, 255, 0.06);
-            border-radius: 18px;
-            overflow: hidden;
-            text-decoration: none;
-            transition: all 0.3s ease;
-        }
-        .item-card:hover {
-            transform: translateY(-6px);
-            box-shadow: 0 16px 40px rgba(0, 0, 0, 0.3);
-            border-color: rgba(251, 146, 60, 0.3);
-        }
-        .item-card-img-wrapper {
-            position: relative;
-            overflow: hidden;
-            height: 200px;
-        }
-        .item-card-img-wrapper img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            transition: transform 0.5s ease;
-        }
-        .item-card:hover .item-card-img-wrapper img {
-            transform: scale(1.08);
-        }
-        .item-card-tag {
-            position: absolute;
-            top: 12px;
-            left: 12px;
-            padding: 4px 10px;
-            background: rgba(0, 0, 0, 0.5);
-            backdrop-filter: blur(8px);
-            border-radius: 6px;
-            font-size: 9px;
-            font-weight: 700;
-            letter-spacing: 0.1em;
-            color: white;
-        }
-        .item-card-info {
-            padding: 16px;
-        }
-        .item-card-title {
-            font-family: 'Lexend', sans-serif;
-            font-weight: 600;
-            font-size: 15px;
-            color: white;
-            margin-bottom: 6px;
-        }
-        .item-card-desc {
-            font-size: 12px;
-            color: rgba(255, 255, 255, 0.45);
-            line-height: 1.5;
-            margin-bottom: 12px;
-        }
-        .item-card-cta {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            padding: 8px 16px;
-            background: rgba(251, 146, 60, 0.15);
-            border: 1px solid rgba(251, 146, 60, 0.25);
-            border-radius: 8px;
-            font-size: 11px;
-            font-weight: 600;
-            color: #fb923c;
-            transition: all 0.3s;
-        }
-        .item-card:hover .item-card-cta {
-            background: rgba(251, 146, 60, 0.25);
-        }
-        footer {
-            background: rgba(0, 0, 0, 0.3);
-            border-top: 1px solid rgba(255, 255, 255, 0.05);
-        }
-        /* Recipe Modal */
-        .recipe-modal {
-            position: fixed;
-            inset: 0;
-            z-index: 200;
-            display: none;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-        }
-        .recipe-modal.active { display: flex; }
-        .recipe-modal-overlay {
-            position: absolute;
-            inset: 0;
-            background: rgba(0, 0, 0, 0.7);
-            backdrop-filter: blur(8px);
-        }
-        .recipe-modal-content {
-            position: relative;
-            width: 100%;
-            max-width: 480px;
-            max-height: 85vh;
-            background: rgba(20, 14, 40, 0.95);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 20px;
-            overflow: hidden;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
-            z-index: 1;
-        }
-        .recipe-modal-scroll {
-            max-height: 85vh;
-            overflow-y: auto;
-        }
-        .recipe-modal-scroll::-webkit-scrollbar { width: 6px; }
-        .recipe-modal-scroll::-webkit-scrollbar-track { background: transparent; }
-        .recipe-modal-scroll::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.15); border-radius: 3px; }
-        .recipe-modal-close {
-            position: absolute;
-            top: 12px;
-            right: 12px;
-            width: 32px;
-            height: 32px;
-            border-radius: 50%;
-            border: none;
-            background: rgba(0, 0, 0, 0.5);
-            backdrop-filter: blur(8px);
-            color: white;
-            font-size: 16px;
-            cursor: pointer;
-            z-index: 10;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.3s;
-        }
-        .recipe-modal-close:hover { background: rgba(255, 60, 60, 0.6); }
-        .recipe-modal-img {
-            width: 100%;
-            height: 200px;
-            object-fit: cover;
-        }
-        .recipe-modal-body { padding: 20px 24px 28px; }
-        .recipe-modal-title {
-            font-family: 'Lexend', sans-serif;
-            font-size: 20px;
-            font-weight: 700;
-            color: white;
-            margin-bottom: 4px;
-        }
-        .recipe-modal-desc {
-            font-size: 13px;
-            color: rgba(255,255,255,0.45);
-            margin-bottom: 20px;
-        }
-        .recipe-modal-section { margin-bottom: 20px; }
-        .recipe-modal-section-title {
-            font-family: 'Lexend', sans-serif;
-            font-size: 13px;
-            font-weight: 600;
-            color: #fb923c;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            margin-bottom: 10px;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-        .recipe-modal-section-title .material-symbols-rounded { font-size: 18px; }
-        .recipe-ingredients {
-            list-style: none;
-            padding: 0;
-            display: flex;
-            flex-direction: column;
-            gap: 6px;
-        }
-        .recipe-ingredients li {
-            font-size: 13px;
-            color: rgba(255,255,255,0.75);
-            padding: 6px 10px;
-            background: rgba(255,255,255,0.04);
-            border-radius: 8px;
-            border-left: 3px solid rgba(251, 146, 60, 0.4);
-        }
-        .recipe-steps {
-            padding-left: 0;
-            list-style: none;
-            counter-reset: step;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-        .recipe-steps li {
-            counter-increment: step;
-            font-size: 13px;
-            color: rgba(255,255,255,0.75);
-            padding: 10px 12px 10px 44px;
-            background: rgba(255,255,255,0.04);
-            border-radius: 10px;
-            position: relative;
-            line-height: 1.6;
-        }
-        .recipe-steps li::before {
-            content: counter(step);
-            position: absolute;
-            left: 12px;
-            top: 10px;
-            width: 22px;
-            height: 22px;
-            background: rgba(251, 146, 60, 0.2);
-            border: 1px solid rgba(251, 146, 60, 0.4);
-            border-radius: 50%;
-            font-size: 11px;
-            font-weight: 700;
-            color: #fb923c;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-    </style>
 </head>
 <body>
-
     <!-- HEADER -->
     <header class="fixed top-0 left-0 right-0 z-50" style="background: rgba(15, 10, 26, 0.85); backdrop-filter: blur(12px); border-bottom: 1px solid rgba(255,255,255,0.05);">
         <div class="max-w-7xl mx-auto px-5 md:px-12 h-14 flex items-center justify-between">
@@ -362,7 +51,6 @@
     </header>
 
     <main class="max-w-7xl mx-auto px-5 md:px-12 pt-20">
-
         <!-- PAGE HERO -->
         <section class="page-hero">
             <div>
@@ -382,11 +70,8 @@
 
         <!-- ITEMS GRID -->
         <section>
-            <div class="items-grid" id="food-grid-page">
-                <!-- Injected by JS -->
-            </div>
+            <div class="items-grid" id="food-grid-page"></div>
         </section>
-
     </main>
 
     <!-- FOOTER -->
@@ -406,9 +91,9 @@
 
     <!-- Recipe Modal -->
     <div id="recipe-modal" class="recipe-modal">
-        <div class="recipe-modal-overlay" onclick="closeRecipeModal()"></div>
+        <div class="recipe-modal-overlay"></div>
         <div class="recipe-modal-content">
-            <button class="recipe-modal-close" onclick="closeRecipeModal()">&#10005;</button>
+            <button class="recipe-modal-close">&#10005;</button>
             <div class="recipe-modal-scroll">
                 <img id="recipe-modal-img" class="recipe-modal-img" src="" alt="">
                 <div class="recipe-modal-body">
@@ -427,76 +112,6 @@
         </div>
     </div>
 
-    <script src="../js/app.js?v=4"></script>
-    <script>
-        function openRecipeModal(index, category) {
-            const item = foodItems[category][index];
-            if (!item) return;
-            document.getElementById('recipe-modal-img').src = item.image;
-            document.getElementById('recipe-modal-title').textContent = item.name;
-            document.getElementById('recipe-modal-desc').textContent = item.desc;
-            const ingredientsList = document.getElementById('recipe-ingredients');
-            ingredientsList.innerHTML = item.ingredients.map(ing => `<li>${ing}</li>`).join('');
-            const stepsList = document.getElementById('recipe-steps');
-            stepsList.innerHTML = item.recipe.map(step => `<li>${step}</li>`).join('');
-            document.getElementById('recipe-modal').classList.add('active');
-            document.body.style.overflow = 'hidden';
-        }
-
-        function closeRecipeModal() {
-            document.getElementById('recipe-modal').classList.remove('active');
-            document.body.style.overflow = '';
-        }
-
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape') closeRecipeModal();
-        });
-
-        let currentCategory = 'hot';
-
-        function updateFoodPage(category) {
-            currentCategory = category;
-            renderFoodPage(category);
-
-            document.querySelectorAll('.cat-btn').forEach(btn => {
-                btn.classList.toggle('active', btn.dataset.category === category);
-            });
-
-            const data = lifestyleDatabase[category];
-            if (data && data.food) {
-                const text = document.getElementById('food-weather-text');
-                const icon = document.getElementById('food-weather-icon');
-                const desc = document.getElementById('food-page-desc');
-                if (text) text.textContent = data.food.title;
-                if (desc) desc.textContent = data.description;
-                if (icon) {
-                    icon.textContent = category === 'hot' ? 'wb_sunny' : category === 'rainy' ? 'rainy' : 'ac_unit';
-                }
-            }
-        }
-
-        document.querySelectorAll('.cat-btn').forEach(btn => {
-            btn.addEventListener('click', () => {
-                updateFoodPage(btn.dataset.category);
-            });
-        });
-
-        async function initFoodPage() {
-            const defaultLat = 34.0151;
-            const defaultLon = 71.5249;
-            try {
-                const data = await fetchWeather(defaultLat, defaultLon);
-                if (data && data.current) {
-                    const category = getLifestyleState(data.current.temperature_2m, data.current.weather_code);
-                    updateFoodPage(category);
-                } else {
-                    updateFoodPage('hot');
-                }
-            } catch(e) {
-                updateFoodPage('hot');
-            }
-        }
-        initFoodPage();
-    </script>
+    <script type="module" src="../js/food.js"></script>
 </body>
 </html>

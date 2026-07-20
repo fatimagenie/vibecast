@@ -11,6 +11,8 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700&family=Inter:wght@400;500;600&family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+    <link rel="stylesheet" href="css/base.css">
+    <link rel="stylesheet" href="css/home.css">
     <script>
         tailwind.config = {
             theme: {
@@ -31,889 +33,6 @@
             },
         }
     </script>
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-
-        body {
-            font-family: 'Inter', sans-serif;
-            background: linear-gradient(180deg, #1a0f2e 0%, #0f0a1a 50%, #0d0816 100%);
-            color: #ffffff;
-            min-height: 100vh;
-        }
-
-        .glass-card {
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-        }
-
-        .hero-bg {
-            background: radial-gradient(ellipse at 50% 0%, rgba(168, 85, 247, 0.15) 0%, transparent 60%),
-                        radial-gradient(ellipse at 80% 20%, rgba(244, 114, 182, 0.1) 0%, transparent 50%),
-                        linear-gradient(180deg, #1a0f2e 0%, #0f0a1a 100%);
-        }
-
-        /* ========================================
-           PREMIUM WEATHER CARD
-           ======================================== */
-        .weather-card-premium {
-            position: relative;
-            border-radius: 28px;
-            padding: 3px;
-            background: linear-gradient(135deg, rgba(168, 85, 247, 0.5), rgba(244, 114, 182, 0.3), rgba(251, 146, 60, 0.2));
-            backdrop-filter: blur(24px);
-            -webkit-backdrop-filter: blur(24px);
-            overflow: hidden;
-            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275),
-                        box-shadow 0.4s ease;
-            width: 100%;
-            max-width: 320px;
-        }
-
-        .weather-card-premium:hover {
-            transform: translateY(-4px) scale(1.02);
-            box-shadow: 0 20px 60px rgba(168, 85, 247, 0.35),
-                        0 0 40px rgba(168, 85, 247, 0.15);
-        }
-
-        .weather-card-premium .card-glow {
-            position: absolute;
-            top: -50%;
-            right: -50%;
-            width: 100%;
-            height: 100%;
-            background: radial-gradient(circle, rgba(244, 114, 182, 0.2) 0%, transparent 70%);
-            border-radius: 50%;
-            pointer-events: none;
-            animation: glowPulse 3s ease-in-out infinite;
-        }
-
-        .weather-card-premium .card-content {
-            background: linear-gradient(145deg, rgba(26, 16, 40, 0.95), rgba(15, 10, 26, 0.98));
-            border-radius: 25px;
-            padding: 24px 22px;
-            position: relative;
-            z-index: 1;
-            overflow: hidden;
-        }
-
-        .weather-region-label {
-            display: block;
-            font-size: 9px;
-            font-weight: 700;
-            letter-spacing: 0.2em;
-            text-transform: uppercase;
-            color: rgba(255, 255, 255, 0.4);
-            margin-bottom: 20px;
-        }
-
-        .weather-main-row {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 12px;
-            margin-bottom: 12px;
-        }
-
-        .weather-icon-wrapper {
-            position: relative;
-            width: 60px;
-            height: 60px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-shrink: 0;
-        }
-
-        .weather-icon-main {
-            font-size: 44px;
-            color: #F5A623;
-            font-variation-settings: 'FILL' 1;
-            filter: drop-shadow(0 0 20px rgba(245, 166, 35, 0.4));
-            z-index: 1;
-            animation: iconFloat 4s ease-in-out infinite;
-        }
-
-        .weather-icon-wrapper .icon-glow {
-            position: absolute;
-            inset: 0;
-            background: radial-gradient(circle, rgba(245, 166, 35, 0.25) 0%, transparent 70%);
-            border-radius: 50%;
-            animation: iconGlow 2s ease-in-out infinite;
-        }
-        @media (max-width: 768px) {
-            .weather-icon-main { font-size: 36px; }
-            .weather-icon-wrapper { width: 50px; height: 50px; }
-            .weather-main-row { gap: 8px; }
-            .weather-card-premium { max-width: 280px; }
-        }
-
-        .weather-temp-block {
-            text-align: right;
-            flex: 1;
-            min-width: 0;
-            overflow: hidden;
-        }
-
-        .weather-temp-row {
-            display: flex;
-            align-items: baseline;
-            justify-content: flex-end;
-        }
-
-        .weather-separator {
-            display: none;
-        }
-
-        .weather-temp-display {
-            font-family: 'Lexend', sans-serif;
-            font-weight: 700;
-            font-size: 42px;
-            line-height: 1;
-            color: #ffffff;
-            text-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-        }
-        @media (max-width: 768px) {
-            .weather-temp-display { font-size: 32px; }
-        }
-
-        #temperature, #feels-like {
-            opacity: 0;
-            transition: opacity 0.4s ease;
-        }
-        #temperature.loaded, #feels-like.loaded {
-            opacity: 1;
-        }
-
-        .weather-condition-text {
-            font-size: 14px;
-            font-weight: 500;
-            color: rgba(255, 255, 255, 0.6);
-            margin-bottom: 16px;
-        }
-
-        .weather-divider {
-            height: 1px;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
-            margin-bottom: 16px;
-        }
-
-        .weather-info-row {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .weather-info-icon {
-            font-size: 16px;
-            color: #c084fc;
-        }
-
-        .weather-info-label {
-            font-size: 12px;
-            color: rgba(255, 255, 255, 0.4);
-        }
-
-        .weather-info-value {
-            font-family: 'Lexend', sans-serif;
-            font-size: 13px;
-            font-weight: 600;
-            color: rgba(255, 255, 255, 0.9);
-        }
-
-        /* Card Animations */
-        @keyframes cardFadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(20px) scale(0.95);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0) scale(1);
-            }
-        }
-
-        @keyframes glowPulse {
-            0%, 100% { opacity: 0.5; transform: scale(1); }
-            50% { opacity: 0.8; transform: scale(1.1); }
-        }
-
-        @keyframes iconFloat {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-4px); }
-        }
-
-        @keyframes iconGlow {
-            0%, 100% { opacity: 0.4; transform: scale(1); }
-            50% { opacity: 0.7; transform: scale(1.15); }
-        }
-
-        /* Hourly Forecast - Exact Match */
-        .hourly-container {
-            position: relative;
-        }
-        .hourly-scroll {
-            display: flex;
-            gap: 10px;
-            overflow-x: auto;
-            padding: 8px 0;
-            scroll-behavior: smooth;
-            -ms-overflow-style: none;
-            scrollbar-width: none;
-        }
-        .hourly-scroll::-webkit-scrollbar { display: none; }
-
-        .hourly-card {
-            flex: 0 0 auto;
-            width: 68px;
-            padding: 12px 6px;
-            border-radius: 14px;
-            text-align: center;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 6px;
-            background: rgba(255, 255, 255, 0.04);
-            border: 1px solid rgba(255, 255, 255, 0.06);
-            transition: all 0.3s;
-        }
-        .hourly-card.active {
-            background: linear-gradient(135deg, #c084fc, #f472b6);
-            border: none;
-            box-shadow: 0 4px 20px rgba(192, 132, 252, 0.3);
-        }
-        .hourly-card .hour-time {
-            font-size: 10px;
-            font-weight: 500;
-            opacity: 0.6;
-        }
-        .hourly-card .hour-icon {
-            font-size: 24px;
-        }
-        .hourly-card .hour-temp {
-            font-family: 'Lexend', sans-serif;
-            font-weight: 700;
-            font-size: 13px;
-        }
-
-        .scroll-arrow {
-            position: absolute;
-            top: 50%;
-            transform: translateY(-50%);
-            width: 32px;
-            height: 32px;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.15);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            z-index: 10;
-            transition: all 0.3s;
-        }
-        .scroll-arrow:hover {
-            background: rgba(255, 255, 255, 0.2);
-        }
-        .scroll-arrow.left { left: -16px; }
-        .scroll-arrow.right { right: -16px; }
-
-        /* Progress Bar */
-        .scroll-progress {
-            width: 100%;
-            height: 4px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 2px;
-            margin-top: 12px;
-            overflow: hidden;
-        }
-        .scroll-progress-bar {
-            height: 100%;
-            background: linear-gradient(90deg, #c084fc, #f472b6);
-            border-radius: 2px;
-            width: 30%;
-            transition: width 0.3s;
-        }
-
-        /* Daily Forecast */
-        .daily-scroll {
-            display: flex;
-            gap: 12px;
-            overflow-x: auto;
-            padding: 8px 0;
-            scroll-behavior: smooth;
-            -ms-overflow-style: none;
-            scrollbar-width: none;
-        }
-        .daily-scroll::-webkit-scrollbar { display: none; }
-
-        .daily-card {
-            flex: 0 0 auto;
-            width: 100px;
-            padding: 16px 10px;
-            border-radius: 16px;
-            text-align: center;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 8px;
-            background: rgba(255, 255, 255, 0.04);
-            border: 1px solid rgba(255, 255, 255, 0.06);
-            transition: all 0.3s;
-        }
-        .daily-card:hover {
-            background: rgba(255, 255, 255, 0.08);
-        }
-        .daily-card.active {
-            background: linear-gradient(135deg, #c084fc, #f472b6);
-            border: none;
-            box-shadow: 0 4px 20px rgba(192, 132, 252, 0.3);
-        }
-        .daily-day {
-            font-size: 11px;
-            font-weight: 600;
-            color: rgba(255, 255, 255, 0.6);
-        }
-        .daily-card.active .daily-day {
-            color: rgba(255, 255, 255, 0.9);
-        }
-        .daily-icon {
-            font-size: 28px;
-        }
-        .daily-temps {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 2px;
-        }
-        .daily-max {
-            font-family: 'Lexend', sans-serif;
-            font-weight: 700;
-            font-size: 16px;
-            color: white;
-        }
-        .daily-min {
-            font-family: 'Lexend', sans-serif;
-            font-weight: 500;
-            font-size: 12px;
-            color: rgba(255, 255, 255, 0.4);
-        }
-        .daily-rain {
-            display: inline-flex;
-            align-items: center;
-            gap: 2px;
-            padding: 2px 6px;
-            background: rgba(59, 130, 246, 0.2);
-            border-radius: 4px;
-            font-size: 9px;
-            font-weight: 600;
-            color: #93c5fd;
-        }
-
-        /* Tips Section - Exact Match */
-        .tips-badge {
-            display: inline-block;
-            padding: 4px 12px;
-            background: rgba(168, 85, 247, 0.2);
-            border: 1px solid rgba(168, 85, 247, 0.3);
-            border-radius: 6px;
-            font-size: 10px;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.1em;
-            color: #c084fc;
-            margin-bottom: 12px;
-        }
-
-        .tip-card {
-            display: flex;
-            align-items: flex-start;
-            gap: 12px;
-            padding: 16px;
-            border-radius: 14px;
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-        }
-        .tip-number {
-            width: 24px;
-            height: 24px;
-            border-radius: 50%;
-            background: rgba(168, 85, 247, 0.2);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 11px;
-            font-weight: 700;
-            color: #c084fc;
-            flex-shrink: 0;
-        }
-        .tip-text {
-            font-size: 13px;
-            color: rgba(255, 255, 255, 0.7);
-            line-height: 1.5;
-        }
-
-        /* Lifestyle Section - Exact Match */
-        .lifestyle-badge {
-            display: inline-block;
-            padding: 4px 12px;
-            background: rgba(244, 114, 182, 0.2);
-            border: 1px solid rgba(244, 114, 182, 0.3);
-            border-radius: 6px;
-            font-size: 10px;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.1em;
-            color: #f472b6;
-            margin-bottom: 8px;
-        }
-
-        .gradient-card {
-            border-radius: 20px;
-            padding: 24px;
-            color: white;
-            position: relative;
-            overflow: hidden;
-        }
-        @media (max-width: 768px) {
-            .gradient-card { padding: 16px; }
-        }
-        .gradient-card::before {
-            content: '';
-            position: absolute;
-            top: -30%;
-            right: -30%;
-            width: 80%;
-            height: 80%;
-            background: radial-gradient(circle, rgba(255,255,255,0.15) 0%, transparent 70%);
-            border-radius: 50%;
-        }
-        .gradient-pink { background: linear-gradient(135deg, #f472b6, #fb923c); }
-        .gradient-orange { background: linear-gradient(135deg, #fb923c, #fbbf24); }
-        .gradient-purple { background: linear-gradient(135deg, #a78bfa, #c084fc); }
-        .gradient-dark {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-        }
-
-        .outfit-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 8px;
-            margin-top: 16px;
-        }
-        @media (max-width: 768px) {
-            .outfit-grid { gap: 6px; margin-top: 12px; }
-            .outfit-item { padding: 8px 10px; font-size: 10px; }
-        }
-        .outfit-item {
-            padding: 10px 12px;
-            background: rgba(255, 255, 255, 0.15);
-            border-radius: 10px;
-            font-size: 11px;
-            font-weight: 500;
-        }
-
-        .see-all-btn {
-            display: inline-block;
-            margin-top: 16px;
-            padding: 8px 16px;
-            background: rgba(255, 255, 255, 0.2);
-            border-radius: 8px;
-            font-size: 11px;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-        .see-all-btn:hover {
-            background: rgba(255, 255, 255, 0.3);
-        }
-
-        .small-card-list {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-        }
-        .small-card-list li {
-            padding: 6px 0;
-            font-size: 12px;
-            color: rgba(255, 255, 255, 0.8);
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        @media (max-width: 768px) {
-            .small-card-list li { padding: 4px 0; font-size: 11px; }
-        }
-        .small-card-list li::before {
-            content: '';
-            width: 4px;
-            height: 4px;
-            border-radius: 50%;
-            background: currentColor;
-            flex-shrink: 0;
-        }
-
-        .search-bar {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 12px;
-            padding: 10px 16px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            transition: border-color 0.3s;
-        }
-        .search-bar:focus-within {
-            border-color: rgba(168, 85, 247, 0.5);
-            box-shadow: 0 0 20px rgba(168, 85, 247, 0.15);
-        }
-        .search-bar input {
-            background: transparent;
-            border: none;
-            outline: none;
-            color: white;
-            font-size: 13px;
-            width: 100%;
-        }
-        .search-bar input::placeholder {
-            color: rgba(255, 255, 255, 0.4);
-        }
-
-        /* Hero Search Dropdown */
-        .hero-search-wrapper {
-            position: relative;
-        }
-        .hero-search-dropdown {
-            position: absolute;
-            top: calc(100% + 8px);
-            left: 0;
-            right: 0;
-            background: rgba(20, 12, 32, 0.98);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 14px;
-            max-height: 260px;
-            overflow-y: auto;
-            display: none;
-            z-index: 30;
-            backdrop-filter: blur(24px);
-            -webkit-backdrop-filter: blur(24px);
-            box-shadow: 0 16px 48px rgba(0, 0, 0, 0.5);
-            animation: dropdownSlide 0.2s ease-out;
-        }
-        .hero-search-dropdown.active {
-            display: block;
-        }
-        .hero-search-dropdown::-webkit-scrollbar { width: 4px; }
-        .hero-search-dropdown::-webkit-scrollbar-track { background: transparent; }
-        .hero-search-dropdown::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.15); border-radius: 2px; }
-
-        @keyframes dropdownSlide {
-            from { opacity: 0; transform: translateY(-8px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .hero-search-item {
-            padding: 14px 16px;
-            cursor: pointer;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-            transition: background 0.2s;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-        .hero-search-item:last-child { border-bottom: none; }
-        .hero-search-item:hover {
-            background: rgba(168, 85, 247, 0.12);
-        }
-        .hero-search-item .search-icon {
-            width: 36px;
-            height: 36px;
-            border-radius: 10px;
-            background: rgba(168, 85, 247, 0.15);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-shrink: 0;
-        }
-        .hero-search-item .search-icon .material-symbols-outlined {
-            font-size: 18px;
-            color: #c084fc;
-        }
-        .hero-search-item .search-info {
-            flex: 1;
-            min-width: 0;
-        }
-        .hero-search-item .search-city {
-            font-size: 14px;
-            font-weight: 600;
-            color: white;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-        .hero-search-item .search-region {
-            font-size: 11px;
-            color: rgba(255, 255, 255, 0.4);
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-        .hero-search-loading {
-            padding: 16px;
-            text-align: center;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-        }
-        .hero-search-loading .spinner-mini {
-            width: 16px;
-            height: 16px;
-            border: 2px solid rgba(168, 85, 247, 0.2);
-            border-top-color: #c084fc;
-            border-radius: 50%;
-            animation: spin 0.8s linear infinite;
-        }
-        .hero-search-no-result {
-            padding: 20px 16px;
-            text-align: center;
-            color: rgba(255, 255, 255, 0.35);
-            font-size: 13px;
-        }
-
-        /* Card Images */
-        .card-img {
-            width: 100%;
-            height: 140px;
-            object-fit: cover;
-            border-radius: 14px;
-            margin-bottom: 16px;
-            transition: transform 0.5s ease;
-        }
-        .card-img:hover {
-            transform: scale(1.03);
-        }
-        @media (max-width: 768px) {
-            .card-img { height: 100px; margin-bottom: 12px; border-radius: 12px; }
-        }
-        .card-img-sm {
-            width: 100%;
-            height: 90px;
-            object-fit: cover;
-            border-radius: 12px;
-            margin-bottom: 12px;
-        }
-
-        /* Weekend Card */
-        .weekend-card {
-            transition: all 0.3s ease;
-            cursor: pointer;
-            overflow: hidden;
-        }
-        .weekend-card:hover {
-            transform: translateY(-6px);
-            box-shadow: 0 16px 40px rgba(0, 0, 0, 0.3);
-        }
-        .weekend-card-img {
-            width: 100%;
-            height: 170px;
-            object-fit: cover;
-            transition: transform 0.5s ease;
-        }
-        .weekend-card:hover .weekend-card-img {
-            transform: scale(1.05);
-        }
-
-        .cat-btn {
-            padding: 8px 16px;
-            border-radius: 10px;
-            font-size: 12px;
-            font-weight: 600;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            color: rgba(255, 255, 255, 0.7);
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-        .cat-btn:hover, .cat-btn.active {
-            background: rgba(192, 132, 252, 0.2);
-            border-color: rgba(192, 132, 252, 0.3);
-            color: #c084fc;
-        }
-
-        .section-title {
-            font-family: 'Lexend', sans-serif;
-            font-weight: 700;
-            font-size: 22px;
-            color: white;
-            margin-bottom: 16px;
-        }
-        @media (max-width: 768px) {
-            .section-title { font-size: 18px; margin-bottom: 12px; }
-        }
-
-        .detail-card {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 16px;
-            border-radius: 16px;
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-        }
-        .detail-card .detail-icon {
-            width: 40px;
-            height: 40px;
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-shrink: 0;
-        }
-        .detail-card .detail-label {
-            font-size: 10px;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            opacity: 0.5;
-        }
-        .detail-card .detail-value {
-            font-family: 'Lexend', sans-serif;
-            font-weight: 600;
-            font-size: 15px;
-        }
-
-        footer {
-            background: rgba(0, 0, 0, 0.3);
-            border-top: 1px solid rgba(255, 255, 255, 0.05);
-        }
-
-        #location-modal {
-            display: none;
-            position: fixed;
-            inset: 0;
-            z-index: 100;
-            background: rgba(0,0,0,0.6);
-            backdrop-filter: blur(8px);
-        }
-        #location-modal.active {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        #location-modal > div {
-            background: #1a1028;
-            border: 1px solid rgba(255,255,255,0.1);
-        }
-        #location-modal input {
-            background: rgba(255,255,255,0.05);
-            border: 1px solid rgba(255,255,255,0.1);
-            color: white;
-        }
-        .unit-toggle {
-            display: flex;
-            gap: 4px;
-            background: rgba(255, 255, 255, 0.06);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: 12px;
-            padding: 4px;
-            margin-top: 14px;
-        }
-        .unit-btn {
-            flex: 1;
-            padding: 7px 14px;
-            border: none;
-            border-radius: 9px;
-            font-family: 'Lexend', sans-serif;
-            font-weight: 700;
-            font-size: 15px;
-            color: rgba(255, 255, 255, 0.35);
-            background: transparent;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-        .unit-btn:hover {
-            color: rgba(255, 255, 255, 0.6);
-        }
-        .unit-btn.active {
-            background: rgba(168, 85, 247, 0.3);
-            color: #fff;
-            box-shadow: 0 2px 10px rgba(168, 85, 247, 0.25);
-        }
-
-        /* Home Travel Cards */
-        .home-travel-card {
-            display: block;
-            background: rgba(255, 255, 255, 0.04);
-            border: 1px solid rgba(255, 255, 255, 0.06);
-            border-radius: 18px;
-            overflow: hidden;
-            text-decoration: none;
-            transition: all 0.3s ease;
-        }
-        .home-travel-card:hover {
-            transform: translateY(-6px);
-            box-shadow: 0 16px 40px rgba(0, 0, 0, 0.3);
-            border-color: rgba(34, 197, 94, 0.3);
-        }
-        .home-travel-card-img {
-            width: 100%;
-            height: 180px;
-            object-fit: cover;
-            transition: transform 0.5s ease;
-        }
-        .home-travel-card:hover .home-travel-card-img {
-            transform: scale(1.05);
-        }
-        .home-travel-card-body {
-            padding: 16px;
-        }
-        .home-travel-card-tag {
-            display: inline-block;
-            padding: 3px 8px;
-            background: rgba(34, 197, 94, 0.15);
-            border: 1px solid rgba(34, 197, 94, 0.25);
-            border-radius: 6px;
-            font-size: 9px;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            color: #22c55e;
-            margin-bottom: 8px;
-        }
-        .home-travel-card-name {
-            font-family: 'Lexend', sans-serif;
-            font-weight: 600;
-            font-size: 15px;
-            color: white;
-            margin-bottom: 4px;
-        }
-        .home-travel-card-desc {
-            font-size: 12px;
-            color: rgba(255, 255, 255, 0.45);
-            line-height: 1.5;
-            margin-bottom: 12px;
-        }
-        .home-travel-card-cta {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            padding: 8px 16px;
-            background: rgba(34, 197, 94, 0.15);
-            border: 1px solid rgba(34, 197, 94, 0.25);
-            border-radius: 8px;
-            font-size: 11px;
-            font-weight: 600;
-            color: #22c55e;
-            transition: all 0.3s;
-        }
-        .home-travel-card:hover .home-travel-card-cta {
-            background: rgba(34, 197, 94, 0.25);
-        }
-    </style>
 </head>
 <body>
     <script>
@@ -964,7 +83,6 @@
     </div>
 
     <main>
-
         <!-- ========== HERO SECTION ========== -->
         <section class="hero-bg min-h-[80vh] flex items-center px-5 md:px-12 pt-20">
             <div class="max-w-7xl mx-auto w-full grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
@@ -975,7 +93,7 @@
                     <p class="text-white/50 text-sm max-w-md leading-relaxed" id="vibe-description">
                         The clear skies in Peshawar make for a perfect <span class="text-primary">Golden Hour</span> afternoon. A perfect day to explore outdoor markets or enjoy a rooftop chai.
                     </p>
-                    <p class="text-white/40 text-xs" id="city-name">Peshawar, Pakistan</p>
+                    <p class="text-white/40 text-xs" id="hero-city-label">Peshawar, Pakistan</p>
                     <div class="hero-search-wrapper max-w-sm">
                         <div class="search-bar">
                             <span class="material-symbols-outlined text-white/40 text-[18px]">search</span>
@@ -992,36 +110,33 @@
                     </div>
                 </div>
                 <div class="flex justify-center lg:justify-end">
-                    <div class="weather-card-premium w-full">
-                        <div class="card-glow"></div>
-                        <div class="card-content">
-                            <span class="weather-region-label">IN YOUR REGION</span>
-
-                            <div class="weather-main-row">
-                                <div class="weather-icon-wrapper">
-                                    <span class="material-symbols-outlined weather-icon-main" id="hero-weather-icon">wb_sunny</span>
-                                    <div class="icon-glow"></div>
-                                </div>
-
-                                <div class="weather-temp-block">
-                                    <div class="weather-temp-row">
-                                        <h2 class="weather-temp-display" id="temperature">--°</h2>
-                                    </div>
+                    <div class="weather-card-google" id="weather-card">
+                        <div class="weather-bg-layer" id="weather-bg-layer"></div>
+                        <div class="weather-card-inner">
+                            <div class="weather-location-row">
+                                <span class="material-symbols-outlined" style="font-size:14px; color:rgba(255,255,255,0.6);">location_on</span>
+                                <span class="weather-city" id="city-name">Peshawar, Pakistan</span>
+                                <span class="weather-timestamp" id="weather-timestamp">As of --:-- pm</span>
+                            </div>
+                            <div class="weather-main-section">
+                                <div class="weather-temp-big" id="temperature">--°</div>
+                                <div class="weather-icon-section">
+                                    <span class="material-symbols-outlined weather-icon-google" id="hero-weather-icon">wb_sunny</span>
+                                    <span class="weather-condition-google" id="weather-condition">Clear Sky</span>
                                 </div>
                             </div>
-
-                            <p class="weather-condition-text" id="weather-condition">Clear Sky</p>
-
-                            <div class="weather-divider"></div>
-
-                            <div class="weather-info-row">
-                                <span class="material-symbols-outlined weather-info-icon">thermostat</span>
-                                <span class="weather-info-label">Feels like</span>
-                                <span class="weather-info-value" id="feels-like">--°</span>
+                            <div class="weather-info-row-google">
+                                <span>Feels Like <strong id="feels-like">--°</strong></span>
+                                <span class="weather-separator">|</span>
+                                <span>High <strong id="high-temp">--°</strong></span>
+                                <span class="weather-separator">|</span>
+                                <span>Low <strong id="low-temp">--°</strong></span>
                             </div>
-                            <div class="unit-toggle" id="unit-toggle">
-                                <button class="unit-btn active" data-unit="C">°C</button>
-                                <button class="unit-btn" data-unit="F">°F</button>
+                            <div class="weather-rain-row" id="rain-row">
+                                <span class="material-symbols-outlined" style="font-size:14px; color:#60a5fa;">water_drop</span>
+                                <span>Chance of Rain <strong id="rain-chance">--%</strong></span>
+                                <span class="weather-separator">|</span>
+                                <span id="rain-amount">-- in</span>
                             </div>
                         </div>
                     </div>
@@ -1068,16 +183,14 @@
                         <p class="detail-value text-white" id="humidity">54%</p>
                     </div>
                 </div>
-            </div>  
+            </div>
         </section>
 
         <!-- ========== DAILY FORECAST ========== -->
         <section class="max-w-7xl mx-auto px-5 md:px-12 py-6">
             <p class="text-white/40 text-xs font-semibold uppercase tracking-wider mb-3">7-DAY FORECAST</p>
             <div class="glass-card rounded-2xl p-4">
-                <div class="daily-scroll" id="daily-scroll">
-                    <!-- Injected by JS -->
-                </div>
+                <div class="daily-scroll" id="daily-scroll"></div>
             </div>
         </section>
 
@@ -1089,9 +202,7 @@
                     <span class="material-symbols-outlined text-white text-[18px]">chevron_left</span>
                 </div>
                 <div class="glass-card rounded-2xl p-4 mx-8">
-                    <div class="hourly-scroll" id="hourly-scroll">
-                        <!-- Injected by JS -->
-                    </div>
+                    <div class="hourly-scroll" id="hourly-scroll"></div>
                     <div class="scroll-progress">
                         <div class="scroll-progress-bar" id="scroll-progress-bar"></div>
                     </div>
@@ -1107,9 +218,7 @@
             <p class="text-white/40 text-xs font-semibold uppercase tracking-wider mb-2">DAILY ROUTINE</p>
             <h2 class="section-title">What to do, what to eat</h2>
 
-            <!-- Tips + Hydration + Plan - 3 Columns (UPPER) -->
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-                <!-- Today's Tips Card -->
                 <div class="gradient-card gradient-dark" id="tips-card">
                     <div class="relative z-10">
                         <div class="flex items-center gap-2 mb-2">
@@ -1117,13 +226,9 @@
                             <span class="text-[10px] font-bold uppercase tracking-wider text-white/60">IMPORTANT</span>
                         </div>
                         <h3 class="font-display font-bold text-lg mb-2">Tips</h3>
-                        <div id="tips-container" class="space-y-2">
-                            <!-- Injected by JS -->
-                        </div>
+                        <div id="tips-container" class="space-y-2"></div>
                     </div>
                 </div>
-
-                <!-- Hydration Card -->
                 <div class="gradient-card gradient-purple" id="hydration-card">
                     <div class="relative z-10">
                         <div class="flex items-center gap-2 mb-2">
@@ -1131,13 +236,9 @@
                             <span class="text-[10px] font-bold uppercase tracking-wider text-white/60">STAY FRESH</span>
                         </div>
                         <h3 class="font-display font-bold text-lg mb-2">Hydration</h3>
-                        <ul class="small-card-list" id="hydration-list">
-                            <!-- Injected by JS -->
-                        </ul>
+                        <ul class="small-card-list" id="hydration-list"></ul>
                     </div>
                 </div>
-
-                <!-- Today's Plan Card -->
                 <div class="gradient-card gradient-dark" id="today-card">
                     <div class="relative z-10">
                         <div class="flex items-center gap-2 mb-2">
@@ -1145,16 +246,12 @@
                             <span class="text-[10px] font-bold uppercase tracking-wider text-white/60">TODAY</span>
                         </div>
                         <h3 class="font-display font-bold text-lg mb-2">Today's Plan</h3>
-                        <ul class="small-card-list" id="today-list">
-                            <!-- Injected by JS -->
-                        </ul>
+                        <ul class="small-card-list" id="today-list"></ul>
                     </div>
                 </div>
             </div>
 
-            <!-- Outfit + Food - 2 Columns -->
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <!-- Outfit Card -->
                 <div class="gradient-card gradient-pink" id="outfit-card">
                     <div class="relative z-10">
                         <div class="flex items-center justify-between mb-2">
@@ -1162,13 +259,9 @@
                             <span class="see-all-btn" id="outfit-badge">SEE EVERYTHING</span>
                         </div>
                         <h3 class="font-display font-bold text-xl mb-1" id="outfit-title">Very Hot — Light Clothes</h3>
-                        <div class="outfit-grid" id="outfit-grid">
-                            <!-- Injected by JS -->
-                        </div>
+                        <div class="outfit-grid" id="outfit-grid"></div>
                     </div>
                 </div>
-
-                <!-- Food Card -->
                 <div class="gradient-card gradient-orange" id="food-card">
                     <div class="relative z-10">
                         <div class="flex items-center gap-2 mb-2">
@@ -1176,9 +269,7 @@
                             <span class="text-[10px] font-bold uppercase tracking-wider text-white/60">HEALTHY</span>
                         </div>
                         <h3 class="font-display font-bold text-lg mb-2" id="food-title">Cooling Food</h3>
-                        <ul class="small-card-list" id="food-list">
-                            <!-- Injected by JS -->
-                        </ul>
+                        <ul class="small-card-list" id="food-list"></ul>
                     </div>
                 </div>
             </div>
@@ -1190,7 +281,6 @@
             <p class="text-white/40 text-sm text-center max-w-lg mx-auto mb-8" id="weekend-desc">Don't let the forecast surprise you. We've curated your perfect itinerary.</p>
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8" id="weekend-grid"></div>
         </section>
-
     </main>
 
     <!-- ========== FOOTER ========== -->
@@ -1216,7 +306,6 @@
                             <li><a class="text-sm text-white/40 hover:text-primary transition-colors" href="#">Destinations</a></li>
                         </ul>
                     </div>
-
                 </div>
                 <div class="space-y-3">
                     <h4 class="text-xs font-bold text-primary uppercase tracking-wider">Stay Tuned</h4>
@@ -1230,39 +319,6 @@
         </div>
     </footer>
 
-    <script src="js/app.js?v=5"></script>
-    <script>
-        // Scroll header
-        let lastScroll = 0;
-        const header = document.querySelector('header');
-        window.addEventListener('scroll', () => {
-            const currentScroll = window.pageYOffset;
-            if (currentScroll > lastScroll && currentScroll > 80) {
-                header.style.transform = 'translateY(-100%)';
-            } else {
-                header.style.transform = 'translateY(0)';
-            }
-            lastScroll = currentScroll;
-        });
-
-        // Hourly scroll arrows
-        function scrollHourly(direction) {
-            const container = document.getElementById('hourly-scroll');
-            const scrollAmount = 150;
-            container.scrollBy({ left: direction * scrollAmount, behavior: 'smooth' });
-        }
-
-        // Update progress bar on scroll
-        const hourlyScroll = document.getElementById('hourly-scroll');
-        const progressBar = document.getElementById('scroll-progress-bar');
-        if (hourlyScroll && progressBar) {
-            hourlyScroll.addEventListener('scroll', () => {
-                const scrollLeft = hourlyScroll.scrollLeft;
-                const maxScroll = hourlyScroll.scrollWidth - hourlyScroll.clientWidth;
-                const percentage = maxScroll > 0 ? (scrollLeft / maxScroll) * 100 : 0;
-                progressBar.style.width = Math.max(30, percentage) + '%';
-            });
-        }
-    </script>
+    <script type="module" src="js/app.js"></script>
 </body>
 </html>
